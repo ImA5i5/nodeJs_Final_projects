@@ -144,8 +144,8 @@ app.use("/milestone", milestoneRoutes);
 
 
 // Example test route
-// app.get("/", (req, res) => {
-//   res.render("/auth/login", { title: "Home Page", layout: "layouts/main" });
+// app.get("/auth/login", (req, res) => {
+//   res.render("pages/home", { title: "Home Page", layout: "layouts/main" });
 // });
 
 
