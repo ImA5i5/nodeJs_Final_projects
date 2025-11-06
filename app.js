@@ -143,10 +143,10 @@ app.use("/milestone", milestoneRoutes);
 
 
 
-// Example test route
-// app.get("/auth/login", (req, res) => {
-//   res.render("pages/home", { title: "Home Page", layout: "layouts/main" });
-// });
+//Example test route
+app.get("/auth/login", (req, res) => {
+  res.render("pages/home", { title: "Home Page", layout: "layouts/main" });
+});
 
 
 
