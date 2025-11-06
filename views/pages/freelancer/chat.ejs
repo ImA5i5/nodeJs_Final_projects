@@ -1,0 +1,146 @@
+<!-- views/pages/freelancer/chat.ejs -->
+<div class="max-w-5xl mx-auto bg-white shadow rounded-lg h-[80vh] flex flex-col">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between bg-purple-600 text-white px-6 py-4 rounded-t-lg">
+    <div class="flex items-center gap-3">
+      <% if (receiver.profile?.profilePic) { %>
+        <img src="<%= receiver.profile.profilePic %>" alt="User" class="h-10 w-10 rounded-full object-cover border" />
+      <% } else { %>
+        <div class="h-10 w-10 rounded-full bg-purple-800 flex items-center justify-center font-bold uppercase">
+          <%= receiver.fullName[0] %>
+        </div>
+      <% } %>
+      <div>
+        <h3 class="font-semibold text-lg"><%= receiver.fullName %></h3>
+        <p id="typingIndicator" class="text-sm text-gray-200 hidden">Typing...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages Area -->
+  <div id="messagesContainer" class="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-3">
+    <% if (messages.length === 0) { %>
+      <p class="text-gray-500 text-center mt-20">No messages yet. Start the conversation 👋</p>
+    <% } %>
+
+    <% messages.forEach(msg => { %>
+      <div class="<%= msg.sender._id.toString() === user._id.toString() ? 'text-right' : 'text-left' %>">
+        <div class="inline-block max-w-[70%] px-4 py-2 rounded-lg shadow
+                    <%= msg.sender._id.toString() === user._id.toString()
+                      ? 'bg-purple-600 text-white rounded-br-none'
+                      : 'bg-gray-200 text-gray-800 rounded-bl-none' %>">
+          <% if (msg.content) { %>
+            <p class="break-words"><%= msg.content %></p>
+          <% } %>
+          <% if (msg.file) { %>
+            <a href="<%= msg.file %>" target="_blank" class="block mt-1 text-sm underline">
+              📎 View Attachment
+            </a>
+          <% } %>
+          <p class="text-xs opacity-75 mt-1"><%= new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></p>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- Message Input -->
+  <form id="chatForm" class="p-4 bg-white border-t flex items-center gap-3">
+    <input
+      type="hidden"
+      id="receiverId"
+      value="<%= receiver._id %>"
+    />
+    <input
+      type="text"
+      id="messageInput"
+      placeholder="Type a message..."
+      class="flex-1 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    />
+    <label for="fileInput" class="cursor-pointer text-purple-600 hover:text-purple-800">
+      📎
+    </label>
+    <input type="file" id="fileInput" name="file" class="hidden" />
+    <button
+      type="submit"
+      class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold"
+    >
+      Send
+    </button>
+  </form>
+</div>
+
+<!-- Socket.IO + Client Logic -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const receiverId = document.getElementById("receiverId").value;
+  const chatForm = document.getElementById("chatForm");
+  const messageInput = document.getElementById("messageInput");
+  const fileInput = document.getElementById("fileInput");
+  const messagesContainer = document.getElementById("messagesContainer");
+  const typingIndicator = document.getElementById("typingIndicator");
+
+  // Join the room (receiverId acts as unique room)
+  socket.emit("joinRoom", receiverId);
+
+  // Typing indicator
+  let typingTimeout;
+  messageInput.addEventListener("input", () => {
+    socket.emit("typing", { room: receiverId, sender: "<%= user.fullName %>" });
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      socket.emit("stopTyping", { room: receiverId });
+    }, 1000);
+  });
+
+  socket.on("showTyping", (data) => {
+    typingIndicator.classList.remove("hidden");
+    typingIndicator.textContent = `${data.sender} is typing...`;
+  });
+
+  socket.on("hideTyping", () => {
+    typingIndicator.classList.add("hidden");
+  });
+
+  // Listen for new messages
+  socket.on("newMessage", (msg) => {
+    const msgHTML = `
+      <div class="${msg.sender === "<%= user._id %>" ? 'text-right' : 'text-left'}">
+        <div class="inline-block max-w-[70%] px-4 py-2 rounded-lg shadow ${
+          msg.sender === "<%= user._id %>"
+            ? 'bg-purple-600 text-white rounded-br-none'
+            : 'bg-gray-200 text-gray-800 rounded-bl-none'
+        }">
+          ${msg.content ? `<p>${msg.content}</p>` : ""}
+          ${msg.file ? `<a href="${msg.file}" target="_blank" class="block mt-1 text-sm underline">📎 View Attachment</a>` : ""}
+          <p class="text-xs opacity-75 mt-1">${new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+        </div>
+      </div>`;
+    messagesContainer.insertAdjacentHTML("beforeend", msgHTML);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  });
+
+  // Handle message sending
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("receiverId", receiverId);
+    formData.append("content", messageInput.value);
+    if (fileInput.files[0]) formData.append("file", fileInput.files[0]);
+
+    const res = await fetch("/chat/send", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (res.ok) {
+      messageInput.value = "";
+      fileInput.value = "";
+    }
+  });
+
+  // Auto scroll
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+</script>

@@ -1,0 +1,147 @@
+<!-- views/pages/admin/project-monitor.ejs -->
+<div class="max-w-7xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10">
+  <h2 class="text-3xl font-bold text-blue-600 mb-8 flex items-center gap-2">
+    🕵️ Project Monitoring Dashboard
+  </h2>
+
+  <!-- 🚨 Disputed Projects Section -->
+  <div class="mb-10">
+    <h3 class="text-xl font-semibold text-red-600 mb-4">⚠️ Disputed Projects</h3>
+
+    <% if (disputedProjects.length === 0) { %>
+      <div class="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 rounded">
+        No open disputes at the moment.
+      </div>
+    <% } else { %>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border text-sm md:text-base mb-6">
+          <thead class="bg-red-100 text-red-700">
+            <tr>
+              <th class="border p-2 text-left">Title</th>
+              <th class="border p-2 text-left">Client</th>
+              <th class="border p-2 text-center">Budget</th>
+              <th class="border p-2 text-center">Status</th>
+              <th class="border p-2 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% disputedProjects.forEach(p => { %>
+              <tr class="border-b hover:bg-red-50 transition">
+                <td class="p-2 font-medium text-gray-800"><%= p.title %></td>
+                <td class="p-2 text-gray-700"><%= p.client.fullName %> (<%= p.client.email %>)</td>
+                <td class="p-2 text-center">₹<%= p.budget %></td>
+                <td class="p-2 text-center capitalize"><%= p.status %></td>
+                <td class="p-2 text-center flex justify-center gap-2">
+                  <button
+                    onclick="handleProjectAction('/project/admin/projects/<%= p._id %>/approve', 'PUT', 'Resolve dispute and mark <%= p.title %> as approved?')"
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                  >
+                    ✅ Resolve
+                  </button>
+                  <button
+                    onclick="handleProjectAction('/project/admin/projects/<%= p._id %>/reject', 'PUT', 'Remove disputed project <%= p.title %>?')"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
+                  >
+                    🗑️ Remove
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- 🕒 Inactive Projects Section -->
+  <div>
+    <h3 class="text-xl font-semibold text-yellow-600 mb-4">⏳ Inactive Projects (30+ days)</h3>
+
+    <% if (inactiveProjects.length === 0) { %>
+      <div class="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-4 rounded">
+        All projects are active and progressing.
+      </div>
+    <% } else { %>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border text-sm md:text-base">
+          <thead class="bg-yellow-100 text-yellow-700">
+            <tr>
+              <th class="border p-2 text-left">Title</th>
+              <th class="border p-2 text-left">Client</th>
+              <th class="border p-2 text-center">Budget</th>
+              <th class="border p-2 text-center">Last Updated</th>
+              <th class="border p-2 text-center">Status</th>
+              <th class="border p-2 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% inactiveProjects.forEach(p => { %>
+              <tr class="border-b hover:bg-yellow-50 transition">
+                <td class="p-2 font-medium text-gray-800"><%= p.title %></td>
+                <td class="p-2 text-gray-700"><%= p.client.fullName %> (<%= p.client.email %>)</td>
+                <td class="p-2 text-center">₹<%= p.budget %></td>
+                <td class="p-2 text-center"><%= new Date(p.updatedAt).toLocaleDateString() %></td>
+                <td class="p-2 text-center capitalize"><%= p.status %></td>
+                <td class="p-2 text-center flex justify-center gap-2">
+                  <button
+                    onclick="handleProjectAction('/project/admin/projects/<%= p._id %>/visibility', 'PATCH', 'Re-enable visibility for <%= p.title %>?')"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded text-sm"
+                  >
+                    👁️ Reactivate
+                  </button>
+                  <button
+                    onclick="handleProjectAction('/project/admin/projects/<%= p._id %>/reject', 'PUT', 'Remove inactive project <%= p.title %>?')"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
+                  >
+                    🗑️ Remove
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- ✅ SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // 🔹 SweetAlert2 reusable project action handler
+  async function handleProjectAction(url, method = "PUT", confirmText = null) {
+    const confirm = await Swal.fire({
+      title: "Confirm Action",
+      text: confirmText || "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#2563eb",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, proceed",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const response = await fetch(url, { method });
+      const data = await response.json();
+
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => window.location.reload(), 1600);
+      } else {
+        Swal.fire("Error", data.message || "Something went wrong.", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Server error occurred.", "error");
+    }
+  }
+</script>

@@ -1,0 +1,217 @@
+<!-- views/pages/admin/users.ejs -->
+
+<div class="container mx-auto p-6">
+  <h2 class="text-2xl font-bold text-blue-600 mb-6">Manage Users</h2>
+
+  <% if (success && success.length) { %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded">
+      <%= success[0] %>
+    </div>
+  <% } %>
+
+  <% if (error && error.length) { %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded">
+      <%= error[0] %>
+    </div>
+  <% } %>
+
+  <% if (info && info.length) { %>
+    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 mb-4 rounded">
+      <%= info[0] %>
+    </div>
+  <% } %>
+
+  <!-- Filter Bar -->
+  <form method="GET" action="/admin/users" class="mb-6 flex flex-wrap gap-2 items-center">
+    <input
+      type="text"
+      name="search"
+      placeholder="Search by name or email"
+      value="<%= filters?.search || '' %>"
+      class="border rounded p-2 flex-grow"
+    />
+
+    <select name="role" class="border rounded p-2">
+      <option value="">All Roles</option>
+      <option value="admin" <%= filters?.role === 'admin' ? 'selected' : '' %>>Admin</option>
+      <option value="freelancer" <%= filters?.role === 'freelancer' ? 'selected' : '' %>>Freelancer</option>
+      <option value="client" <%= filters?.role === 'client' ? 'selected' : '' %>>Client</option>
+    </select>
+
+    <select name="status" class="border rounded p-2">
+      <option value="">All Status</option>
+      <option value="active" <%= filters?.status === 'active' ? 'selected' : '' %>>Active</option>
+      <option value="suspended" <%= filters?.status === 'suspended' ? 'selected' : '' %>>Suspended</option>
+    </select>
+
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+      Filter
+    </button>
+  </form>
+
+  <!-- User Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse border text-sm md:text-base">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border p-2">Name</th>
+          <th class="border p-2">Email</th>
+          <th class="border p-2">Role</th>
+          <th class="border p-2">Status</th>
+          <th class="border p-2">Verified</th>
+          <th class="border p-2 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users.length === 0) { %>
+          <tr>
+            <td colspan="6" class="text-center text-gray-500 py-4">No users found.</td>
+          </tr>
+        <% } else { %>
+          <% users.forEach(user => { %>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-2"><%= user.fullName %></td>
+              <td class="p-2"><%= user.email %></td>
+              <td class="p-2 capitalize"><%= user.role %></td>
+              <td class="p-2">
+                <span class="<%= user.status === 'active' ? 'text-green-600' : 'text-yellow-600' %> font-semibold">
+                  <%= user.status %>
+                </span>
+              </td>
+              <td class="p-2 text-center"><%= user.isVerified ? "✅" : "❌" %></td>
+
+              <td class="p-2 space-y-1 text-center">
+                <% if (!user.isVerified) { %>
+                  <button onclick="handleAdminAction('/admin/users/approve/<%= user._id %>')"
+                    class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded w-full">
+                    Approve
+                  </button>
+                <% } %>
+
+                <button onclick="handleAdminAction('/admin/users/suspend/<%= user._id %>')"
+                  class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded w-full">
+                  Suspend
+                </button>
+
+                <button onclick="handleAdminAction('/admin/users/reset-password/<%= user._id %>')"
+                  class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded w-full">
+                  Reset Password
+                </button>
+
+                <button onclick="handleAdminAction('/admin/users/verify-identity/<%= user._id %>')"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded w-full">
+                  Verify Identity
+                </button>
+
+                <button onclick="handleAdminAction('/admin/users/delete/<%= user._id %>', 'DELETE', 'This will permanently delete the user.')"
+                  class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded w-full">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Manual Verify Form -->
+  <div class="mt-8 bg-gray-50 border rounded p-4">
+    <h3 class="text-lg font-semibold mb-2">Manually Verify a User by Email</h3>
+    <form
+      onsubmit="handleEmailVerify(event)"
+      class="flex flex-wrap gap-2 items-center"
+    >
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter email"
+        class="border rounded p-2 flex-grow md:w-1/3"
+        required
+      />
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+        Verify Email
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- SweetAlert2 for feedback -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  async function handleAdminAction(url, method = "POST", confirmText = null) {
+    if (confirmText) {
+      const confirm = await Swal.fire({
+        title: "Are you sure?",
+        text: confirmText,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#2563eb",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, proceed",
+      });
+      if (!confirm.isConfirmed) return;
+    }
+
+    try {
+      const response = await fetch(url, { method });
+      const data = await response.json();
+
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: data.message,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        setTimeout(() => window.location.reload(), 1600);
+      } else {
+        Swal.fire("Error", data.message || "Something went wrong.", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Server error occurred.", "error");
+    }
+  }
+
+  // Handle manual email verification
+  async function handleEmailVerify(e) {
+    e.preventDefault();
+    const email = e.target.email.value.trim();
+    if (!email) return;
+
+    const confirm = await Swal.fire({
+      title: "Verify Email?",
+      text: `Manually verify ${email}?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Verify",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const response = await fetch("/admin/users/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Verified",
+          text: data.message,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        setTimeout(() => window.location.reload(), 1600);
+      } else {
+        Swal.fire("Error", data.message || "Verification failed", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Server error occurred.", "error");
+    }
+  }
+</script>

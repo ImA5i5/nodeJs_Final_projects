@@ -1,0 +1,157 @@
+<!-- views/pages/admin/disputes.ejs -->
+<div class="container mx-auto p-6">
+  <h2 class="text-2xl font-bold text-blue-600 mb-6">⚖️ Dispute Management</h2>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <% summary.forEach(s => { %>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <h3 class="font-semibold capitalize text-gray-600"><%= s._id %></h3>
+        <p class="text-2xl font-bold text-blue-600"><%= s.count %></p>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- Filter Bar -->
+  <form method="GET" action="/admin/disputes" class="mb-6 flex flex-wrap gap-2 items-center">
+    <input
+      type="text"
+      name="search"
+      placeholder="Search by reason or description"
+      value="<%= filters?.search || '' %>"
+      class="border rounded p-2 flex-grow"
+    />
+    <select name="status" class="border rounded p-2">
+      <option value="">All</option>
+      <option value="open" <%= filters?.status === 'open' ? 'selected' : '' %>>Open</option>
+      <option value="in-review" <%= filters?.status === 'in-review' ? 'selected' : '' %>>In Review</option>
+      <option value="resolved" <%= filters?.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
+      <option value="rejected" <%= filters?.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+    </select>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Filter
+    </button>
+  </form>
+
+  <!-- Dispute Table -->
+  <div class="overflow-x-auto bg-white shadow rounded">
+    <table class="w-full border-collapse text-sm md:text-base">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border p-2">Project</th>
+          <th class="border p-2">Client</th>
+          <th class="border p-2">Freelancer</th>
+          <th class="border p-2">Reason</th>
+          <th class="border p-2">Status</th>
+          <th class="border p-2 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (disputes.length === 0) { %>
+          <tr><td colspan="6" class="text-center text-gray-500 py-4">No disputes found.</td></tr>
+        <% } else { %>
+          <% disputes.forEach(d => { %>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-2 font-medium"><%= d.projectTitle %></td>
+              <td class="p-2"><%= d.clientName %></td>
+              <td class="p-2"><%= d.freelancerName %></td>
+              <td class="p-2"><%= d.reason %></td>
+              <td class="p-2 text-center capitalize">
+                <span class="<%= d.status === 'resolved' ? 'text-green-600' : d.status === 'open' ? 'text-yellow-600' : 'text-blue-600' %> font-semibold">
+                  <%= d.status %>
+                </span>
+              </td>
+              <td class="p-2 text-center space-y-1">
+                <button
+                  onclick="openModal('<%= d._id %>', '<%= d.projectTitle %>')"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded w-full">
+                  Manage
+                </button>
+
+                <a href="/admin/disputes/history/<%= d._id %>"
+                   class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded inline-block w-full text-center">
+                  History
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="disputeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white rounded shadow-lg w-11/12 md:w-2/3 p-6">
+    <h3 id="modalTitle" class="text-xl font-semibold mb-3 text-blue-600">Manage Dispute</h3>
+    <textarea
+      id="resolution"
+      class="w-full border p-2 rounded mb-3"
+      placeholder="Write resolution or notes..."></textarea>
+    <div class="flex flex-wrap gap-3 justify-end">
+      <button onclick="handleDispute('resolve')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Resolve</button>
+      <button onclick="handleDispute('review')" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Mark Review</button>
+      <button onclick="handleDispute('refund')" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Approve Refund</button>
+      <button onclick="handleDispute('release')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Release Payment</button>
+      <button onclick="closeModal()" class="border border-gray-400 px-4 py-2 rounded">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  let currentDisputeId = null;
+
+  function openModal(id, projectTitle) {
+    currentDisputeId = id;
+    document.getElementById("modalTitle").innerText = `Manage Dispute - ${projectTitle}`;
+    document.getElementById("disputeModal").classList.remove("hidden");
+  }
+
+  function closeModal() {
+    document.getElementById("disputeModal").classList.add("hidden");
+    document.getElementById("resolution").value = "";
+  }
+
+  async function handleDispute(action) {
+    const resolution = document.getElementById("resolution").value.trim();
+    if (!currentDisputeId) return;
+
+    let url = `/admin/disputes/handle/${currentDisputeId}`;
+    let body = { action, resolution };
+
+    if (action === "refund" || action === "release") {
+      url = `/admin/disputes/process/${currentDisputeId}`;
+      body = { action };
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: data.message,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        setTimeout(() => window.location.reload(), 1600);
+      } else {
+        Swal.fire("Error", data.message || "Something went wrong", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Server error occurred.", "error");
+    } finally {
+      closeModal();
+    }
+  }
+</script>

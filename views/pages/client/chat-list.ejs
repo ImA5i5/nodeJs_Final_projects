@@ -1,0 +1,60 @@
+<!-- views/pages/client/chat-list.ejs -->
+<div class="p-8">
+  <h1 class="text-3xl font-bold text-green-700 mb-6">💬 My Chat Inbox</h1>
+
+  <% if (chats && chats.length > 0) { %>
+    <div class="space-y-4">
+      <% chats.forEach(chat => { %>
+        <div class="bg-white rounded-lg shadow p-4 flex justify-between items-center border border-gray-100 hover:bg-green-50 transition">
+          <div class="flex items-center gap-4">
+            <% if (chat.otherUser?.profile?.profilePic) { %>
+              <img src="<%= chat.otherUser.profile.profilePic %>"
+                   class="h-12 w-12 rounded-full object-cover border" />
+            <% } else { %>
+              <div class="h-12 w-12 bg-green-200 flex items-center justify-center rounded-full text-lg font-bold text-green-800">
+                <%= chat.otherUser?.fullName?.charAt(0) || "?" %>
+              </div>
+            <% } %>
+
+            <div>
+              <h3 class="font-semibold text-lg text-gray-800 flex items-center gap-2">
+                <%= chat.otherUser?.fullName || "Unknown User" %>
+                <% if (!chat.lastMessage?.isRead) { %>
+                  <span class="w-2 h-2 bg-red-500 rounded-full inline-block"></span>
+                <% } %>
+              </h3>
+
+              <p class="text-sm text-gray-500 truncate max-w-xs">
+                <%= chat.lastMessage || "No messages yet" %>
+              </p>
+
+              <p class="text-xs text-gray-400">
+                <%= new Date(chat.createdAt).toLocaleString() %>
+              </p>
+            </div>
+          </div>
+
+          <a href="/client/chat/<%= chat.otherUser._id %>"
+             class="text-green-600 hover:text-green-800 font-semibold text-sm border border-green-500 px-3 py-1 rounded">
+            ➡ Open Chat
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="text-gray-500 mt-6">You haven’t chatted with any freelancers yet.</p>
+  <% } %>
+</div>
+
+<script>
+  // Optional: auto-refresh inbox every 20s for new messages
+  setInterval(async () => {
+    try {
+      const res = await fetch('/client/chat-list', { headers: { 'Accept': 'application/json' } });
+      const data = await res.json();
+      if (data.success) location.reload();
+    } catch (err) {
+      console.error('Inbox refresh failed', err);
+    }
+  }, 20000);
+</script>

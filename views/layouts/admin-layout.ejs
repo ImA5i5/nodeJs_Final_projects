@@ -1,0 +1,40 @@
+<!-- views/layouts/admin-layout.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | <%= title || "Dashboard" %></title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-gray-100 flex font-sans text-gray-800">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-700 text-white min-h-screen p-4">
+      <h2 class="text-2xl font-bold mb-8">Admin Panel</h2>
+      <nav class="flex flex-col gap-3">
+        <a href="/admin/dashboard" class="hover:bg-blue-600 p-2 rounded">📊 Dashboard</a>
+        <a href="/admin/users" class="hover:bg-blue-600 p-2 rounded">👥 User Management</a>
+        <a href="/admin/categories" class="hover:bg-blue-600 p-2 rounded">🏷 Categories</a>
+        <a href="/admin/projects" class="hover:bg-blue-600 p-2 rounded">📁 Projects</a>
+        <a href="/admin/payments" class="hover:bg-blue-600 p-2 rounded">💳 Payments</a>
+        <a href="/admin/disputes" class="hover:bg-blue-600 p-2 rounded">⚖️ Dispute Management</a>
+        <a href="/admin/reports" class="hover:bg-blue-600 p-2 rounded">📈 Reports</a>
+        <a href="/logout" class="hover:bg-blue-600 p-2 rounded text-red-200">🚪 Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Content Area -->
+    <main class="flex-1 p-8">
+       <% if (error && error.length) { %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded"><%= error[0] %></div>
+  <% } %>
+
+  <% if (success && success.length) { %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded"><%= success[0] %></div>
+  <% } %>
+
+      <%- body %>
+    </main>
+  </body>
+</html>

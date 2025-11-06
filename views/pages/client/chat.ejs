@@ -1,0 +1,102 @@
+<!-- views/pages/client/chat.ejs -->
+<div class="p-8">
+  <h1 class="text-2xl font-bold text-green-700 mb-4">
+    💭 Chat with <%= receiver.fullName %>
+  </h1>
+
+  <!-- Chat Box -->
+  <div id="chatContainer"
+       class="bg-white shadow rounded-lg border border-gray-200 p-4 h-[500px] overflow-y-auto mb-4">
+    <% if (messages && messages.length > 0) { %>
+      <% messages.forEach(msg => { %>
+        <div class="<%= msg.sender._id.toString() === user._id.toString() ? 'text-right' : 'text-left' %> mb-3">
+          <div class="inline-block px-4 py-2 rounded-lg
+            <%= msg.sender._id.toString() === user._id.toString()
+                ? 'bg-green-100 text-green-800'
+                : 'bg-gray-100 text-gray-800' %>">
+            <% if (msg.file) { %>
+              <a href="<%= msg.file %>" target="_blank" class="underline text-sm">📎 Attachment</a>
+            <% } else { %>
+              <%= msg.content || msg.text %>
+            <% } %>
+          </div>
+          <div class="text-xs text-gray-400 mt-1">
+            <%= new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-center text-gray-400 mt-20">No messages yet. Start chatting below 💬</p>
+    <% } %>
+  </div>
+
+  <!-- Message Form -->
+  <form id="chatForm" class="flex gap-3 items-center">
+    <input type="hidden" id="receiverId" value="<%= receiver._id %>" />
+    <input type="text" id="messageInput" placeholder="Type a message..."
+           class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" />
+    <input type="file" id="fileInput" class="hidden" />
+    <button type="button" id="attachBtn"
+            class="bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded text-gray-700">📎</button>
+    <button type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Send</button>
+  </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const socket = io();
+  const receiverId = document.getElementById("receiverId").value;
+  const chatContainer = document.getElementById("chatContainer");
+  const chatForm = document.getElementById("chatForm");
+  const messageInput = document.getElementById("messageInput");
+  const fileInput = document.getElementById("fileInput");
+  const attachBtn = document.getElementById("attachBtn");
+
+  // Join client room
+  socket.emit("joinRoom", "<%= user._id %>");
+
+  // Real-time message listener
+  socket.on("newMessage", (msg) => {
+    const div = document.createElement("div");
+    const isOwn = msg.sender === "<%= user._id %>";
+    div.className = isOwn ? "text-right mb-3" : "text-left mb-3";
+    div.innerHTML = `
+      <div class="inline-block px-4 py-2 rounded-lg ${isOwn ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
+        ${msg.file ? `<a href="${msg.file}" target="_blank" class="underline text-sm">📎 Attachment</a>` : msg.text}
+      </div>
+      <div class="text-xs text-gray-400 mt-1">${new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</div>`;
+    chatContainer.appendChild(div);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  });
+
+  // Handle file picker
+  attachBtn.addEventListener("click", () => fileInput.click());
+
+  // Handle sending messages
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("receiverId", receiverId);
+    formData.append("text", messageInput.value);
+    if (fileInput.files[0]) formData.append("file", fileInput.files[0]);
+
+    const res = await fetch("/client/chat/send", { method: "POST", body: formData });
+    const json = await res.json();
+
+    if (json.success) {
+      socket.emit("chatMessage", {
+        room: receiverId,
+        text: messageInput.value,
+        file: json.message.file,
+        sender: "<%= user._id %>",
+        createdAt: new Date().toISOString(),
+      });
+      messageInput.value = "";
+      fileInput.value = "";
+    }
+  });
+});
+</script>

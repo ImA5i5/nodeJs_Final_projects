@@ -1,0 +1,121 @@
+<!-- views/pages/client/hired-projects.ejs -->
+<div class="max-w-6xl mx-auto mt-10 bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-2xl font-bold text-green-700 mb-6 flex items-center gap-2">
+    💼 My Hired Freelancers
+  </h2>
+
+  <% if (projects.length === 0) { %>
+    <p class="text-gray-500 text-center py-6">No freelancers hired yet.</p>
+  <% } else { %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-200 text-sm">
+        <thead class="bg-green-700 text-white">
+          <tr>
+            <th class="p-3 text-left">Project</th>
+            <th class="p-3 text-left">Freelancer</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-center">Last Updated</th>
+            <th class="p-3 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% projects.forEach(p => { %>
+            <tr class="border-b hover:bg-gray-50 transition">
+              <td class="p-3 font-semibold text-gray-800"><%= p.title %></td>
+              <td class="p-3 flex items-center gap-3">
+                <% if (p.hiredFreelancer?.profile?.profilePic) { %>
+                  <img src="<%= p.hiredFreelancer.profile.profilePic %>" class="h-10 w-10 rounded-full border" />
+                <% } else { %>
+                  <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold">
+                    <%= p.hiredFreelancer.fullName.charAt(0).toUpperCase() %>
+                  </div>
+                <% } %>
+                <div>
+                  <p><%= p.hiredFreelancer.fullName %></p>
+                  <p class="text-xs text-gray-500"><%= p.hiredFreelancer.email %></p>
+                </div>
+              </td>
+
+              <td class="p-3 text-center capitalize">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold
+                  <%= p.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                      p.status === 'completed' ? 'bg-green-100 text-green-700' :
+                      p.status === 'disputed' ? 'bg-red-100 text-red-700' :
+                      'bg-gray-100 text-gray-700' %>">
+                  <%= p.status %>
+                </span>
+              </td>
+
+              <td class="p-3 text-center text-gray-500"><%= new Date(p.updatedAt).toLocaleDateString() %></td>
+
+              <td class="p-3 text-center">
+                <% if (p.status === 'in-progress') { %>
+                  <button 
+                    class="markCompletedBtn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                    data-id="<%= p._id %>">
+                    ✅ Mark Completed
+                  </button>
+                <% } else if (p.status === 'completed') { %>
+                  <span class="text-green-600 font-semibold">✔ Completed</span>
+                <% } else { %>
+                  <span class="text-gray-400">—</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<!-- ✅ SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // ✅ Global Toast setup
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 1800,
+    timerProgressBar: true,
+  });
+
+  // ✅ Handle Mark Completed button click
+  document.querySelectorAll(".markCompletedBtn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const projectId = btn.dataset.id;
+
+      const confirm = await Swal.fire({
+        title: "Mark project as completed?",
+        text: "This will notify the freelancer that the project is done.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#16a34a",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, mark completed!",
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const response = await fetch(`/client/projects/${projectId}/complete`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          Toast.fire({ icon: "success", title: data.message });
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          Swal.fire("Error", data.message || "Something went wrong.", "error");
+        }
+      } catch (err) {
+        Swal.fire("Server Error", "Unable to update project.", "error");
+      }
+    });
+  });
+</script>

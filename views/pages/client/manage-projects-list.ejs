@@ -1,0 +1,111 @@
+<div class="p-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-green-700">📋 Manage All Projects</h1>
+
+    <!-- ➕ New Project Button -->
+    <a href="/client/post-project"
+       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow">
+      🆕 Post New Project
+    </a>
+  </div>
+
+  <% if (projects && projects.length > 0) { %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% projects.forEach(p => { %>
+        <div class="bg-white p-6 rounded-lg shadow border border-gray-200 hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2"><%= p.title %></h3>
+          <p class="text-sm text-gray-500 mb-2">💰 Budget: ₹<%= p.budget %></p>
+          <p class="text-sm text-gray-500 mb-2">📅 Duration: <%= p.duration || "N/A" %></p>
+          <p class="text-sm mb-3">
+            👤 Freelancer:
+            <%= p.hiredFreelancer ? p.hiredFreelancer.fullName : "Not assigned" %>
+          </p>
+          <p class="text-sm mb-4">
+            🏷️ Status:
+            <span class="capitalize font-medium
+              <%= p.status === 'completed'
+                    ? 'text-green-600'
+                    : p.status === 'in-progress'
+                    ? 'text-blue-600'
+                    : p.status === 'pending'
+                    ? 'text-yellow-600'
+                    : 'text-gray-600' %>">
+              <%= p.status %>
+            </span>
+          </p>
+
+          <div class="flex flex-wrap gap-2 justify-between mt-3">
+            <a href="/client/manage/<%= p._id %>"
+               class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm">
+              📈 Manage
+            </a>
+
+            <% if (p.status === 'pending') { %>
+              <button data-id="<%= p._id %>" class="approveBtn bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-sm">
+                ✅ Approve
+              </button>
+            <% } %>
+
+            <% if (p.status !== 'completed') { %>
+              <button data-id="<%= p._id %>" class="closeBtn bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded text-sm">
+                🚫 Close
+              </button>
+            <% } %>
+
+            <button data-id="<%= p._id %>" class="deleteBtn bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm">
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="text-gray-500 text-center mt-8">No projects found.</p>
+  <% } %>
+</div>
+
+<!-- ========================= -->
+<!-- AJAX Logic for Quick Actions -->
+<!-- ========================= -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Approve Project
+  document.querySelectorAll(".approveBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      if (!confirm("Approve this project?")) return;
+
+      const res = await fetch(`/client/projects/${id}/approve`, { method: "PUT" });
+      const json = await res.json();
+      alert(json.message || "Project approved!");
+      if (json.success) location.reload();
+    });
+  });
+
+  // Close Project
+  document.querySelectorAll(".closeBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      if (!confirm("Close this project?")) return;
+
+      const res = await fetch(`/client/projects/${id}/close`, { method: "PUT" });
+      const json = await res.json();
+      alert(json.message || "Project closed!");
+      if (json.success) location.reload();
+    });
+  });
+
+  // Delete Project
+  document.querySelectorAll(".deleteBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      if (!confirm("Are you sure you want to delete this project?")) return;
+
+      const res = await fetch(`/client/projects/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      alert(json.message || "Project deleted!");
+      if (json.success) location.reload();
+    });
+  });
+});
+</script>

@@ -1,0 +1,46 @@
+<!-- views/layouts/client-layout.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client | <%= title || "Dashboard" %></title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-gray-100 flex text-gray-800">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-green-700 text-white min-h-screen p-4">
+      <h2 class="text-2xl font-bold mb-8">Client Dashboard</h2>
+      <nav class="flex flex-col gap-3">
+        <a href="/client/dashboard" class="hover:bg-green-600 p-2 rounded">📊 Dashboard</a>
+        <a href="/client/post-project" class="hover:bg-green-600 p-2 rounded">📝 Post Project</a>
+        <a href="/client/projects" class="hover:bg-green-600 p-2 rounded">📁 My Projects</a>
+        <a href="/client/proposals" class="hover:bg-green-600 p-2 rounded">💬 Proposals</a>
+        <a href="/client/hire" class="hover:bg-green-600 p-2 rounded">🧩 Hire Freelancers</a>
+        <a href="/client/hired-projects" class="hover:bg-green-600 p-2 rounded">💼 Hired Freelancers</a>
+        <a href="/client/milestones"class="hover:bg-green-600 p-2 rounded">⏱ Milestones</a>
+        <a href="/client/projects/:id/milestones"class="hover:bg-green-600 p-2 rounded">⏱ All Milestones</a>
+        <a href="/client/manage" class="hover:bg-green-600 p-2 rounded">📈 Manage Project</a>
+        <a href="/client/chat-list" class="hover:bg-green-600 p-2 rounded">💬 Chat Inbox</a>
+        <a href="/client/chat" class="hover:bg-green-600 p-2 rounded">💭 Chat Room</a>
+        <a href="/client/payments" class="hover:bg-green-600 p-2 rounded">💸 Payments</a>
+        <a href="/client/reviews" class="hover:bg-green-600 p-2 rounded">⭐ Reviews</a>
+        <a href="/logout" class="hover:bg-green-600 p-2 rounded text-red-200">🚪 Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+       <% if (error && error.length) { %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded"><%= error[0] %></div>
+  <% } %>
+
+  <% if (success && success.length) { %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded"><%= success[0] %></div>
+  <% } %>
+
+      <%- body %>
+    </main>
+  </body>
+</html>

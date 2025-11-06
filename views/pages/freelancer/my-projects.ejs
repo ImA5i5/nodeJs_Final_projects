@@ -1,0 +1,215 @@
+<!-- ✅ views/pages/freelancer/my-projects.ejs -->
+<div class="max-w-7xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-6">
+  <h2 class="text-2xl font-bold text-green-700 mb-6">📋 My Projects</h2>
+
+  <% if (projects && projects.length > 0) { %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-200 rounded-lg">
+        <thead class="bg-green-700 text-white">
+          <tr>
+            <th class="py-3 px-4 text-left">Title</th>
+            <th class="py-3 px-4 text-left">Client</th>
+            <th class="py-3 px-4 text-center">Budget</th>
+            <th class="py-3 px-4 text-center">Status</th>
+            <th class="py-3 px-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% projects.forEach(p => { %>
+            <tr class="border-b hover:bg-gray-50 transition">
+              <td class="py-3 px-4 font-semibold text-gray-800"><%= p.title %></td>
+              <td class="py-3 px-4 text-gray-700"><%= p.client?.fullName || "N/A" %></td>
+              <td class="py-3 px-4 text-center text-gray-700">₹<%= p.budget %></td>
+              
+              <!-- ✅ Status Label -->
+              <td class="py-3 px-4 text-center">
+                <span
+                  class="px-3 py-1 rounded-full text-xs font-semibold
+                    <%= p.status === 'assigned' ? 'bg-yellow-200 text-yellow-800' :
+                         p.status === 'in-progress' ? 'bg-blue-200 text-blue-800' :
+                         p.status === 'submitted' ? 'bg-purple-200 text-purple-800' :
+                         p.status === 'completed' ? 'bg-green-200 text-green-800' :
+                         p.status === 'pending' ? 'bg-gray-200 text-gray-800' :
+                         'bg-gray-200 text-gray-600' %>">
+                  <%= p.status.charAt(0).toUpperCase() + p.status.slice(1) %>
+                </span>
+              </td>
+
+              <!-- ✅ Action Buttons -->
+              <td class="py-3 px-4 text-center flex justify-center gap-2 flex-wrap">
+
+                <!-- Assigned: Accept Project -->
+                <% if (p.status === 'assigned') { %>
+                  <button 
+                    data-id="<%= p._id %>" 
+                    class="acceptBtn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                    ✅ Accept Project
+                  </button>
+                <% } %>
+
+                <!-- In Progress: Upload / Submit / Request -->
+                <% if (p.status === 'in-progress') { %>
+                  <button 
+                    data-id="<%= p._id %>" 
+                    class="uploadBtn bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                    📤 Upload Deliverables
+                  </button>
+                  <button 
+                    data-id="<%= p._id %>" 
+                    class="submitBtn bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm">
+                    🚀 Submit for Approval
+                  </button>
+                  <button 
+                    data-id="<%= p._id %>" 
+                    class="releaseBtn bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                    💰 Request Milestone Release
+                  </button>
+                <% } %>
+
+                <!-- Submitted: Awaiting Review -->
+                <% if (p.status === 'submitted') { %>
+                  <span class="text-purple-600 text-sm font-semibold">
+                    ⏳ Awaiting Client Review...
+                  </span>
+                <% } %>
+
+                <!-- Completed: Done -->
+                <% if (p.status === 'completed') { %>
+                  <span class="text-green-600 text-sm font-semibold">
+                    ✅ Project Completed
+                  </span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <div class="text-center py-10 text-gray-500">No projects found.</div>
+  <% } %>
+</div>
+
+<!-- ✅ SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ✅ Accept Project
+  document.querySelectorAll(".acceptBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const projectId = btn.dataset.id;
+      const confirm = await Swal.fire({
+        title: "Accept Project?",
+        text: "Once accepted, this project will move to 'In-Progress'.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "✅ Accept",
+        cancelButtonText: "Cancel",
+      });
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const res = await fetch(`/project/${projectId}/accept`, { method: "POST" });
+        const data = await res.json();
+        if (data.success) {
+          Swal.fire("Accepted!", data.message, "success");
+          setTimeout(() => window.location.reload(), 1000);
+        } else {
+          Swal.fire("Error", data.message, "error");
+        }
+      } catch {
+        Swal.fire("Server Error", "Unable to accept project.", "error");
+      }
+    });
+  });
+
+  // 📤 Upload Deliverables
+  document.querySelectorAll(".uploadBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const projectId = btn.dataset.id;
+      const { value: fileInput } = await Swal.fire({
+        title: "Upload Deliverables",
+        input: "file",
+        inputAttributes: {
+          multiple: "multiple",
+          accept: ".zip,.pdf,.jpg,.png,.docx,.pptx"
+        },
+        showCancelButton: true,
+        confirmButtonText: "📤 Upload",
+      });
+      if (!fileInput) return;
+
+      const formData = new FormData();
+      for (const file of fileInput.files) formData.append("deliverables", file);
+
+      const res = await fetch(`/project/${projectId}/upload`, {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        Swal.fire("Uploaded!", data.message, "success");
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    });
+  });
+
+  // 🚀 Submit for Client Approval
+  document.querySelectorAll(".submitBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const projectId = btn.dataset.id;
+      const confirm = await Swal.fire({
+        title: "Submit for Client Approval?",
+        text: "This will notify the client to review your work.",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "🚀 Submit",
+      });
+      if (!confirm.isConfirmed) return;
+
+      try {
+        // ✅ Backend route: POST /project/:id/submit
+        const res = await fetch(`/project/${projectId}/submit`, { method: "POST" });
+        const data = await res.json();
+
+        if (data.success) {
+          Swal.fire("Submitted!", data.message, "success");
+          setTimeout(() => window.location.reload(), 1000);
+        } else {
+          Swal.fire("Error", data.message, "error");
+        }
+      } catch (err) {
+        Swal.fire("❌ Server Error", "Failed to submit project.", "error");
+      }
+    });
+  });
+
+  // 💰 Request Milestone Release
+  document.querySelectorAll(".releaseBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const projectId = btn.dataset.id;
+      const confirm = await Swal.fire({
+        title: "Request Milestone Release?",
+        text: "This will notify the client and admin to release payment.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "💰 Request",
+      });
+      if (!confirm.isConfirmed) return;
+
+      const res = await fetch(`/project/${projectId}/request-release`, { method: "POST" });
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Requested!", data.message, "success");
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    });
+  });
+});
+</script>

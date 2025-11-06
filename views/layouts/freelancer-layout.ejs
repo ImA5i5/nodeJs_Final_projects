@@ -1,0 +1,78 @@
+<!-- views/layouts/freelancer-layout.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer | <%= title || "Dashboard" %></title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-gray-50 flex text-gray-800">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-purple-700 text-white min-h-screen p-4">
+  <h2 class="text-2xl font-bold mb-8">Freelancer</h2>
+
+  <nav class="flex flex-col gap-3">
+    <a href="/freelancer/dashboard" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      🏠 <span>Dashboard</span>
+    </a>
+
+    <a href="/freelancer/profile" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      👤 <span>Profile</span>
+    </a>
+
+    <a href="/freelancer/browse" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      💼 <span>Browse Projects</span>
+    </a>
+
+    <a href="/freelancer/my-projects" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      📁 <span>My Projects</span>
+    </a>
+
+    <a href="/freelancer/milestones" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      📋 <span>Milestones</span>
+    </a>
+
+    <a href="/freelancer/my-bids" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      🧾 <span>My Bids</span>
+    </a>
+    
+    <a href="/freelancer/chat-list" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      💬 <span>Messages</span>
+    </a>
+
+    <a href="/chat/list" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+  💬 <span>Chat</span>
+    </a>
+
+    <a href="/freelancer/earnings" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      💳 <span>Earnings</span>
+    </a>
+
+    <a href="/freelancer/reviews" class="hover:bg-purple-600 p-2 rounded flex items-center gap-2">
+      ⭐ <span>Reviews</span>
+    </a>
+
+    <a href="/logout" class="hover:bg-purple-600 p-2 rounded text-red-200 flex items-center gap-2">
+      🚪 <span>Logout</span>
+    </a>
+  </nav>
+    </aside>
+
+
+    <!-- Main Content -->
+    
+    <main class="flex-1 p-8">
+       <% if (error && error.length) { %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded"><%= error[0] %></div>
+  <% } %>
+
+  <% if (success && success.length) { %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded"><%= success[0] %></div>
+  <% } %>
+
+      <%- body %>
+    </main>
+  </body>
+</html>

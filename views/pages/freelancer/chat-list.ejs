@@ -1,0 +1,33 @@
+<div class="max-w-4xl mx-auto bg-white shadow rounded-lg">
+  <div class="bg-purple-600 text-white px-6 py-4 rounded-t-lg">
+    <h2 class="text-2xl font-semibold">💬 Messages</h2>
+  </div>
+
+  <div class="divide-y">
+    <% if (chats.length === 0) { %>
+      <p class="p-6 text-gray-500 text-center">No messages yet.</p>
+    <% } else { %>
+      <% chats.forEach(chat => { %>
+        <a href="/freelancer/chat-room/<%= chat.otherUser._id %>" 
+           class="flex items-center justify-between p-4 hover:bg-gray-100">
+          <div class="flex items-center gap-3">
+            <% if (chat.otherUser.profile?.profilePic) { %>
+              <img src="<%= chat.otherUser.profile.profilePic %>" class="h-10 w-10 rounded-full object-cover" />
+            <% } else { %>
+              <div class="h-10 w-10 rounded-full bg-purple-200 flex items-center justify-center font-semibold text-purple-700">
+                <%= chat.otherUser.fullName[0].toUpperCase() %>
+              </div>
+            <% } %>
+            <div>
+              <p class="font-semibold text-gray-800"><%= chat.otherUser.fullName %></p>
+              <p class="text-gray-500 text-sm truncate w-48"><%= chat.lastMessage || "No messages yet" %></p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400">
+            <%= new Date(chat.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+          </p>
+        </a>
+      <% }) %>
+    <% } %>
+  </div>
+</div>

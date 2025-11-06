@@ -1,0 +1,215 @@
+<!-- ✅ views/pages/client/milestones.ejs -->
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
+  <h2 class="text-3xl font-bold text-green-700 mb-6 flex items-center gap-2">
+    💼 Milestones for <%= project.title %>
+  </h2>
+
+  <!-- ✅ Create Milestone Form -->
+  <form id="createMilestoneForm" class="grid md:grid-cols-4 gap-3 mb-8">
+    <input name="title" placeholder="Milestone title" required class="p-2 border rounded-md" />
+    <input name="amount" type="number" placeholder="Amount (₹)" required class="p-2 border rounded-md" />
+    <input name="dueDate" type="date" class="p-2 border rounded-md" />
+    <textarea name="description" placeholder="Description" class="md:col-span-4 p-2 border rounded-md"></textarea>
+    <button
+      type="submit"
+      class="md:col-span-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-md transition">
+      ➕ Create Milestone
+    </button>
+  </form>
+
+  <!-- ✅ Milestone List -->
+  <div id="milestoneList" class="space-y-4">
+    <% if (milestones.length) { %>
+      <% milestones.forEach(m => { %>
+        <div
+          class="border rounded-lg p-4 shadow-sm flex justify-between items-start hover:shadow-md transition"
+          id="milestone-<%= m._id %>"
+        >
+          <div>
+            <h4 class="text-lg font-semibold text-gray-800"><%= m.title %> — ₹<%= m.amount %></h4>
+            <p class="text-sm text-gray-600"><%= m.description || 'No description' %></p>
+            <p class="text-xs text-gray-500 mt-1">
+              Due: <%= m.dueDate ? new Date(m.dueDate).toLocaleDateString() : 'N/A' %>
+            </p>
+            <span
+              class="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full
+              <% if (m.status === 'created') { %> bg-yellow-100 text-yellow-700
+              <% } else if (m.status === 'funded') { %> bg-blue-100 text-blue-700
+              <% } else if (m.status === 'submitted') { %> bg-purple-100 text-purple-700
+              <% } else if (m.status === 'revision-requested') { %> bg-orange-100 text-orange-700
+              <% } else if (m.status === 'released' || m.status === 'completed') { %> bg-green-100 text-green-700
+              <% } else { %> bg-gray-100 text-gray-700 <% } %>">
+              <%= m.status %>
+            </span>
+          </div>
+
+          <!-- ✅ Actions -->
+          <div class="flex flex-col gap-2 text-right">
+            <% if (m.status === 'created') { %>
+              <button
+                class="depositBtn bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded"
+                data-id="<%= m._id %>">💰 Fund Escrow</button>
+            <% } else if (m.status === 'submitted') { %>
+              <button
+                class="approveBtn bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded"
+                data-id="<%= m._id %>">✅ Approve & Release</button>
+              <button
+                class="reviseBtn bg-orange-500 hover:bg-orange-600 text-white text-sm px-3 py-1 rounded"
+                data-id="<%= m._id %>">✏️ Request Revision</button>
+            <% } else if (m.status === 'funded' || m.status === 'in-progress') { %>
+              <span class="text-xs text-gray-500 italic">Freelancer working...</span>
+            <% } else if (m.status === 'released' || m.status === 'completed') { %>
+              <span class="text-xs text-green-600 font-semibold">✅ Done</span>
+            <% } else if (m.status === 'revision-requested') { %>
+              <span class="text-xs text-orange-600 italic">Awaiting resubmission...</span>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="text-center text-gray-500 py-10">No milestones yet. Create one above.</div>
+    <% } %>
+  </div>
+</div>
+
+<!-- ✅ SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+/* -------------------------------
+   1️⃣ CREATE MILESTONE (AJAX)
+--------------------------------*/
+document.getElementById("createMilestoneForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  
+  Swal.fire({
+    title: "Creating milestone...",
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading(),
+  });
+
+  const res = await fetch(`/milestone/project/<%= project._id %>/milestone`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  const result = await res.json();
+
+  Swal.close();
+
+  if (res.ok && result.success) {
+    Swal.fire("✅ Success", result.message, "success").then(() => location.reload());
+  } else {
+    Swal.fire("❌ Error", result.message || "Failed to create milestone.", "error");
+  }
+});
+
+
+/* -------------------------------
+   2️⃣ FUND (ESCROW)
+--------------------------------*/
+document.querySelectorAll(".depositBtn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.id;
+    const confirm = await Swal.fire({
+      title: "💰 Fund Escrow?",
+      text: "This will lock funds for the milestone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, fund now",
+      confirmButtonColor: "#16a34a",
+      cancelButtonColor: "#d33"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    Swal.fire({ title: "Processing...", didOpen: () => Swal.showLoading() });
+
+    const res = await fetch(`/milestone/milestone/${id}/deposit`, { method: "POST" });
+    const result = await res.json();
+    Swal.close();
+
+    if (res.ok && result.success) {
+      Swal.fire("✅ Funded", result.message, "success").then(() => location.reload());
+    } else {
+      Swal.fire("❌ Error", result.message || "Funding failed.", "error");
+    }
+  });
+});
+
+
+/* -------------------------------
+   3️⃣ APPROVE & RELEASE
+--------------------------------*/
+document.querySelectorAll(".approveBtn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.id;
+
+    const confirm = await Swal.fire({
+      title: "Approve this milestone?",
+      text: "Funds will be released to the freelancer.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "✅ Approve & Release",
+      confirmButtonColor: "#16a34a"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    Swal.fire({ title: "Releasing payment...", didOpen: () => Swal.showLoading() });
+
+    const res = await fetch(`/milestone/milestone/${id}/review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "approve" })
+    });
+    const result = await res.json();
+
+    Swal.close();
+
+    if (res.ok && result.success) {
+      Swal.fire("✅ Released", result.message, "success").then(() => location.reload());
+    } else {
+      Swal.fire("❌ Error", result.message || "Could not approve milestone.", "error");
+    }
+  });
+});
+
+
+/* -------------------------------
+   4️⃣ REQUEST REVISION
+--------------------------------*/
+document.querySelectorAll(".reviseBtn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.id;
+
+    const { value: note } = await Swal.fire({
+      title: "✏️ Request Revision",
+      input: "textarea",
+      inputLabel: "Enter feedback for the freelancer:",
+      inputPlaceholder: "Describe what needs revision...",
+      showCancelButton: true
+    });
+
+    if (!note) return;
+
+    Swal.fire({ title: "Sending...", didOpen: () => Swal.showLoading() });
+
+    const res = await fetch(`/milestone/milestone/${id}/review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "request_revision", note })
+    });
+
+    const result = await res.json();
+    Swal.close();
+
+    if (res.ok && result.success) {
+      Swal.fire("✏️ Sent", result.message, "success").then(() => location.reload());
+    } else {
+      Swal.fire("❌ Error", result.message || "Could not request revision.", "error");
+    }
+  });
+});
+</script>

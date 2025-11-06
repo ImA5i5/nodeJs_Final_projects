@@ -1,0 +1,19 @@
+<!-- views/pages/chat/notifications.ejs -->
+
+
+<h1 class="text-2xl font-bold mb-6">🔔 Notifications</h1>
+
+<div class="bg-white shadow rounded-lg p-6">
+  <% if (notifications && notifications.length > 0) { %>
+    <ul class="divide-y">
+      <% notifications.forEach(note => { %>
+        <li class="py-3">
+          <p class="text-gray-800"><%= note.message %></p>
+          <span class="text-xs text-gray-500"><%= new Date(note.createdAt).toLocaleString() %></span>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p class="text-gray-500">You have no new notifications.</p>
+  <% } %>
+</div>

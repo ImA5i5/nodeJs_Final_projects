@@ -1,0 +1,37 @@
+<!-- views/partials/sidebar.ejs -->
+<aside class="w-64 bg-gray-900 text-white min-h-screen p-4">
+  <h2 class="text-xl font-bold mb-6">
+    <% if (user.role === 'admin') { %> Admin Panel
+    <% } else if (user.role === 'freelancer') { %> Freelancer
+    <% } else { %> Client Dashboard <% } %>
+  </h2>
+
+  <nav class="flex flex-col gap-3 text-sm">
+    <% if (user.role === 'admin') { %>
+      <a href="/admin/dashboard" class="hover:bg-gray-700 p-2 rounded">📊 Dashboard</a>
+      <a href="/admin/users" class="hover:bg-gray-700 p-2 rounded">👥 User Management</a>
+      <a href="/admin/categories" class="hover:bg-gray-700 p-2 rounded">🏷 Categories</a>
+      <a href="/admin/projects" class="hover:bg-gray-700 p-2 rounded">📁 Projects</a>
+      <a href="/admin/payments" class="hover:bg-gray-700 p-2 rounded">💳 Payments</a>
+      <a href="/admin/reports" class="hover:bg-gray-700 p-2 rounded">📈 Reports</a>
+
+    <% } else if (user.role === 'freelancer') { %>
+      <a href="/freelancer/dashboard" class="hover:bg-gray-700 p-2 rounded">🏠 Dashboard</a>
+      <a href="/freelancer/profile" class="hover:bg-gray-700 p-2 rounded">👤 Profile</a>
+      <a href="/freelancer/browse" class="hover:bg-gray-700 p-2 rounded">💼 Browse Projects</a>
+      <a href="/freelancer/my-bids" class="hover:bg-gray-700 p-2 rounded">🧾 My Bids</a>
+      <a href="/freelancer/earnings" class="hover:bg-gray-700 p-2 rounded">💳 Earnings</a>
+      <a href="/freelancer/reviews" class="hover:bg-gray-700 p-2 rounded">⭐ Reviews</a>
+
+    <% } else if (user.role === 'client') { %>
+      <a href="/client/dashboard" class="hover:bg-gray-700 p-2 rounded">📊 Dashboard</a>
+      <a href="/client/post-project" class="hover:bg-gray-700 p-2 rounded">📝 Post Project</a>
+      <a href="/client/projects" class="hover:bg-gray-700 p-2 rounded">📁 My Projects</a>
+      <a href="/client/hire" class="hover:bg-gray-700 p-2 rounded">🧩 Hire Freelancers</a>
+      <a href="/client/payments" class="hover:bg-gray-700 p-2 rounded">💸 Payments</a>
+      <a href="/client/reviews" class="hover:bg-gray-700 p-2 rounded">⭐ Reviews</a>
+    <% } %>
+
+    <a href="/logout" class="mt-4 bg-red-500 hover:bg-red-600 p-2 rounded text-center text-white">🚪 Logout</a>
+  </nav>
+</aside>

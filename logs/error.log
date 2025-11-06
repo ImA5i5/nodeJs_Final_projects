@@ -1,0 +1,27 @@
+[2025-10-21 06:02:27] ERROR: ❌ Mailer Connection Error: Connection closed
+[2025-10-21 06:05:22] ERROR: ❌ Mailer Connection Error: Client network socket disconnected before secure TLS connection was established
+[2025-10-21 06:06:54] ERROR: ❌ MongoDB Connection Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.qnunwtq.mongodb.net
+[2025-10-22 02:26:39] ERROR: Dashboard Error: Project is not defined
+[2025-10-22 02:28:04] ERROR: Dashboard Error: Payment is not defined
+[2025-10-22 02:28:05] ERROR: Dashboard Error: Payment is not defined
+[2025-10-25 12:24:32] ERROR: ❌ MongoDB Connection Error: queryTxt EREFUSED cluster0.qnunwtq.mongodb.net
+[2025-10-26 17:29:20] ERROR: ❌ MongoDB Connection Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.qnunwtq.mongodb.net
+[2025-10-26 17:30:00] ERROR: ❌ MongoDB Connection Error: querySrv EREFUSED _mongodb._tcp.cluster0.qnunwtq.mongodb.net
+[2025-10-26 17:31:18] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.qnunwtq.mongodb.net
+[2025-10-26 17:34:44] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.qnunwtq.mongodb.net
+[2025-10-27 00:25:33] ERROR: View My Projects Error: Review is not defined
+[2025-10-28 02:06:16] ERROR: Update Project Error:
+[2025-10-28 02:06:17] ERROR: Update Project Error:
+[2025-11-01 13:30:06] ERROR: ❌ MongoDB Connection Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+[2025-11-01 13:34:07] ERROR: ❌ MongoDB Connection Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+[2025-11-03 02:35:32] ERROR: Accept Proposal Error: Project validation failed: status: `assigned` is not a valid enum value for path `status`.
+[2025-11-03 12:07:35] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-03 12:07:37] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-03 12:07:38] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-03 12:07:38] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-03 12:07:50] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-03 12:07:53] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-05 18:13:15] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.qnunwtq.mongodb.net
+[2025-11-06 00:31:30] ERROR: Withdrawal Request Error: Cannot destructure property 'method' of 'req.body' as it is undefined.
+[2025-11-06 00:31:41] ERROR: Withdrawal Request Error: Cannot destructure property 'method' of 'req.body' as it is undefined.
+[2025-11-06 18:28:51] ERROR: ❌ MongoDB Connection Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.qnunwtq.mongodb.net

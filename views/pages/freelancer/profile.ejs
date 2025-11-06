@@ -1,0 +1,193 @@
+<!-- views/pages/freelancer/profile.ejs -->
+<div class="max-w-5xl mx-auto p-8 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold text-blue-600 mb-6">👤 My Freelancer Profile</h2>
+
+  <!-- Tabs -->
+  <div class="flex gap-4 mb-6 border-b pb-2">
+    <button id="viewTab" class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-1">View Profile</button>
+    <button id="editTab" class="text-gray-600 hover:text-blue-600">Edit Profile</button>
+  </div>
+
+  <!-- Feedback message -->
+  <div id="feedback" class="hidden p-3 mb-4 rounded text-center"></div>
+
+  <!-- ===== 👀 VIEW PROFILE SECTION ===== -->
+  <div id="viewSection" class="space-y-4">
+    <div class="flex items-center gap-6">
+      <img
+        src="<%= user.profile?.profilePic || '/default-avatar.png' %>"
+        class="w-24 h-24 rounded-full object-cover border"
+      />
+      <div>
+        <h3 class="text-xl font-semibold text-gray-800"><%= user.fullName %></h3>
+        <p class="text-gray-500">@<%= user.email %></p>
+        <p class="mt-2 text-green-600 font-semibold">₹<%= user.profile?.hourlyRate || 0 %>/hr</p>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <h4 class="font-semibold text-gray-700 mb-2">🧾 Bio</h4>
+      <p class="text-gray-600"><%= user.profile?.bio || "No bio added yet." %></p>
+    </div>
+
+    <div class="mt-4 grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">💡 Skills</h4>
+        <% if (user.profile?.skills?.length) { %>
+          <div class="flex flex-wrap gap-2">
+            <% user.profile.skills.forEach(skill => { %>
+              <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"><%= skill %></span>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="text-gray-500">No skills added yet.</p>
+        <% } %>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-gray-700 mb-2">🎓 Certifications</h4>
+        <% if (user.profile?.certifications?.length) { %>
+          <ul class="list-disc ml-6 text-gray-600">
+            <% user.profile.certifications.forEach(cert => { %>
+              <li><%= cert %></li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p class="text-gray-500">No certifications listed.</p>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <h4 class="font-semibold text-gray-700 mb-2">📁 Portfolio</h4>
+      <% if (user.profile?.portfolio?.length) { %>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <% user.profile.portfolio.forEach(img => { %>
+            <img src="<%= img %>" class="rounded-lg shadow-sm object-cover h-32 w-full" />
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-gray-500">No portfolio uploaded yet.</p>
+      <% } %>
+    </div>
+
+    <div class="mt-4">
+      <h4 class="font-semibold text-gray-700 mb-2">⭐ Average Rating</h4>
+      <p class="text-lg text-yellow-500 font-semibold"><%= user.profile?.rating || 0 %> / 5</p>
+    </div>
+  </div>
+
+  <!-- ===== 📝 EDIT PROFILE SECTION ===== -->
+  <div id="editSection" class="hidden">
+    <form id="profileForm" enctype="multipart/form-data" class="space-y-6">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-semibold">Full Name</label>
+          <input type="text" name="fullName" value="<%= user.fullName || '' %>" class="border rounded p-2 w-full" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold">Hourly Rate (₹)</label>
+          <input type="number" name="hourlyRate" value="<%= user.profile?.hourlyRate || '' %>" class="border rounded p-2 w-full" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold">Bio</label>
+        <textarea name="bio" rows="3" class="border rounded p-2 w-full"><%= user.profile?.bio || '' %></textarea>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-semibold">Experience (Years)</label>
+          <input type="number" name="experience" value="<%= user.profile?.experience || '' %>" class="border rounded p-2 w-full" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold">Skills (comma separated)</label>
+          <input type="text" name="skills" value="<%= user.profile?.skills?.join(', ') || '' %>" class="border rounded p-2 w-full" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold">Certifications (comma separated)</label>
+        <input type="text" name="certifications" value="<%= user.profile?.certifications?.join(', ') || '' %>" class="border rounded p-2 w-full" />
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-semibold">Profile Picture</label>
+          <% if (user.profile?.profilePic) { %>
+            <img src="<%= user.profile.profilePic %>" alt="Profile Pic" class="h-24 w-24 rounded-full object-cover mb-2 border" />
+          <% } %>
+          <input type="file" name="profilePic" accept="image/*" class="border rounded p-2 w-full" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold">Portfolio Samples</label>
+          <input type="file" name="portfolio" accept="image/*" multiple class="border rounded p-2 w-full" />
+        </div>
+      </div>
+
+      <button type="submit" id="updateBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded w-full md:w-auto">
+        💾 Update Profile
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- JavaScript for Tabs + AJAX Update -->
+<script>
+  const viewTab = document.getElementById("viewTab");
+  const editTab = document.getElementById("editTab");
+  const viewSection = document.getElementById("viewSection");
+  const editSection = document.getElementById("editSection");
+  const feedback = document.getElementById("feedback");
+  const form = document.getElementById("profileForm");
+  const updateBtn = document.getElementById("updateBtn");
+
+  // Toggle View/Edit
+  viewTab.addEventListener("click", () => {
+    viewSection.classList.remove("hidden");
+    editSection.classList.add("hidden");
+    viewTab.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    editTab.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  editTab.addEventListener("click", () => {
+    editSection.classList.remove("hidden");
+    viewSection.classList.add("hidden");
+    editTab.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    viewTab.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  // AJAX Update Profile
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    updateBtn.disabled = true;
+    updateBtn.textContent = "Updating...";
+
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("/freelancer/profile/update", { method: "POST", body: formData });
+      if (res.ok) {
+        feedback.textContent = "✅ Profile updated successfully!";
+        feedback.className = "p-3 mb-4 bg-green-500 text-white rounded text-center";
+        feedback.classList.remove("hidden");
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        feedback.textContent = "❌ Update failed.";
+        feedback.className = "p-3 mb-4 bg-red-500 text-white rounded text-center";
+        feedback.classList.remove("hidden");
+      }
+    } catch (err) {
+      feedback.textContent = "⚠️ Network error. Please try again.";
+      feedback.className = "p-3 mb-4 bg-yellow-500 text-white rounded text-center";
+      feedback.classList.remove("hidden");
+    } finally {
+      updateBtn.disabled = false;
+      updateBtn.textContent = "💾 Update Profile";
+    }
+  });
+</script>

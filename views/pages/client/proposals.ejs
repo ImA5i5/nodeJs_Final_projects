@@ -1,0 +1,128 @@
+<!-- ✅ views/pages/client/proposals.ejs -->
+<div class="max-w-7xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-3xl font-bold text-green-700">💬 Freelancer Proposals</h2>
+  </div>
+
+  <% if (hasProposals) { %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-200 rounded-lg">
+        <thead class="bg-green-700 text-white text-sm">
+          <tr>
+            <th class="py-3 px-4 text-left">Freelancer</th>
+            <th class="py-3 px-4 text-left">Project</th>
+            <th class="py-3 px-4 text-center">Bid Amount</th>
+            <th class="py-3 px-4 text-center">Delivery</th>
+            <th class="py-3 px-4 text-center">Status</th>
+            <th class="py-3 px-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% proposals.forEach((p) => { %>
+            <tr class="border-b hover:bg-gray-50 transition text-sm">
+              <td class="py-3 px-4 flex items-center gap-3">
+                <% if (p.freelancer.profile?.profilePic) { %>
+                  <img src="<%= p.freelancer.profile.profilePic %>" alt="Profile" class="h-10 w-10 rounded-full object-cover" />
+                <% } else { %>
+                  <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-700">
+                    <%= p.freelancer.fullName.charAt(0).toUpperCase() %>
+                  </div>
+                <% } %>
+                <div>
+                  <div class="font-semibold text-gray-800"><%= p.freelancer.fullName %></div>
+                  <div class="text-xs text-gray-500"><%= p.freelancer.email %></div>
+                </div>
+              </td>
+              <td class="py-3 px-4"><%= p.project.title %></td>
+              <td class="py-3 px-4 text-center">₹<%= p.bidAmount %></td>
+              <td class="py-3 px-4 text-center"><%= p.deliveryTime %> days</td>
+              <td class="py-3 px-4 text-center">
+                <span
+                  class="px-3 py-1 rounded-full text-xs font-semibold
+                    <%= p.status === 'accepted' ? 'bg-green-100 text-green-700' :
+                        p.status === 'shortlisted' ? 'bg-blue-100 text-blue-700' :
+                        p.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                        'bg-yellow-100 text-yellow-700' %>">
+                  <%= p.status.charAt(0).toUpperCase() + p.status.slice(1) %>
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center flex justify-center gap-2">
+                <% if (p.status === 'pending') { %>
+                  <button data-id="<%= p._id %>" class="shortlistBtn bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">⭐ Shortlist</button>
+                  <button data-id="<%= p._id %>" class="acceptBtn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">✅ Hire</button>
+                  <button data-id="<%= p._id %>" class="rejectBtn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">❌ Reject</button>
+                <% } else if (p.status === 'shortlisted') { %>
+                  <button data-id="<%= p._id %>" class="acceptBtn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">✅ Hire</button>
+                  <button data-id="<%= p._id %>" class="rejectBtn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">❌ Reject</button>
+                <% } else { %>
+                  <span class="text-gray-400 italic text-xs">No actions available</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <div class="text-center py-12 text-gray-500 text-lg">No proposals found.</div>
+  <% } %>
+</div>
+
+<!-- ✅ SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // ✅ Accept (Hire)
+  document.querySelectorAll(".acceptBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const bidId = btn.dataset.id;
+      const confirm = await Swal.fire({
+        title: "Hire this freelancer?",
+        text: "Once hired, other proposals for this project will be rejected.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Hire!",
+        cancelButtonText: "Cancel",
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const res = await fetch(`/client/proposals/${bidId}/accept`, { method: "POST" });
+        const data = await res.json();
+
+        if (data.success) {
+          await Swal.fire("Hired!", data.message, "success");
+          location.reload();
+        } else {
+          Swal.fire("Error", data.message, "error");
+        }
+      } catch (err) {
+        Swal.fire("Server Error", "Could not hire freelancer.", "error");
+      }
+    });
+  });
+
+  // ⭐ Shortlist
+  document.querySelectorAll(".shortlistBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const bidId = btn.dataset.id;
+      const res = await fetch(`/client/proposals/${bidId}/shortlist`, { method: "POST" });
+      const data = await res.json();
+      if (data.success) Swal.fire("Shortlisted!", data.message, "success").then(() => location.reload());
+    });
+  });
+
+  // ❌ Reject
+  document.querySelectorAll(".rejectBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const bidId = btn.dataset.id;
+      const res = await fetch(`/client/proposals/${bidId}/reject`, { method: "POST" });
+      const data = await res.json();
+      if (data.success) Swal.fire("Rejected", data.message, "info").then(() => location.reload());
+    });
+  });
+});
+</script>
+

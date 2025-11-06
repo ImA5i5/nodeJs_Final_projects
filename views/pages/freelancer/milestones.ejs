@@ -1,0 +1,201 @@
+<!-- ✅ views/pages/freelancer/milestones.ejs -->
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
+  <h2 class="text-3xl font-bold text-blue-700 mb-6 flex items-center gap-2">
+    🧩 My Milestones
+  </h2>
+
+  <% if (milestones && milestones.length > 0) { %>
+    <div id="milestoneList" class="space-y-4">
+      <% milestones.forEach(m => { %>
+        <div
+          class="border rounded-lg p-4 shadow-sm flex justify-between items-start hover:shadow-md transition"
+          id="milestone-<%= m._id %>"
+        >
+          <div>
+            <h4 class="text-lg font-semibold text-gray-800"><%= m.title %> — ₹<%= m.amount %></h4>
+            <p class="text-sm text-gray-600"><%= m.description || 'No description' %></p>
+            <p class="text-xs text-gray-500 mt-1">
+              Due: <%= m.dueDate ? new Date(m.dueDate).toLocaleDateString() : 'N/A' %>
+            </p>
+            <span
+              class="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full
+              <% if (m.status === 'created') { %> bg-yellow-100 text-yellow-700
+              <% } else if (m.status === 'funded') { %> bg-blue-100 text-blue-700
+              <% } else if (m.status === 'in-progress') { %> bg-indigo-100 text-indigo-700
+              <% } else if (m.status === 'submitted') { %> bg-purple-100 text-purple-700
+              <% } else if (m.status === 'revision-requested') { %> bg-orange-100 text-orange-700
+              <% } else if (m.status === 'released' || m.status === 'completed') { %> bg-green-100 text-green-700
+              <% } else { %> bg-gray-100 text-gray-700 <% } %>">
+              <%= m.status %>
+            </span>
+          </div>
+
+          <!-- ✅ Freelancer Actions -->
+          <div class="flex flex-col gap-2 text-right">
+            <% if (m.status === 'created' || m.status === 'funded') { %>
+              <button
+                class="startBtn bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded"
+                data-id="<%= m._id %>">▶ Start Work</button>
+            <% } %>
+
+            <% if (m.status === 'in-progress' || m.status === 'revision-requested') { %>
+              <form id="uploadForm-<%= m._id %>" enctype="multipart/form-data" class="flex flex-col gap-2">
+                <input
+                  type="file"
+                  name="attachments"
+                  multiple
+                  class="text-xs text-gray-700"
+                  accept=".zip,.rar,.pdf,.jpg,.png,.docx"
+                />
+                <button
+                  type="button"
+                  class="uploadBtn bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded"
+                  data-id="<%= m._id %>">
+                  📤 Upload Deliverables
+                </button>
+                <progress id="progress-<%= m._id %>" value="0" max="100" class="hidden w-full h-2 rounded"></progress>
+              </form>
+
+              <button
+                class="submitBtn bg-purple-600 hover:bg-purple-700 text-white text-sm px-3 py-1 rounded"
+                data-id="<%= m._id %>">
+                🚀 Submit for Review
+              </button>
+            <% } %>
+
+            <% if (m.status === 'submitted') { %>
+              <span class="text-xs text-gray-500 italic">⏳ Waiting for client review...</span>
+            <% } %>
+
+            <% if (m.status === 'released' || m.status === 'completed') { %>
+              <span class="text-xs text-green-600 font-semibold">✅ Milestone Completed</span>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="text-center py-10 text-gray-600">
+      <p>No milestones assigned yet.</p>
+    </div>
+  <% } %>
+</div>
+
+<!-- ✅ SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+/* -------------------------------
+   1️⃣ START MILESTONE
+--------------------------------*/
+document.querySelectorAll(".startBtn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.id;
+
+    const confirm = await Swal.fire({
+      title: "Start Milestone?",
+      text: "This will mark the milestone as 'In Progress'.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Start Work",
+      confirmButtonColor: "#16a34a"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    Swal.fire({ title: "Starting...", didOpen: () => Swal.showLoading() });
+
+    const res = await fetch(`/milestone/milestone/${id}/start`, { method: "POST" });
+    const result = await res.json();
+    Swal.close();
+
+    if (res.ok && result.success) {
+      Swal.fire("✅ Started!", result.message, "success").then(() => location.reload());
+    } else {
+      Swal.fire("❌ Error", result.message || "Unable to start milestone.", "error");
+    }
+  });
+});
+
+
+/* -------------------------------
+   2️⃣ UPLOAD DELIVERABLES
+--------------------------------*/
+document.querySelectorAll(".uploadBtn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.id;
+    const form = document.getElementById(`uploadForm-${id}`);
+    const progressBar = document.getElementById(`progress-${id}`);
+
+    const files = form.querySelector('input[type="file"]').files;
+    if (!files.length) return Swal.fire("⚠️ No files", "Please select deliverable files first.", "warning");
+
+    const fd = new FormData(form);
+    progressBar.classList.remove("hidden");
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/milestone/milestone/${id}/upload`, true);
+
+    xhr.upload.onprogress = function (e) {
+      if (e.lengthComputable) {
+        const percent = Math.round((e.loaded / e.total) * 100);
+        progressBar.value = percent;
+      }
+    };
+
+    xhr.onload = async function () {
+      progressBar.classList.add("hidden");
+      if (xhr.status === 200) {
+        const data = JSON.parse(xhr.responseText);
+        if (data.success) {
+          Swal.fire("✅ Uploaded", data.message, "success").then(() => location.reload());
+        } else {
+          Swal.fire("❌ Error", data.message || "Upload failed.", "error");
+        }
+      } else {
+        Swal.fire("❌ Error", "Server error during upload.", "error");
+      }
+    };
+
+    xhr.send(fd);
+  });
+});
+
+
+/* -------------------------------
+   3️⃣ SUBMIT FOR REVIEW
+--------------------------------*/
+document.querySelectorAll(".submitBtn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.id;
+
+    const confirm = await Swal.fire({
+      title: "Submit for Review?",
+      text: "Notify the client that the milestone is ready for review.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "🚀 Submit",
+      confirmButtonColor: "#9333ea"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    Swal.fire({ title: "Submitting...", didOpen: () => Swal.showLoading() });
+
+    const res = await fetch(`/milestone/milestone/${id}/upload`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "submitted" })
+    });
+
+    const result = await res.json();
+    Swal.close();
+
+    if (res.ok && result.success) {
+      Swal.fire("🚀 Submitted!", result.message, "success").then(() => location.reload());
+    } else {
+      Swal.fire("❌ Error", result.message || "Failed to submit milestone.", "error");
+    }
+  });
+});
+</script>

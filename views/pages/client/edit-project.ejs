@@ -1,0 +1,232 @@
+<!-- views/pages/client/edit-project.ejs -->
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8 mt-10">
+  <h2 class="text-3xl font-bold text-blue-600 mb-6 flex items-center gap-2">
+    ✏️ Edit Project
+  </h2>
+
+  <!-- Alerts -->
+  <div id="alertBox" class="hidden mb-4 p-3 rounded text-white"></div>
+
+  <form id="editProjectForm" enctype="multipart/form-data" class="space-y-6">
+    <!-- Title -->
+    <div>
+      <label class="block text-sm font-semibold mb-1">Project Title</label>
+      <input
+        type="text"
+        name="title"
+        value="<%= project.title %>"
+        required
+        class="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label class="block text-sm font-semibold mb-1">Description</label>
+      <textarea
+        name="description"
+        rows="4"
+        required
+        class="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500"
+      ><%= project.description %></textarea>
+    </div>
+
+    <!-- Category & Budget -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-semibold mb-1">Category</label>
+        <input
+          type="text"
+          name="category"
+          value="<%= project.category?.name || project.category || '' %>"
+          class="border border-gray-300 rounded-lg p-3 w-full"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-1">Budget (₹)</label>
+        <input
+          type="number"
+          name="budget"
+          min="1"
+          value="<%= project.budget %>"
+          required
+          class="border border-gray-300 rounded-lg p-3 w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Duration -->
+    <div>
+      <label class="block text-sm font-semibold mb-1">Project Duration</label>
+      <input
+        type="text"
+        name="duration"
+        value="<%= project.duration || '' %>"
+        class="border border-gray-300 rounded-lg p-3 w-full"
+      />
+    </div>
+
+    <!-- Payment Type Toggle -->
+    <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg">
+      <div>
+        <label class="block text-sm font-semibold mb-1">Payment Type</label>
+        <p class="text-gray-600 text-sm">Select your preferred payment model.</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span id="fixedLabel" class="font-medium text-blue-600">Fixed</span>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="paymentToggle"
+            class="sr-only peer"
+            <%= project.paymentType === "hourly" ? "checked" : "" %>
+          />
+          <div
+            class="w-11 h-6 bg-gray-300 peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer
+            peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px]
+            after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
+            peer-checked:bg-green-500"
+          ></div>
+        </label>
+        <span id="hourlyLabel" class="font-medium text-gray-500">Hourly</span>
+      </div>
+      <input type="hidden" name="paymentType" id="paymentType" value="<%= project.paymentType %>" />
+    </div>
+
+    <!-- Attachments -->
+    <div>
+      <label class="block text-sm font-semibold mb-2">📎 Attachments</label>
+      <input
+        type="file"
+        name="attachments"
+        id="attachments"
+        multiple
+        accept=".jpg,.jpeg,.png,.pdf,.docx"
+        class="border border-gray-300 rounded-lg p-3 w-full"
+      />
+
+      <!-- Existing Files -->
+      <div id="existingFiles" class="mt-3 flex flex-wrap gap-3">
+        <% if (project.attachments && project.attachments.length) { %>
+          <% project.attachments.forEach((file) => { %>
+            <div
+              class="border rounded-lg px-3 py-2 text-sm bg-gray-50 flex items-center gap-2"
+              data-url="<%= file %>"
+            >
+              <a href="<%= file %>" target="_blank" class="text-blue-600 underline">📄 View</a>
+              <button
+                type="button"
+                class="text-red-500 text-xs font-semibold removeFileBtn"
+              >
+                ✖ Remove
+              </button>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="text-gray-400 text-sm">No files uploaded yet.</p>
+        <% } %>
+      </div>
+
+      <!-- File Preview -->
+      <div id="filePreview" class="mt-3 flex flex-wrap gap-3"></div>
+
+      <!-- Hidden field for removed files -->
+      <input type="hidden" name="removeFiles" id="removeFiles" />
+    </div>
+
+    <!-- Save Changes -->
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200"
+      >
+        💾 Save Changes
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- ✅ JS: File Removal, Preview, Payment Toggle, and AJAX Update -->
+<script>
+  const form = document.getElementById("editProjectForm");
+  const alertBox = document.getElementById("alertBox");
+  const fileInput = document.getElementById("attachments");
+  const filePreview = document.getElementById("filePreview");
+  const existingFiles = document.getElementById("existingFiles");
+  const removeFilesInput = document.getElementById("removeFiles");
+  const paymentToggle = document.getElementById("paymentToggle");
+  const paymentTypeInput = document.getElementById("paymentType");
+  const fixedLabel = document.getElementById("fixedLabel");
+  const hourlyLabel = document.getElementById("hourlyLabel");
+
+  let removedFiles = [];
+
+  // 💰 Toggle Payment Type
+  paymentToggle.addEventListener("change", () => {
+    if (paymentToggle.checked) {
+      paymentTypeInput.value = "hourly";
+      fixedLabel.classList.remove("text-blue-600");
+      hourlyLabel.classList.add("text-green-600");
+    } else {
+      paymentTypeInput.value = "fixed";
+      hourlyLabel.classList.remove("text-green-600");
+      fixedLabel.classList.add("text-blue-600");
+    }
+  });
+
+  // 📎 Preview New Files
+  fileInput.addEventListener("change", () => {
+    filePreview.innerHTML = "";
+    [...fileInput.files].forEach((file) => {
+      const div = document.createElement("div");
+      div.className = "border rounded-lg px-3 py-2 text-sm bg-gray-50 flex items-center gap-2";
+      div.innerHTML = `<span>📄 ${file.name}</span><span class="text-gray-400 text-xs">(${(file.size / 1024).toFixed(1)} KB)</span>`;
+      filePreview.appendChild(div);
+    });
+  });
+
+  // ❌ Remove Existing File (marks for deletion)
+  existingFiles.addEventListener("click", (e) => {
+    if (e.target.classList.contains("removeFileBtn")) {
+      const parent = e.target.closest("[data-url]");
+      const fileUrl = parent.dataset.url;
+      removedFiles.push(fileUrl);
+      parent.remove();
+      removeFilesInput.value = removedFiles.join(",");
+    }
+  });
+
+  // 💾 AJAX Update
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    const projectId = "<%= project._id %>";
+    try {
+      const res = await fetch(`/project/${projectId}`, {
+        method: "PUT",
+        body: formData,
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        showAlert("✅ Project updated successfully!", "bg-green-500");
+        setTimeout(() => (window.location.href = "/client/projects"), 1500);
+      } else {
+        showAlert(data.message || "❌ Failed to update project.", "bg-red-500");
+      }
+    } catch (err) {
+      showAlert("⚠️ Something went wrong.", "bg-red-500");
+    }
+  });
+
+  // 🧩 Alert Helper
+  function showAlert(msg, color) {
+    alertBox.className = `block ${color} text-white p-3 rounded mb-4 text-center`;
+    alertBox.textContent = msg;
+    setTimeout(() => (alertBox.className = "hidden"), 2500);
+  }
+</script>

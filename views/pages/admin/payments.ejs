@@ -1,0 +1,123 @@
+<!-- views/pages/admin/payments.ejs -->
+<div class="container mx-auto p-6">
+  <h2 class="text-2xl font-bold text-blue-600 mb-6">💳 Payment Management</h2>
+
+  <!-- Report Summary -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white p-4 shadow rounded">
+      <h3 class="font-semibold text-gray-700">Total Revenue</h3>
+      <p class="text-green-600 text-xl font-bold">$<%= report.totalRevenue.toFixed(2) %></p>
+    </div>
+    <div class="bg-white p-4 shadow rounded">
+      <h3 class="font-semibold text-gray-700">Transactions</h3>
+      <p class="text-blue-600 text-xl font-bold"><%= report.totalTransactions %></p>
+    </div>
+    <div class="bg-white p-4 shadow rounded">
+      <h3 class="font-semibold text-gray-700">Pending Escrow</h3>
+      <p class="text-yellow-600 text-xl font-bold">
+        <%= payments.filter(p => p.status === 'in-escrow').length %>
+      </p>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <form method="GET" action="/payment/admin/all" class="mb-6 flex flex-wrap gap-2">
+    <input type="text" name="search" placeholder="Search user or project" class="border p-2 rounded flex-grow">
+    <select name="status" class="border p-2 rounded">
+      <option value="">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="in-escrow">In Escrow</option>
+      <option value="released">Released</option>
+      <option value="refunded">Refunded</option>
+    </select>
+    <select name="method" class="border p-2 rounded">
+      <option value="">All Methods</option>
+      <option value="razorpay">Razorpay</option>
+      <option value="paypal">PayPal</option>
+      <option value="bank">Bank</option>
+    </select>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded">Filter</button>
+  </form>
+
+  <!-- Payments Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse border text-sm md:text-base">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border p-2">Project</th>
+          <th class="border p-2">Client</th>
+          <th class="border p-2">Freelancer</th>
+          <th class="border p-2">Amount</th>
+          <th class="border p-2">Status</th>
+          <th class="border p-2">Method</th>
+          <th class="border p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!payments.length) { %>
+          <tr><td colspan="7" class="text-center text-gray-500 py-4">No payments found.</td></tr>
+        <% } else { %>
+          <% payments.forEach(p => { %>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-2"><%= p.projectTitle %></td>
+              <td class="p-2"><%= p.clientName %></td>
+              <td class="p-2"><%= p.freelancerName %></td>
+              <td class="p-2">$<%= p.amount %></td>
+              <td class="p-2 capitalize"><%= p.status %></td>
+              <td class="p-2"><%= p.paymentMethod %></td>
+              <td class="p-2 space-y-1">
+                <% if (p.status === 'in-escrow') { %>
+                  <button onclick="handlePayment('/payment/admin/release/<%= p._id %>')"
+                          class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded w-full">
+                          Release
+                  </button>
+                  <button onclick="handlePayment('/payment/admin/refund/<%= p._id %>')"
+                          class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded w-full">
+                          Refund
+                  </button>
+                <% } %>
+                <% if (p.status === 'pending') { %>
+                  <button onclick="handlePayment('/payment/admin/withdraw/<%= p._id %>')"
+                          class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded w-full">
+                          Approve Withdrawal
+                  </button>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  async function handlePayment(url, method = "POST") {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "Proceed with this action?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#2563eb",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, proceed"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const res = await fetch(url, { method });
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Success", data.message, "success");
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        Swal.fire("Error", data.message || "Something went wrong", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Server error occurred", "error");
+    }
+  }
+</script>

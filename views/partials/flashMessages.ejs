@@ -1,0 +1,20 @@
+<!-- views/partials/flashMessages.ejs -->
+<div class="container mx-auto mt-4 px-4">
+  <% if (messages().error) { %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-3 rounded">
+      <%= messages().error %>
+    </div>
+  <% } %>
+
+  <% if (messages().success) { %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-3 rounded">
+      <%= messages().success %>
+    </div>
+  <% } %>
+
+  <% if (messages().info) { %>
+    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 mb-3 rounded">
+      <%= messages().info %>
+    </div>
+  <% } %>
+</div>

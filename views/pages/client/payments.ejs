@@ -1,0 +1,184 @@
+<!-- views/pages/client/payments.ejs -->
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-green-700">💸 Payments & Transactions</h1>
+    <button
+      onclick="openDepositModal()"
+      class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow"
+    >
+      💰 Deposit to Escrow
+    </button>
+  </div>
+
+  <!-- Transactions Table -->
+  <table class="min-w-full border rounded-lg overflow-hidden shadow">
+    <thead class="bg-green-600 text-white">
+      <tr>
+        <th class="p-3 text-left">Project</th>
+        <th class="p-3 text-left">Freelancer</th>
+        <th class="p-3 text-center">Amount</th>
+        <th class="p-3 text-center">Status</th>
+        <th class="p-3 text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y">
+      <% if (payments.length > 0) { %>
+        <% payments.forEach(p => { %>
+          <tr class="hover:bg-gray-50">
+            <td class="p-3"><%= p.project?.title %></td>
+            <td class="p-3"><%= p.freelancer?.fullName || "—" %></td>
+            <td class="p-3 text-center">₹<%= p.amount %></td>
+            <td class="p-3 text-center font-semibold">
+              <% if (p.status === "in-escrow") { %>
+                <span class="text-yellow-600">In Escrow</span>
+              <% } else if (p.status === "released") { %>
+                <span class="text-green-600">Released</span>
+              <% } else if (p.status === "refunded") { %>
+                <span class="text-red-600">Refunded</span>
+              <% } else { %>
+                <span class="text-gray-600"><%= p.status %></span>
+              <% } %>
+            </td>
+            <td class="p-3 text-center space-x-2">
+              <% if (p.status === "in-escrow") { %>
+                <button
+                  onclick="releasePayment('<%= p._id %>')"
+                  class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                >
+                  Release
+                </button>
+                <button
+                  onclick="requestRefund('<%= p._id %>')"
+                  class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                >
+                  Refund
+                </button>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="5" class="text-center text-gray-500 p-4">No transactions yet.</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<!-- 💰 Deposit to Escrow Modal -->
+<div
+  id="depositModal"
+  class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+    <h2 class="text-xl font-semibold mb-4 text-green-700">💰 Deposit to Escrow</h2>
+
+    <form id="depositForm" class="space-y-3">
+      <div>
+        <label class="block text-gray-700 mb-1">Select Project</label>
+        <select name="projectId" id="projectSelect" class="w-full border rounded p-2" required>
+          <option value="">-- Select Project --</option>
+          <% payments.forEach(p => { if (p.project) { %>
+            <option value="<%= p.project._id %>"><%= p.project.title %></option>
+          <% } }) %>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 mb-1">Amount (₹)</label>
+        <input
+          type="number"
+          name="amount"
+          min="1"
+          step="0.01"
+          class="w-full border rounded p-2"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 mb-1">Payment Method</label>
+        <select name="method" class="w-full border rounded p-2" required>
+          <option value="razorpay">Razorpay</option>
+          <option value="paypal">PayPal</option>
+          <option value="bank">Bank Transfer</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button
+          type="button"
+          onclick="closeDepositModal()"
+          class="px-3 py-2 border border-gray-400 rounded text-gray-600 hover:bg-gray-100"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        >
+          Deposit
+        </button>
+      </div>
+    </form>
+
+    <button
+      onclick="closeDepositModal()"
+      class="absolute top-2 right-3 text-gray-500 hover:text-gray-700"
+    >
+      ✖
+    </button>
+  </div>
+</div>
+
+<script>
+function openDepositModal() {
+  document.getElementById("depositModal").classList.remove("hidden");
+  document.getElementById("depositModal").classList.add("flex");
+}
+
+function closeDepositModal() {
+  document.getElementById("depositModal").classList.add("hidden");
+  document.getElementById("depositModal").classList.remove("flex");
+}
+
+// 💸 Deposit Funds (AJAX)
+document.getElementById("depositForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const body = Object.fromEntries(formData.entries());
+
+  const res = await fetch("/payment/client/deposit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const data = await res.json();
+  alert(data.message);
+  if (data.success) {
+    closeDepositModal();
+    location.reload();
+  }
+});
+
+// ✅ Release Payment
+async function releasePayment(id) {
+  if (!confirm("Release payment to freelancer?")) return;
+  const res = await fetch(`/payment/client/release/${id}`, { method: "POST" });
+  const data = await res.json();
+  alert(data.message);
+  location.reload();
+}
+
+// 🔁 Refund Request
+async function requestRefund(id) {
+  if (!confirm("Request refund for this payment?")) return;
+  const res = await fetch(`/payment/client/refund/${id}`, { method: "POST" });
+  const data = await res.json();
+  alert(data.message);
+  location.reload();
+}
+</script>

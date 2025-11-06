@@ -1,0 +1,28 @@
+<!-- views/partials/header.ejs -->
+<header class="bg-white shadow-sm py-4 sticky top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center px-6">
+    <h1 class="text-2xl font-bold text-blue-600">
+      <a href="/">Freelancer Marketplace</a>
+    </h1>
+
+    <% if (user) { %>
+      <nav class="flex items-center gap-4">
+        <% if (user.role === 'client') { %>
+          <a href="/client/dashboard" class="hover:text-blue-500">Dashboard</a>
+          <a href="/client/post-project" class="hover:text-blue-500">Post Project</a>
+        <% } else if (user.role === 'freelancer') { %>
+          <a href="/freelancer/dashboard" class="hover:text-blue-500">Dashboard</a>
+          <a href="/freelancer/browse" class="hover:text-blue-500">Browse Projects</a>
+        <% } else if (user.role === 'admin') { %>
+          <a href="/admin/dashboard" class="hover:text-blue-500">Admin Panel</a>
+        <% } %>
+        <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded">Logout</a>
+      </nav>
+    <% } else { %>
+      <nav class="flex items-center gap-4">
+        <a href="/login" class="hover:text-blue-500">Login</a>
+        <a href="/register" class="hover:text-blue-500">Register</a>
+      </nav>
+    <% } %>
+  </div>
+</header>

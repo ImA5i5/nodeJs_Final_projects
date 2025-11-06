@@ -1,0 +1,190 @@
+<!-- ✅ views/pages/freelancer/my-bids.ejs -->
+<div class="max-w-7xl mx-auto p-6">
+  <h2 class="text-3xl font-bold text-blue-700 mb-6 flex items-center gap-2">
+    📋 My Proposals (Bids)
+  </h2>
+
+  <% if (bids && bids.length > 0) { %>
+    <div class="overflow-x-auto bg-white shadow-lg rounded-xl">
+      <table class="min-w-full border-collapse text-sm md:text-base">
+        <thead class="bg-blue-50 text-blue-700">
+          <tr>
+            <th class="border p-3 text-left">Project Title</th>
+            <th class="border p-3 text-left">Bid Amount (₹)</th>
+            <th class="border p-3 text-left">Delivery Time</th>
+            <th class="border p-3 text-center">Status</th>
+            <th class="border p-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% bids.forEach(bid => { %>
+            <tr class="border-b hover:bg-gray-50 transition">
+              <!-- ✅ Project Title -->
+              <td class="p-3 font-semibold text-gray-700">
+                <% if (bid.project) { %>
+                  <a href="/freelancer/project/<%= bid.project._id %>" class="text-blue-600 hover:underline">
+                    <%= bid.project.title %>
+                  </a>
+                <% } else { %>
+                  <span class="text-gray-400 italic">[Project Removed]</span>
+                <% } %>
+              </td>
+
+              <!-- ✅ Bid Amount -->
+              <td class="p-3">₹<%= bid.bidAmount %></td>
+
+              <!-- ✅ Delivery Time -->
+              <td class="p-3"><%= bid.deliveryTime %></td>
+
+              <!-- ✅ Status -->
+              <td class="p-3 text-center">
+                <% 
+                  const statusClasses = {
+                    pending: "bg-yellow-100 text-yellow-700",
+                    shortlisted: "bg-blue-100 text-blue-700",
+                    accepted: "bg-green-100 text-green-700",
+                    rejected: "bg-red-100 text-red-700",
+                    withdrawn: "bg-gray-200 text-gray-700"
+                  };
+                  const color = statusClasses[bid.status] || "bg-gray-100 text-gray-600";
+                %>
+                <span class="px-3 py-1 rounded-full text-xs font-semibold <%= color %> capitalize">
+                  <%= bid.status %>
+                </span>
+              </td>
+
+              <!-- ✅ Actions -->
+              <td class="p-3 text-center">
+                <% if (bid.status === 'pending' || bid.status === 'shortlisted') { %>
+                  <button
+                    onclick="editBid('<%= bid._id %>', '<%= bid.bidAmount %>', '<%= bid.deliveryTime %>', `<%- (bid.coverLetter || '').replace(/`/g, '&#96;').replace(/"/g, '&quot;') %>`)"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-3 py-1 rounded mr-2">
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onclick="withdrawBid('<%= bid._id %>')"
+                    class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded">
+                    ❌ Withdraw
+                  </button>
+                <% } else { %>
+                  <span class="text-gray-400 text-xs italic">No actions</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <div class="text-center bg-white py-20 rounded-xl shadow">
+      <p class="text-gray-600 text-lg">You haven’t submitted any bids yet.</p>
+      <a href="/freelancer/browse" class="text-blue-600 hover:underline mt-2 inline-block font-semibold">
+        💼 Browse projects to apply now
+      </a>
+    </div>
+  <% } %>
+</div>
+
+<!-- ✅ SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // ✏️ Edit Bid (AJAX + SweetAlert2)
+  async function editBid(id, bidAmount, deliveryTime, coverLetter) {
+    try {
+      const { value: values } = await Swal.fire({
+        title: "✏️ Edit Your Bid",
+        html: `
+          <div style="text-align:left">
+            <label class='text-sm font-medium'>💰 Bid Amount (₹)</label>
+            <input id="editBidAmount" type="number" value="${bidAmount}" class="swal2-input" placeholder="Enter new bid" required>
+
+            <label class='text-sm font-medium mt-2'>⏱ Delivery Time</label>
+            <input id="editDeliveryTime" type="text" value="${deliveryTime}" class="swal2-input" placeholder="e.g. 7 days" required>
+
+            <label class='text-sm font-medium mt-2'>📝 Cover Letter</label>
+            <textarea id="editCoverLetter" class="swal2-textarea" placeholder="Update your message..." required>${coverLetter}</textarea>
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "💾 Save Changes",
+        confirmButtonColor: "#2563eb",
+        cancelButtonColor: "#d33",
+        preConfirm: () => {
+          const bidAmount = document.getElementById("editBidAmount").value.trim();
+          const deliveryTime = document.getElementById("editDeliveryTime").value.trim();
+          const coverLetter = document.getElementById("editCoverLetter").value.trim();
+          if (!bidAmount || !deliveryTime || !coverLetter) {
+            Swal.showValidationMessage("⚠️ Please fill all fields before saving.");
+            return false;
+          }
+          return { bidAmount, deliveryTime, coverLetter };
+        }
+      });
+
+      if (values) {
+        Swal.fire({
+          title: "Updating...",
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
+        });
+
+        const res = await fetch(`/freelancer/bid/${id}/edit`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        Swal.close();
+
+        if (res.ok && data.success) {
+          Swal.fire("✅ Updated!", data.message, "success");
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          Swal.fire("❌ Error", data.message || "Failed to update bid.", "error");
+        }
+      }
+    } catch (err) {
+      Swal.fire("❌ Error", "Something went wrong while editing bid.", "error");
+    }
+  }
+
+  // ❌ Withdraw Bid (AJAX + SweetAlert2)
+  async function withdrawBid(id) {
+    try {
+      const confirm = await Swal.fire({
+        title: "Withdraw this proposal?",
+        text: "You cannot undo this action.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#2563eb",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, withdraw it",
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      Swal.fire({
+        title: "Processing...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      const res = await fetch(`/freelancer/bid/${id}/withdraw`, { method: "DELETE" });
+      const data = await res.json().catch(() => ({}));
+
+      Swal.close();
+
+      if (res.ok && data.success) {
+        Swal.fire("✅ Withdrawn!", data.message, "success");
+        setTimeout(() => location.reload(), 1000);
+      } else {
+        Swal.fire("❌ Error", data.message || "Failed to withdraw bid.", "error");
+      }
+    } catch (err) {
+      Swal.fire("❌ Error", "Something went wrong while withdrawing bid.", "error");
+    }
+  }
+</script>

@@ -1,0 +1,46 @@
+<div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8 mt-12">
+  <h2 class="text-2xl font-bold text-center text-blue-600 mb-6">Create an Account</h2>
+
+  <% if (error && error.length) { %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded"><%= error[0] %></div>
+  <% } %>
+
+  <% if (success && success.length) { %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded"><%= success[0] %></div>
+  <% } %>
+
+  <form action="/auth/register" method="POST" class="space-y-4">
+    <div>
+      <label for="fullName" class="block text-sm font-semibold mb-1">Full Name</label>
+      <input type="text" name="fullName" required class="w-full border border-gray-300 rounded p-2" />
+    </div>
+
+    <div>
+      <label for="email" class="block text-sm font-semibold mb-1">Email</label>
+      <input type="email" name="email" required class="w-full border border-gray-300 rounded p-2" />
+    </div>
+
+    <div>
+      <label for="password" class="block text-sm font-semibold mb-1">Password</label>
+      <input type="password" name="password" required minlength="6" class="w-full border border-gray-300 rounded p-2" />
+    </div>
+
+    <div>
+      <label for="role" class="block text-sm font-semibold mb-1">Select Role</label>
+      <select name="role" required class="w-full border border-gray-300 rounded p-2">
+        <option value="">-- Choose a role --</option>
+        <option value="admin">Admin</option>
+        <option value="freelancer">Freelancer</option>
+        <option value="client">Client</option>
+      </select>
+    </div>
+
+    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
+      Register
+    </button>
+  </form>
+
+  <p class="text-center text-sm text-gray-600 mt-4">
+    Already have an account? <a href="/auth/login" class="text-blue-600 hover:underline">Login</a>
+  </p>
+</div>

@@ -1,0 +1,158 @@
+<!-- views/pages/client/manage-project.ejs -->
+ <div class="p-8">
+
+  <!-- Header Section -->
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-green-700">
+      📈 Manage Project: <%= project?.title || "Untitled Project" %>
+    </h1>
+
+    <!-- 📋 View All Projects Button -->
+    <a href="/client/manage/list"
+       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow transition">
+      📋 Manage All Projects
+    </a>
+  </div>
+
+  <!-- Project Info Card -->
+  <div class="bg-white p-6 rounded-lg shadow mb-8">
+    <h2 class="text-xl font-semibold text-gray-800 mb-2">Project Details</h2>
+    <p class="text-gray-600 mb-1"><strong>Freelancer:</strong> <%= project?.hiredFreelancer?.fullName || "Not assigned" %></p>
+    <p class="text-gray-600 mb-1"><strong>Budget:</strong> ₹<%= project?.budget %></p>
+    <p class="text-gray-600 mb-1"><strong>Duration:</strong> <%= project?.duration || "N/A" %></p>
+    <p class="text-gray-600 mb-1"><strong>Status:</strong> 
+      <span class="capitalize font-medium text-green-700"><%= project?.status %></span>
+    </p>
+  </div>
+
+  <!-- Milestone Tracker -->
+  <div class="bg-green-50 p-6 rounded-lg shadow mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-green-700">📊 Project Progress</h2>
+
+    <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
+      <div class="bg-green-600 h-3 rounded-full transition-all duration-500" 
+           style="width: <%= progress || 0 %>%"></div>
+    </div>
+    <p class="text-sm text-gray-600">Progress: <%= progress || 0 %>%</p>
+
+    <% if (milestones && milestones.length > 0) { %>
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% milestones.forEach(m => { %>
+          <div class="bg-white p-4 rounded shadow border border-gray-200">
+            <h3 class="font-semibold text-gray-800 mb-1"><%= m.title %></h3>
+            <p class="text-sm text-gray-600 mb-1">Due: <%= new Date(m.dueDate).toLocaleDateString() %></p>
+            <p class="text-sm text-gray-600 mb-1">Status: 
+              <span class="<%= m.status === 'completed' ? 'text-green-600' : 'text-yellow-600' %>">
+                <%= m.status %>
+              </span>
+            </p>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="text-gray-500 mt-2">No milestones yet.</p>
+    <% } %>
+  </div>
+
+  <!-- Chat Section (Placeholder) -->
+  <div class="bg-white p-6 rounded-lg shadow mb-8">
+    <h2 class="text-lg font-semibold text-green-700 mb-4">💬 Communication</h2>
+    <p class="text-gray-600 text-sm mb-3">
+      You can chat with your freelancer in the <a href="/client/chat" class="text-green-600 underline">Chat Room</a>.
+    </p>
+    <div class="bg-gray-100 p-4 rounded text-gray-500 text-sm italic">
+      (Real-time chat integration placeholder)
+    </div>
+  </div>
+
+  <!-- Upload Deliverables -->
+  <div class="bg-white p-6 rounded-lg shadow mb-8">
+    <h2 class="text-lg font-semibold text-green-700 mb-4">📎 Deliverables</h2>
+
+    <form id="deliverableForm" enctype="multipart/form-data">
+      <input type="file" name="deliverables" id="deliverables" multiple
+             class="border border-gray-300 p-2 rounded w-full mb-3" />
+      <button type="submit"
+              class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow">
+        ⬆️ Upload Files
+      </button>
+    </form>
+
+    <ul id="uploadedFiles" class="mt-4 text-sm text-gray-600"></ul>
+  </div>
+
+  <!-- Client Action Buttons -->
+  <div class="bg-white p-6 rounded-lg shadow flex flex-wrap gap-4 justify-end">
+    <button id="approveBtn"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+      ✅ Approve Work
+    </button>
+
+    <button id="revisionBtn"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
+      🔁 Request Revision
+    </button>
+
+    <button id="closeBtn"
+            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+      🚫 Close Project
+    </button>
+  </div>
+</div>
+
+<!-- ========================= -->
+<!-- AJAX + Interactivity Logic -->
+<!-- ========================= -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("deliverableForm");
+  const uploadedFiles = document.getElementById("uploadedFiles");
+  const projectId = "<%= project?._id %>";
+
+  // Upload Deliverables via AJAX
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+
+    const res = await fetch(`/client/projects/${projectId}/deliverables`, {
+      method: "POST",
+      body: data
+    });
+
+    const json = await res.json();
+    if (json.success) {
+      alert("Deliverables uploaded successfully!");
+      uploadedFiles.innerHTML = json.files
+        .map(f => `<li>📎 <a href="${f}" target="_blank">${f.split('/').pop()}</a></li>`)
+        .join("");
+    } else {
+      alert(json.message || "Error uploading files");
+    }
+  });
+
+  // Approve Work
+  document.getElementById("approveBtn").addEventListener("click", async () => {
+    if (!confirm("Approve final work?")) return;
+    const res = await fetch(`/client/projects/${projectId}/approve`, { method: "PUT" });
+    const json = await res.json();
+    alert(json.message || "Work approved!");
+    if (json.success) location.reload();
+  });
+
+  // Request Revision
+  document.getElementById("revisionBtn").addEventListener("click", async () => {
+    const res = await fetch(`/client/projects/${projectId}/revision`, { method: "PUT" });
+    const json = await res.json();
+    alert(json.message || "Revision requested!");
+  });
+
+  // Close Project
+  document.getElementById("closeBtn").addEventListener("click", async () => {
+    if (!confirm("Close this project?")) return;
+    const res = await fetch(`/client/projects/${projectId}/close`, { method: "PUT" });
+    const json = await res.json();
+    alert(json.message || "Project closed!");
+    if (json.success) location.reload();
+  });
+});
+</script>

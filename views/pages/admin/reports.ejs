@@ -1,0 +1,193 @@
+<!-- views/pages/admin/reports.ejs -->
+<div class="container mx-auto p-6">
+  <h2 class="text-2xl font-bold text-blue-700 mb-6">📊 Platform Analytics & Reports</h2>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white shadow rounded p-4 text-center">
+      <h3 class="text-gray-600">Total Users</h3>
+      <p id="userCount" class="text-3xl font-bold text-blue-600"><%= userCount %></p>
+    </div>
+    <div class="bg-white shadow rounded p-4 text-center">
+      <h3 class="text-gray-600">Projects</h3>
+      <p id="projectCount" class="text-3xl font-bold text-green-600"><%= projectCount %></p>
+    </div>
+    <div class="bg-white shadow rounded p-4 text-center">
+      <h3 class="text-gray-600">Revenue (₹)</h3>
+      <p id="totalRevenue" class="text-3xl font-bold text-indigo-600">₹<%= totalRevenue.toLocaleString() %></p>
+    </div>
+    <div class="bg-white shadow rounded p-4 text-center">
+      <h3 class="text-gray-600">Disputes</h3>
+      <p id="totalDisputes" class="text-3xl font-bold text-red-600"><%= totalDisputes %></p>
+    </div>
+  </div>
+
+  <!-- Filter + Export -->
+  <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+    <div>
+      <label class="mr-2 font-semibold text-gray-700">Report Period:</label>
+      <select id="periodSelect" class="border rounded p-2">
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly" selected>Monthly</option>
+      </select>
+    </div>
+    <button id="exportBtn"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
+      💾 Export as CSV
+    </button>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+    <div class="bg-white shadow rounded p-4">
+      <h3 class="font-semibold text-gray-800 mb-2">📈 Revenue Trend</h3>
+      <canvas id="revenueChart"></canvas>
+    </div>
+    <div class="bg-white shadow rounded p-4">
+      <h3 class="font-semibold text-gray-800 mb-2">👥 User Growth</h3>
+      <canvas id="userChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Leaderboards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+    <div class="bg-white shadow rounded p-4">
+      <h3 class="font-semibold text-gray-800 mb-3">🏆 Top Freelancers (Earnings)</h3>
+      <table class="w-full text-sm border">
+        <thead class="bg-gray-100">
+          <tr><th class="p-2 border">Name</th><th class="p-2 border">Earnings (₹)</th><th class="p-2 border">Projects</th></tr>
+        </thead>
+        <tbody id="freelancersTable"></tbody>
+      </table>
+    </div>
+    <div class="bg-white shadow rounded p-4">
+      <h3 class="font-semibold text-gray-800 mb-3">💼 Top Clients (Spending)</h3>
+      <table class="w-full text-sm border">
+        <thead class="bg-gray-100">
+          <tr><th class="p-2 border">Name</th><th class="p-2 border">Spent (₹)</th><th class="p-2 border">Projects</th></tr>
+        </thead>
+        <tbody id="clientsTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  const revenueCtx = document.getElementById("revenueChart");
+  const userCtx = document.getElementById("userChart");
+
+  let revenueChart, userChart;
+
+  // Initial render from server data
+  const initialRevenue = <%- JSON.stringify(revenueTrend) %>;
+  const initialUser = <%- JSON.stringify(userGrowth) %>;
+
+  renderCharts(initialRevenue, initialUser);
+
+  // 🕒 Period selector (AJAX update)
+  document.getElementById("periodSelect").addEventListener("change", async (e) => {
+    const period = e.target.value;
+    try {
+      const res = await fetch(`/analytics/reports/period/${period}`);
+      const { data } = await res.json();
+      updateRevenueChart(data);
+    } catch (err) {
+      console.error("Error fetching report:", err);
+    }
+  });
+
+  // 🧾 Fetch & render top performers
+  fetchTopPerformers();
+
+  async function fetchTopPerformers() {
+    try {
+      const res = await fetch("/analytics/reports/leaderboard");
+      const { topFreelancers, topClients } = await res.json();
+
+      const freelancerRows = topFreelancers.map(
+        f => `<tr class="border-b"><td class="p-2 border">${f.name}</td>
+              <td class="p-2 border text-green-600 font-semibold">₹${f.totalEarnings}</td>
+              <td class="p-2 border">${f.projects}</td></tr>`
+      ).join("");
+
+      const clientRows = topClients.map(
+        c => `<tr class="border-b"><td class="p-2 border">${c.name}</td>
+              <td class="p-2 border text-blue-600 font-semibold">₹${c.totalSpent}</td>
+              <td class="p-2 border">${c.projects}</td></tr>`
+      ).join("");
+
+      document.getElementById("freelancersTable").innerHTML = freelancerRows;
+      document.getElementById("clientsTable").innerHTML = clientRows;
+    } catch (err) {
+      console.error("Error loading leaderboard:", err);
+    }
+  }
+
+  // 💾 Export Report (CSV)
+  document.getElementById("exportBtn").addEventListener("click", async () => {
+    const confirm = await Swal.fire({
+      title: "Export CSV?",
+      text: "This will download the full analytics report as a CSV file.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#2563eb",
+      confirmButtonText: "Yes, export",
+    });
+    if (!confirm.isConfirmed) return;
+    window.location.href = "/analytics/reports/export/csv";
+  });
+
+  // 🔄 Chart Rendering Functions
+  function renderCharts(revenueData, userData) {
+    const revLabels = revenueData.map(r => `${r._id.month}/${r._id.year}`);
+    const revValues = revenueData.map(r => r.total);
+
+    const userLabels = userData.map(u => `${u._id.month}/${u._id.year}`);
+    const userValues = userData.map(u => u.total);
+
+    revenueChart = new Chart(revenueCtx, {
+      type: "line",
+      data: {
+        labels: revLabels,
+        datasets: [{
+          label: "Revenue (₹)",
+          data: revValues,
+          borderColor: "rgb(59,130,246)",
+          backgroundColor: "rgba(59,130,246,0.3)",
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    userChart = new Chart(userCtx, {
+      type: "bar",
+      data: {
+        labels: userLabels,
+        datasets: [{
+          label: "New Users",
+          data: userValues,
+          backgroundColor: "rgba(16,185,129,0.6)",
+          borderColor: "rgb(16,185,129)",
+          borderWidth: 1
+        }]
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+  }
+
+  // 🔁 Update Revenue Chart on AJAX
+  function updateRevenueChart(newData) {
+    const labels = newData.map(d => d._id);
+    const values = newData.map(d => d.totalAmount);
+    revenueChart.data.labels = labels;
+    revenueChart.data.datasets[0].data = values;
+    revenueChart.update();
+  }
+</script>

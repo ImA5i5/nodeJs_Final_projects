@@ -1,0 +1,214 @@
+<!-- views/pages/client/post-project.ejs -->
+<div class="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-8 mt-10">
+  <h2 class="text-3xl font-bold text-green-700 mb-6 flex items-center gap-2">
+    📝 Post a New Project
+  </h2>
+
+  <!-- ✅ Alert Box -->
+  <div id="alertBox" class="hidden mb-4 p-3 rounded text-white text-center"></div>
+
+  <form id="projectForm" enctype="multipart/form-data" class="space-y-5">
+    <!-- Project Title -->
+    <div>
+      <label class="font-semibold block mb-1">Project Title</label>
+      <input
+        type="text"
+        name="title"
+        required
+        class="border border-gray-300 rounded-lg w-full p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+        placeholder="Enter project title"
+      />
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label class="font-semibold block mb-1">Description</label>
+      <textarea
+        name="description"
+        required
+        rows="4"
+        class="border border-gray-300 rounded-lg w-full p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+        placeholder="Describe your project details..."
+      ></textarea>
+    </div>
+
+    <!-- Category -->
+    <div>
+      <label class="font-semibold block mb-1">Category</label>
+      <select
+        name="category"
+        id="categorySelect"
+        required
+        class="border border-gray-300 rounded-lg w-full p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+      >
+        <option value="">Select Category</option>
+        <% categories.forEach(cat => { %>
+          <option value="<%= cat._id %>"><%= cat.name %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <!-- Subcategory -->
+    <div>
+      <label class="font-semibold block mb-1">Subcategory</label>
+      <select
+        name="subcategory"
+        id="subcategorySelect"
+        required
+        class="border border-gray-300 rounded-lg w-full p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+      >
+        <option value="">Select Subcategory</option>
+      </select>
+    </div>
+
+    <!-- Budget -->
+    <div>
+      <label class="font-semibold block mb-1">Budget (₹)</label>
+      <input
+        type="number"
+        name="budget"
+        required
+        class="border border-gray-300 rounded-lg w-full p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+        placeholder="Enter your budget"
+      />
+    </div>
+
+    <!-- Duration -->
+    <div>
+      <label class="font-semibold block mb-1">Duration</label>
+      <input
+        type="text"
+        name="duration"
+        class="border border-gray-300 rounded-lg w-full p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+        placeholder="e.g. 2 weeks, 1 month"
+      />
+    </div>
+
+    <!-- Payment Type -->
+    <div>
+      <label class="font-semibold block mb-1">Payment Type</label>
+      <div class="flex gap-4">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="paymentType" value="fixed" checked />
+          <span>Fixed</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="paymentType" value="hourly" />
+          <span>Hourly</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Attachments -->
+    <div>
+      <label class="font-semibold block mb-1">Attachments (optional)</label>
+      <input
+        type="file"
+        name="attachments"
+        id="fileInput"
+        multiple
+        class="border border-gray-300 rounded-lg w-full p-2"
+      />
+      <div id="filePreview" class="mt-2 flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button
+        type="submit"
+        id="submitBtn"
+        class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition"
+      >
+        🚀 Submit Project
+      </button>
+      <div id="spinner" class="hidden mt-2 text-green-700 font-semibold animate-pulse">
+        Submitting...
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  const categories = <%- JSON.stringify(categories) %>;
+  const categorySelect = document.getElementById("categorySelect");
+  const subcategorySelect = document.getElementById("subcategorySelect");
+  const fileInput = document.getElementById("fileInput");
+  const filePreview = document.getElementById("filePreview");
+  const alertBox = document.getElementById("alertBox");
+  const projectForm = document.getElementById("projectForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const spinner = document.getElementById("spinner");
+
+  // ✅ Populate subcategories dynamically
+  categorySelect.addEventListener("change", () => {
+    const selected = categories.find((c) => c._id === categorySelect.value);
+    subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+    if (selected && selected.subcategories) {
+      selected.subcategories
+        .filter((sub) => sub.isApproved)
+        .forEach((sub) => {
+          const opt = document.createElement("option");
+          opt.value = sub.name;
+          opt.textContent = sub.name;
+          subcategorySelect.appendChild(opt);
+        });
+    }
+  });
+
+  // ✅ File preview (for image/pdf)
+  fileInput.addEventListener("change", () => {
+    filePreview.innerHTML = "";
+    Array.from(fileInput.files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const div = document.createElement("div");
+        div.className = "border rounded p-1";
+        if (file.type.startsWith("image/")) {
+          div.innerHTML = `<img src="${e.target.result}" class="h-16 w-16 object-cover rounded" />`;
+        } else {
+          div.innerHTML = `<span class="text-sm text-gray-600">${file.name}</span>`;
+        }
+        filePreview.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // ✅ AJAX Form Submission
+  projectForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    spinner.classList.remove("hidden");
+    alertBox.classList.add("hidden");
+
+    const formData = new FormData(projectForm);
+
+    try {
+      const res = await fetch("/client/create", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        showAlert("✅ Project posted successfully!", "bg-green-500");
+        projectForm.reset();
+        filePreview.innerHTML = "";
+      } else {
+        showAlert(data.message || "❌ Failed to post project.", "bg-red-500");
+      }
+    } catch (err) {
+      showAlert("⚠️ Something went wrong.", "bg-red-500");
+    } finally {
+      submitBtn.disabled = false;
+      spinner.classList.add("hidden");
+    }
+  });
+
+  function showAlert(msg, color) {
+    alertBox.textContent = msg;
+    alertBox.className = `block ${color} text-white p-3 rounded text-center mb-4`;
+    setTimeout(() => alertBox.classList.add("hidden"), 3000);
+  }
+</script>

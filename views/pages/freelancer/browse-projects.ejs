@@ -1,0 +1,166 @@
+<!-- ✅ views/pages/freelancer/browse-projects.ejs -->
+
+<div class="max-w-7xl mx-auto p-6">
+  <h2 class="text-3xl font-bold text-blue-700 mb-6 flex items-center gap-2">
+    💼 Browse Available Projects
+  </h2>
+
+  <!-- 🔍 Filters Section -->
+  <form method="GET" action="/freelancer/browse" class="bg-white shadow-md rounded-lg p-4 mb-6 flex flex-wrap gap-4 items-center">
+    <!-- Search -->
+    <input
+      type="text"
+      name="search"
+      value="<%= filters.search || '' %>"
+      placeholder="Search projects..."
+      class="border border-gray-300 rounded-lg px-4 py-2 flex-1 focus:ring-2 focus:ring-blue-500"
+    />
+
+    <!-- Category -->
+    <select
+      name="category"
+      class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
+    >
+      <option value="">All Categories</option>
+      <% categories.forEach(c => { %>
+        <option value="<%= c._id %>" <%= filters.category == c._id ? "selected" : "" %>><%= c.name %></option>
+      <% }) %>
+    </select>
+
+    <!-- Budget Range -->
+    <input
+      type="number"
+      name="minBudget"
+      placeholder="Min ₹"
+      value="<%= filters.minBudget || '' %>"
+      class="border border-gray-300 rounded-lg px-3 py-2 w-28 focus:ring-2 focus:ring-blue-500"
+    />
+    <input
+      type="number"
+      name="maxBudget"
+      placeholder="Max ₹"
+      value="<%= filters.maxBudget || '' %>"
+      class="border border-gray-300 rounded-lg px-3 py-2 w-28 focus:ring-2 focus:ring-blue-500"
+    />
+
+    <button
+      type="submit"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold shadow-sm"
+    >
+      🔎 Filter
+    </button>
+  </form>
+
+  <!-- ⚙️ Projects List -->
+  <% if (projects && projects.length > 0) { %>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% projects.forEach(project => { %>
+        <div class="bg-white border border-gray-200 shadow-sm rounded-xl p-5 hover:shadow-lg transition-all duration-200">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-xl font-bold text-blue-700 truncate"><%= project.title %></h3>
+            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full capitalize">
+              <%= project.paymentType %>
+            </span>
+          </div>
+
+          <p class="text-gray-700 text-sm mb-3">
+            <%= project.description.substring(0, 120) %>...
+          </p>
+
+          <div class="text-sm text-gray-600 mb-4 space-y-1">
+            <p>📂 <strong>Category:</strong> <%= project.category?.name || 'N/A' %></p>
+            <p>💰 <strong>Budget:</strong> ₹<%= project.budget %></p>
+            <p>🕒 <strong>Duration:</strong> <%= project.duration || 'Not specified' %></p>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <a
+              href="/freelancer/project/<%= project._id %>"
+              class="text-blue-600 hover:underline text-sm font-medium"
+            >
+              View Details
+            </a>
+            <button
+              onclick="openBidModal('<%= project._id %>', '<%= project.title.replace(/'/g, "\\'") %>')"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow transition"
+            >
+              💬 Apply Now
+            </button>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="text-center py-20 bg-white shadow rounded-lg">
+      <p class="text-gray-600 text-lg">No projects found matching your filters.</p>
+      <p class="text-gray-400 text-sm mt-2">Try adjusting search criteria or check back later.</p>
+    </div>
+  <% } %>
+</div>
+
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // 🧩 Open Bid Modal
+  async function openBidModal(projectId, projectTitle) {
+    const { value: formValues } = await Swal.fire({
+      title: `💼 Apply for: ${projectTitle}`,
+      html: `
+        <form id="bidForm" class="flex flex-col gap-3 text-left">
+          <label class="text-sm font-medium">💰 Bid Amount (₹)</label>
+          <input type="number" id="bidAmount" class="swal2-input" placeholder="Enter your bid amount" required />
+
+          <label class="text-sm font-medium">⏱ Delivery Time</label>
+          <input type="text" id="deliveryTime" class="swal2-input" placeholder="e.g. 5 days" required />
+
+          <label class="text-sm font-medium">📝 Cover Letter</label>
+          <textarea id="coverLetter" class="swal2-textarea" placeholder="Write a short proposal..." required></textarea>
+        </form>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "🚀 Submit Proposal",
+      confirmButtonColor: "#2563eb",
+      cancelButtonColor: "#d33",
+      preConfirm: () => {
+        const bidAmount = document.getElementById("bidAmount").value.trim();
+        const deliveryTime = document.getElementById("deliveryTime").value.trim();
+        const coverLetter = document.getElementById("coverLetter").value.trim();
+
+        if (!bidAmount || !deliveryTime || !coverLetter) {
+          Swal.showValidationMessage("⚠️ Please fill all fields before submitting.");
+          return false;
+        }
+
+        return { bidAmount, deliveryTime, coverLetter };
+      }
+    });
+
+    if (formValues) {
+      const res = await fetch("/freelancer/bid", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId, ...formValues })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success !== false) {
+        Swal.fire({
+          icon: "success",
+          title: "✅ Proposal Sent!",
+          text: data.message || "Your bid has been submitted successfully.",
+          timer: 2000,
+          showConfirmButton: false
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "❌ Error",
+          text: data.message || "Something went wrong while submitting your bid.",
+        });
+      }
+    }
+  }
+</script>

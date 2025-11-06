@@ -1,0 +1,178 @@
+<!-- views/pages/freelancer/earnings.ejs -->
+<div class="max-w-6xl mx-auto bg-white rounded-lg shadow p-8">
+  <h2 class="text-2xl font-bold text-purple-700 mb-6">💰 My Earnings</h2>
+
+  <!-- Earnings Summary -->
+  <div id="earningsSummary" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-green-100 p-4 rounded-lg text-center shadow">
+      <h3 class="text-lg font-semibold text-green-700">Released</h3>
+      <p id="releasedAmount" class="text-3xl font-bold">₹<%= totalReleased %></p>
+    </div>
+
+    <div class="bg-yellow-100 p-4 rounded-lg text-center shadow">
+      <h3 class="text-lg font-semibold text-yellow-700">Pending / Escrow</h3>
+      <p id="pendingAmount" class="text-3xl font-bold">₹<%= totalPending %></p>
+    </div>
+
+    <div class="bg-blue-100 p-4 rounded-lg text-center shadow">
+      <h3 class="text-lg font-semibold text-blue-700">Total Projects</h3>
+      <p class="text-3xl font-bold"><%= transactions.length %></p>
+    </div>
+  </div>
+
+  <!-- Filter + Withdraw -->
+  <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <!-- Filter by Status -->
+    <div class="flex items-center gap-3">
+      <label class="font-semibold text-gray-700">Filter by Status:</label>
+      <select id="statusFilter" class="border rounded p-2 text-gray-700">
+        <option value="all">All</option>
+        <option value="released">Released</option>
+        <option value="in-escrow">In Escrow</option>
+        <option value="pending">Pending</option>
+        <option value="refunded">Refunded</option>
+      </select>
+    </div>
+
+    <!-- Withdrawal -->
+    <form id="withdrawForm" class="flex flex-wrap items-center gap-3">
+      <input type="number" name="amount" placeholder="Amount (₹)" class="border rounded p-2 w-32" required />
+      <select name="method" class="border rounded p-2">
+        <option value="bank">Bank</option>
+        <option value="paypal">PayPal</option>
+        <option value="razorpay">Razorpay</option>
+      </select>
+      <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded">
+        🏦 Request Withdrawal
+      </button>
+    </form>
+  </div>
+
+  <p id="withdrawMsg" class="text-sm mb-4"></p>
+
+  <!-- Transactions Table -->
+  <div class="overflow-x-auto">
+    <table id="transactionsTable" class="w-full border text-left">
+      <thead class="bg-gray-100 text-gray-700 uppercase text-sm">
+        <tr>
+          <th class="px-4 py-2 border">Project</th>
+          <th class="px-4 py-2 border">Client</th>
+          <th class="px-4 py-2 border">Amount</th>
+          <th class="px-4 py-2 border">Status</th>
+          <th class="px-4 py-2 border">Date</th>
+          <th class="px-4 py-2 border">Invoice</th>
+        </tr>
+      </thead>
+      <tbody id="transactionsBody">
+        <% transactions.forEach(t => { %>
+          <tr class="border-b hover:bg-gray-50 transition">
+            <td class="px-4 py-2"><%= t.project?.title || 'N/A' %></td>
+            <td class="px-4 py-2"><%= t.client?.fullName || 'N/A' %></td>
+            <td class="px-4 py-2 font-semibold">₹<%= t.amount %></td>
+            <td class="px-4 py-2 capitalize">
+              <% if (t.status === 'released') { %>
+                <span class="text-green-600 font-semibold">Released</span>
+              <% } else if (t.status === 'in-escrow') { %>
+                <span class="text-yellow-600 font-semibold">In Escrow</span>
+              <% } else if (t.status === 'pending') { %>
+                <span class="text-blue-600 font-semibold">Pending</span>
+              <% } else { %>
+                <span class="text-red-600 font-semibold">Refunded</span>
+              <% } %>
+            </td>
+            <td class="px-4 py-2"><%= new Date(t.createdAt).toLocaleDateString() %></td>
+            <td class="px-4 py-2">
+              <% if (t.status === "released") { %>
+                <a href="/payment/freelancer/invoice/<%= t._id %>"
+                   class="text-purple-600 hover:underline">Download</a>
+              <% } else { %>
+                <span class="text-gray-400">N/A</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 🔄 AJAX Scripts -->
+<script>
+  // Refresh summary every 30s
+  async function refreshEarnings() {
+    try {
+      const res = await fetch("/payment/freelancer/earnings/data");
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById("releasedAmount").innerText = "₹" + data.data.released;
+        document.getElementById("pendingAmount").innerText = "₹" + data.data.pending;
+      }
+    } catch (err) {
+      console.error("Error refreshing earnings:", err);
+    }
+  }
+
+  // Withdrawal request
+  const form = document.getElementById("withdrawForm");
+  const msg = document.getElementById("withdrawMsg");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    msg.textContent = "Processing...";
+    msg.className = "text-gray-600";
+
+    const res = await fetch("/payment/freelancer/withdraw", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+    msg.textContent = data.message;
+    msg.className = data.success ? "text-green-600" : "text-red-600";
+
+    if (data.success) {
+      form.reset();
+      refreshEarnings();
+    }
+  });
+
+  // Filter payments by status (AJAX)
+  document.getElementById("statusFilter").addEventListener("change", async (e) => {
+    const status = e.target.value;
+    try {
+      const res = await fetch(`/payment/freelancer/filter?status=${status}`);
+      const data = await res.json();
+
+      if (data.success) {
+        const tbody = document.getElementById("transactionsBody");
+        tbody.innerHTML = data.payments.map(t => `
+          <tr class="border-b hover:bg-gray-50">
+            <td class="px-4 py-2">${t.project?.title || 'N/A'}</td>
+            <td class="px-4 py-2">${t.client?.fullName || 'N/A'}</td>
+            <td class="px-4 py-2 font-semibold">₹${t.amount}</td>
+            <td class="px-4 py-2 capitalize">
+              ${t.status === 'released'
+                ? '<span class="text-green-600 font-semibold">Released</span>'
+                : t.status === 'in-escrow'
+                ? '<span class="text-yellow-600 font-semibold">In Escrow</span>'
+                : t.status === 'pending'
+                ? '<span class="text-blue-600 font-semibold">Pending</span>'
+                : '<span class="text-red-600 font-semibold">Refunded</span>'}
+            </td>
+            <td class="px-4 py-2">${new Date(t.createdAt).toLocaleDateString()}</td>
+            <td class="px-4 py-2">
+              ${t.status === "released"
+                ? `<a href="/payment/freelancer/invoice/${t._id}" class="text-purple-600 hover:underline">Download</a>`
+                : '<span class="text-gray-400">N/A</span>'}
+            </td>
+          </tr>
+        `).join("");
+      }
+    } catch (err) {
+      console.error("Error filtering payments:", err);
+    }
+  });
+
+  // Auto-refresh summary every 30s
+  setInterval(refreshEarnings, 30000);
+</script>

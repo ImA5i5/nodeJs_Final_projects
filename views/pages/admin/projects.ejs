@@ -1,0 +1,206 @@
+<!-- views/pages/admin/projects.ejs -->
+<div class="max-w-7xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-6">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3">
+    <h2 class="text-3xl font-bold text-green-700 flex items-center gap-2">
+      🗂️ Manage Projects
+    </h2>
+
+    <!-- Filters -->
+    <form method="GET" action="/project/admin/projects" class="flex gap-2">
+      <select name="status" class="border border-gray-300 rounded-lg p-2 text-sm">
+        <option value="">All Status</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="in-progress">In Progress</option>
+        <option value="completed">Completed</option>
+        <option value="disputed">Disputed</option>
+      </select>
+      <input
+        type="text"
+        name="search"
+        placeholder="Search projects..."
+        class="border border-gray-300 rounded-lg p-2 text-sm"
+      />
+      <button
+        type="submit"
+        class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition"
+      >
+        🔍 Filter
+      </button>
+    </form>
+  </div>
+
+  <% if (projects && projects.length > 0) { %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-200 rounded-lg">
+        <thead class="bg-green-700 text-white">
+          <tr>
+            <th class="py-3 px-4 text-left">Title</th>
+            <th class="py-3 px-4 text-left">Client</th>
+            <th class="py-3 px-4 text-center">Budget</th>
+            <th class="py-3 px-4 text-center">Status</th>
+            <th class="py-3 px-4 text-center">Visibility</th>
+            <th class="py-3 px-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% projects.forEach(project => { %>
+            <tr class="border-b hover:bg-gray-50 transition">
+              <td class="py-3 px-4 font-semibold text-gray-800"><%= project.title %></td>
+              <td class="py-3 px-4 text-gray-700">
+                <%= project.clientName %><br/>
+                <span class="text-xs text-gray-500"><%= project.clientEmail %></span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-700">₹<%= project.budget %></td>
+
+              <!-- Status Badge -->
+              <td class="py-3 px-4 text-center">
+                <span
+                  class="px-3 py-1 rounded-full text-xs font-semibold 
+                    <%= project.status === 'approved' ? 'bg-green-200 text-green-800' :
+                         project.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
+                         project.status === 'in-progress' ? 'bg-blue-200 text-blue-800' :
+                         project.status === 'completed' ? 'bg-gray-200 text-gray-700' :
+                         project.status === 'disputed' ? 'bg-red-200 text-red-800' :
+                         'bg-gray-200 text-gray-700' %>"
+                >
+                  <%= project.status.charAt(0).toUpperCase() + project.status.slice(1) %>
+                </span>
+              </td>
+
+              <!-- Visibility -->
+              <td class="py-3 px-4 text-center">
+                <span
+                  class="px-3 py-1 text-xs rounded-full font-medium 
+                    <%= project.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
+                  <%= project.isActive ? 'Visible' : 'Hidden' %>
+                </span>
+              </td>
+
+              <!-- Actions -->
+              <td class="py-3 px-4 text-center flex justify-center gap-2">
+                <% if (project.status === 'pending') { %>
+                  <button data-id="<%= project._id %>"
+                    class="approveBtn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                    ✅ Approve
+                  </button>
+                <% } %>
+
+                <% if (project.status !== 'rejected' && project.status !== 'completed') { %>
+                  <button data-id="<%= project._id %>"
+                    class="rejectBtn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                    ❌ Reject
+                  </button>
+                <% } %>
+
+                <button data-id="<%= project._id %>"
+                  class="toggleVisibilityBtn bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm">
+                  👁️ <%= project.isActive ? "Hide" : "Show" %>
+                </button>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <div class="text-center py-12 text-gray-500">
+      No projects found.
+    </div>
+  <% } %>
+</div>
+
+<!-- ✅ SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // 🧩 Helper: SweetAlert2 Toast
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 1800,
+    timerProgressBar: true,
+  });
+
+  // ✅ Approve project
+  document.querySelectorAll(".approveBtn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      const confirm = await Swal.fire({
+        title: "Approve Project?",
+        text: "This project will be approved and visible to freelancers.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "✅ Approve",
+        cancelButtonText: "❌ Cancel",
+        confirmButtonColor: "#16a34a",
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const res = await fetch(`/project/admin/projects/${id}/approve`, { method: "PUT" });
+        const data = await res.json();
+        if (data.success) {
+          Toast.fire({ icon: "success", title: "Project approved!" });
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          Swal.fire("Error", data.message || "Failed to approve project.", "error");
+        }
+      } catch (err) {
+        Swal.fire("Server Error", "Unable to approve project.", "error");
+      }
+    });
+  });
+
+  // ❌ Reject project
+  document.querySelectorAll(".rejectBtn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      const confirm = await Swal.fire({
+        title: "Reject Project?",
+        text: "This project will be marked as rejected and hidden.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "❌ Reject",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#dc2626",
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const res = await fetch(`/project/admin/projects/${id}/reject`, { method: "PUT" });
+        const data = await res.json();
+        if (data.success) {
+          Toast.fire({ icon: "success", title: "Project rejected." });
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          Swal.fire("Error", data.message || "Failed to reject project.", "error");
+        }
+      } catch (err) {
+        Swal.fire("Server Error", "Unable to reject project.", "error");
+      }
+    });
+  });
+
+  // 👁️ Toggle visibility
+  document.querySelectorAll(".toggleVisibilityBtn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      try {
+        const res = await fetch(`/project/admin/projects/${id}/visibility`, { method: "PATCH" });
+        const data = await res.json();
+        if (data.success) {
+          Toast.fire({ icon: "success", title: "Visibility updated!" });
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          Swal.fire("Error", data.message || "Failed to update visibility.", "error");
+        }
+      } catch (err) {
+        Swal.fire("Server Error", "Unable to toggle visibility.", "error");
+      }
+    });
+  });
+</script>

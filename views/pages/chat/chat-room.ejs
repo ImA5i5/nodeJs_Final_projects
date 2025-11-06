@@ -1,0 +1,45 @@
+<!-- views/pages/chat/chat-room.ejs -->
+
+
+<h1 class="text-2xl font-bold mb-4">💬 Chat with <%= receiver.fullName %></h1>
+
+<div id="chat-box" class="bg-white border rounded-lg shadow p-4 h-96 overflow-y-auto mb-4">
+  <% messages.forEach(msg => { %>
+    <div class="<%= msg.sender.toString() === user._id.toString() ? 'text-right' : 'text-left' %> mb-2">
+      <p class="<%= msg.sender.toString() === user._id.toString() ? 'bg-blue-100 text-blue-800 inline-block p-2 rounded-lg' : 'bg-gray-100 text-gray-700 inline-block p-2 rounded-lg' %>">
+        <%= msg.text %>
+      </p>
+      <span class="text-xs text-gray-400 block mt-1">
+        <%= new Date(msg.createdAt).toLocaleTimeString() %>
+      </span>
+    </div>
+  <% }) %>
+</div>
+
+<form id="chat-form" action="/chat/send" method="POST" class="flex gap-2">
+  <input type="hidden" name="receiverId" value="<%= receiver._id %>">
+  <input type="text" name="message" placeholder="Type a message..." required class="flex-1 border border-gray-300 p-2 rounded">
+  <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Send</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const chatForm = document.getElementById('chat-form');
+  const chatBox = document.getElementById('chat-box');
+
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = e.target.message.value;
+    const receiverId = e.target.receiverId.value;
+    socket.emit('chatMessage', { message, receiverId });
+    e.target.message.value = '';
+  });
+
+  socket.on('newMessage', (msg) => {
+    const div = document.createElement('div');
+    div.innerHTML = `<p class='inline-block bg-gray-100 p-2 rounded-lg'>${msg.text}</p>`;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+</script>

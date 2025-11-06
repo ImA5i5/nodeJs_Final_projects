@@ -1,0 +1,94 @@
+<!-- views/pages/client/hire-freelancers.ejs -->
+<div class="max-w-6xl mx-auto mt-10 bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-2xl font-bold text-green-700 mb-6">Hire Freelancers</h2>
+
+  <!-- 🔍 Filters -->
+  <form id="filterForm" class="grid md:grid-cols-4 gap-4 mb-6">
+    <input type="text" name="keyword" placeholder="Search by name..." class="border p-2 rounded" />
+    <input type="text" name="skill" placeholder="Skill (e.g. React)" class="border p-2 rounded" />
+    <input type="number" name="minRate" placeholder="Min Rate" class="border p-2 rounded" />
+    <input type="number" name="maxRate" placeholder="Max Rate" class="border p-2 rounded" />
+    <button type="submit" class="bg-green-600 text-white py-2 rounded hover:bg-green-700 md:col-span-4">Filter</button>
+  </form>
+
+  <!-- Freelancers List -->
+  <div id="freelancerList" class="grid md:grid-cols-3 gap-6">
+    <% if (freelancers && freelancers.length) { %>
+      <% freelancers.forEach(f => { %>
+        <div class="border rounded-lg p-4 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <% if (f.profile?.profilePic) { %>
+              <img src="<%= f.profile.profilePic %>" class="h-14 w-14 rounded-full object-cover border" />
+            <% } else { %>
+              <div class="h-14 w-14 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-700">
+                <%= f.fullName.charAt(0).toUpperCase() %>
+              </div>
+            <% } %>
+            <div>
+              <h3 class="font-semibold text-lg"><%= f.fullName %></h3>
+              <p class="text-sm text-gray-500">₹<%= f.profile?.hourlyRate || 0 %>/hr</p>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-700 mb-3"><%= f.profile?.bio?.substring(0,100) || "No bio available" %>...</p>
+          <p class="text-xs text-gray-500 mb-3">Skills: <%= (f.profile?.skills || []).join(", ") || "N/A" %></p>
+
+          <div class="flex justify-between">
+            <a href="/client/view/<%= f._id %>" class="text-blue-600 hover:underline text-sm">View Profile</a>
+            <button onclick="hireFreelancer('<%= f._id %>')" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">Hire</button>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-gray-500 text-center col-span-3">No freelancers found.</p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  // Filter via AJAX
+  document.getElementById("filterForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(new FormData(e.target)).toString();
+    const res = await fetch(`/freelancer/client/browse?${params}`);
+    const data = await res.json();
+
+    const list = document.getElementById("freelancerList");
+    if (!data.freelancers?.length) {
+      list.innerHTML = `<p class='text-center text-gray-500 col-span-3'>No freelancers found.</p>`;
+      return;
+    }
+
+    list.innerHTML = data.freelancers.map(f => `
+      <div class="border rounded-lg p-4 shadow-sm hover:shadow-md transition">
+        <div class="flex items-center gap-3 mb-3">
+          ${f.profile?.profilePic
+            ? `<img src="${f.profile.profilePic}" class="h-14 w-14 rounded-full object-cover border" />`
+            : `<div class='h-14 w-14 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-700'>
+                ${f.fullName.charAt(0).toUpperCase()}
+              </div>`}
+          <div>
+            <h3 class="font-semibold text-lg">${f.fullName}</h3>
+            <p class="text-sm text-gray-500">₹${f.profile?.hourlyRate || 0}/hr</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-700 mb-3">${f.profile?.bio?.substring(0,100) || "No bio"}...</p>
+        <p class="text-xs text-gray-500 mb-3">Skills: ${(f.profile?.skills || []).join(", ") || "N/A"}</p>
+        <div class="flex justify-between">
+          <a href="/freelancer/client/view/${f._id}" class="text-blue-600 hover:underline text-sm">View Profile</a>
+          <button onclick="hireFreelancer('${f._id}')" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">Hire</button>
+        </div>
+      </div>
+    `).join("");
+  });
+
+  // Hire Freelancer (AJAX)
+  async function hireFreelancer(freelancerId) {
+    const projectId = prompt("Enter the project ID to assign this freelancer:");
+    if (!projectId) return;
+
+    const res = await fetch(`/freelancer/client/hire/${freelancerId}/${projectId}`, { method: "POST" });
+    const data = await res.json();
+    alert(data.message);
+  }
+</script>
