@@ -1,157 +1,84 @@
 <!-- views/pages/admin/disputes.ejs -->
-<div class="container mx-auto p-6">
-  <h2 class="text-2xl font-bold text-blue-600 mb-6">⚖️ Dispute Management</h2>
-
-  <!-- Summary Cards -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-    <% summary.forEach(s => { %>
-      <div class="bg-white shadow rounded p-4 text-center">
-        <h3 class="font-semibold capitalize text-gray-600"><%= s._id %></h3>
-        <p class="text-2xl font-bold text-blue-600"><%= s.count %></p>
-      </div>
-    <% }) %>
+<div class="max-w-7xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-red-700 flex items-center gap-2">⚖️ Open Disputes</h2>
+    <a href="/admin/disputes-history" class="text-sm text-blue-600 hover:underline">📜 View History</a>
   </div>
 
-  <!-- Filter Bar -->
-  <form method="GET" action="/admin/disputes" class="mb-6 flex flex-wrap gap-2 items-center">
-    <input
-      type="text"
-      name="search"
-      placeholder="Search by reason or description"
-      value="<%= filters?.search || '' %>"
-      class="border rounded p-2 flex-grow"
-    />
-    <select name="status" class="border rounded p-2">
-      <option value="">All</option>
-      <option value="open" <%= filters?.status === 'open' ? 'selected' : '' %>>Open</option>
-      <option value="in-review" <%= filters?.status === 'in-review' ? 'selected' : '' %>>In Review</option>
-      <option value="resolved" <%= filters?.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
-      <option value="rejected" <%= filters?.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
-    </select>
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-      Filter
-    </button>
-  </form>
+  <div id="alertBox" class="hidden mb-4 p-3 rounded text-white text-center"></div>
 
-  <!-- Dispute Table -->
-  <div class="overflow-x-auto bg-white shadow rounded">
-    <table class="w-full border-collapse text-sm md:text-base">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border p-2">Project</th>
-          <th class="border p-2">Client</th>
-          <th class="border p-2">Freelancer</th>
-          <th class="border p-2">Reason</th>
-          <th class="border p-2">Status</th>
-          <th class="border p-2 text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (disputes.length === 0) { %>
-          <tr><td colspan="6" class="text-center text-gray-500 py-4">No disputes found.</td></tr>
-        <% } else { %>
+  <% if (disputes && disputes.length) { %>
+    <div class="overflow-x-auto bg-white rounded-xl shadow">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-50 text-gray-700">
+          <tr>
+            <th class="p-3 text-left">Dispute ID</th>
+            <th class="p-3 text-left">Milestone</th>
+            <th class="p-3 text-left">Raised By</th>
+            <th class="p-3 text-left">Reason</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-center">Created</th>
+            <th class="p-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
           <% disputes.forEach(d => { %>
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-2 font-medium"><%= d.projectTitle %></td>
-              <td class="p-2"><%= d.clientName %></td>
-              <td class="p-2"><%= d.freelancerName %></td>
-              <td class="p-2"><%= d.reason %></td>
-              <td class="p-2 text-center capitalize">
-                <span class="<%= d.status === 'resolved' ? 'text-green-600' : d.status === 'open' ? 'text-yellow-600' : 'text-blue-600' %> font-semibold">
+            <tr id="row-<%= d._id %>" class="border-t hover:bg-gray-50">
+              <td class="p-3 font-mono"><%= d._id %></td>
+              <td class="p-3"><%= d.milestone?.title || ('Milestone #' + d.milestone?._id) %></td>
+              <td class="p-3"><%= d.raisedBy?.fullName || d.raisedBy?.email || 'User' %></td>
+              <td class="p-3 max-w-xs"><div class="line-clamp-2"><%= d.reason %></div></td>
+              <td class="p-3 text-center">
+                <span class="px-2 py-1 rounded-full text-xs font-semibold <%= d.status === 'open' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' %>">
                   <%= d.status %>
                 </span>
               </td>
-              <td class="p-2 text-center space-y-1">
-                <button
-                  onclick="openModal('<%= d._id %>', '<%= d.projectTitle %>')"
-                  class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded w-full">
-                  Manage
-                </button>
-
-                <a href="/admin/disputes/history/<%= d._id %>"
-                   class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded inline-block w-full text-center">
-                  History
-                </a>
+              <td class="p-3 text-center"><%= new Date(d.createdAt).toLocaleString() %></td>
+              <td class="p-3 text-center">
+                <% if (d.status === 'open') { %>
+                  <button onclick="resolveDispute('<%= d._id %>')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">
+                    ✅ Resolve
+                  </button>
+                <% } else { %>
+                  <span class="text-gray-400 text-xs italic">Resolved</span>
+                <% } %>
               </td>
             </tr>
           <% }) %>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- Modal -->
-<div id="disputeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-  <div class="bg-white rounded shadow-lg w-11/12 md:w-2/3 p-6">
-    <h3 id="modalTitle" class="text-xl font-semibold mb-3 text-blue-600">Manage Dispute</h3>
-    <textarea
-      id="resolution"
-      class="w-full border p-2 rounded mb-3"
-      placeholder="Write resolution or notes..."></textarea>
-    <div class="flex flex-wrap gap-3 justify-end">
-      <button onclick="handleDispute('resolve')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Resolve</button>
-      <button onclick="handleDispute('review')" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Mark Review</button>
-      <button onclick="handleDispute('refund')" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Approve Refund</button>
-      <button onclick="handleDispute('release')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Release Payment</button>
-      <button onclick="closeModal()" class="border border-gray-400 px-4 py-2 rounded">Cancel</button>
+        </tbody>
+      </table>
     </div>
-  </div>
+  <% } else { %>
+    <div class="bg-white rounded-xl shadow p-10 text-center text-gray-600">No open disputes.</div>
+  <% } %>
 </div>
 
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  let currentDisputeId = null;
+async function resolveDispute(disputeId) {
+  const { value: resolution } = await Swal.fire({
+    title: "Resolve Dispute",
+    input: "textarea",
+    inputPlaceholder: "Write the admin decision / notes...",
+    showCancelButton: true,
+    confirmButtonText: "✅ Resolve",
+  });
+  if (resolution === undefined) return;
 
-  function openModal(id, projectTitle) {
-    currentDisputeId = id;
-    document.getElementById("modalTitle").innerText = `Manage Dispute - ${projectTitle}`;
-    document.getElementById("disputeModal").classList.remove("hidden");
+  const res = await fetch("/admin/disputes/resolve", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ disputeId, resolution })
+  });
+  const data = await res.json();
+
+  if (data.success) {
+    Swal.fire("Resolved!", data.message || "Dispute resolved.", "success");
+    const row = document.getElementById(`row-${disputeId}`);
+    if (row) row.querySelector("span").className = "px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700";
+    if (row) row.querySelector("span").textContent = "resolved";
+  } else {
+    Swal.fire("Error", data.message || "Failed to resolve dispute.", "error");
   }
-
-  function closeModal() {
-    document.getElementById("disputeModal").classList.add("hidden");
-    document.getElementById("resolution").value = "";
-  }
-
-  async function handleDispute(action) {
-    const resolution = document.getElementById("resolution").value.trim();
-    if (!currentDisputeId) return;
-
-    let url = `/admin/disputes/handle/${currentDisputeId}`;
-    let body = { action, resolution };
-
-    if (action === "refund" || action === "release") {
-      url = `/admin/disputes/process/${currentDisputeId}`;
-      body = { action };
-    }
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: data.message,
-          timer: 1500,
-          showConfirmButton: false,
-        });
-        setTimeout(() => window.location.reload(), 1600);
-      } else {
-        Swal.fire("Error", data.message || "Something went wrong", "error");
-      }
-    } catch (err) {
-      Swal.fire("Error", "Server error occurred.", "error");
-    } finally {
-      closeModal();
-    }
-  }
+}
 </script>

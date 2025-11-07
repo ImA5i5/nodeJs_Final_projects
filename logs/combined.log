@@ -2860,3 +2860,360 @@
 [2025-11-06 19:26:34] INFO: 🚀 Redis ready
 [2025-11-06 19:26:34] INFO: 🔗 Redis client connected successfully
 [2025-11-06 19:26:35] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-06 20:04:36] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-06 20:04:36] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:36] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:37] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:37] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:37] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:37] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:37] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:37] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:37] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:37] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:37] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:37] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:37] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:38] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:38] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:38] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:38] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:38] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-06 20:04:39] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:39] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:39] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:39] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:40] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:40] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:40] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:40] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:41] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:41] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:41] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:41] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:42] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:42] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:42] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:42] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:43] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:43] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:43] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:43] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:44] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:44] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:44] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:44] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:45] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:45] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:45] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:45] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:46] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:46] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:46] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:46] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:47] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:47] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:47] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:47] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:48] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:48] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:48] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:48] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:49] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:49] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:49] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:49] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:50] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:50] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:50] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:50] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:51] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:51] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:51] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:51] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:52] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:52] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:52] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:52] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:53] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:53] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:53] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:53] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:54] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:54] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:54] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:54] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:55] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:55] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:55] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:55] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:56] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:56] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:56] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:56] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:57] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:57] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:57] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:57] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:58] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:58] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:58] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:58] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:04:59] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:04:59] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:00] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:00] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:00] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:00] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:01] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:01] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:01] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:01] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:02] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:02] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:02] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:02] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:03] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:03] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:03] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:03] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:04] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:04] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:04] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:04] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:05] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:05] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:05] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:05] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:06] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:06] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:06] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:06] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:07] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:07] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:07] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:07] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:08] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:08] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:08] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:08] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:09] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:09] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:09] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:09] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:10] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:10] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:10] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:10] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:11] WARN: ♻️ Redis reconnecting...
+[2025-11-06 20:05:11] ERROR: ❌ Redis error: getaddrinfo ENOTFOUND redis-12345.internal
+[2025-11-06 20:05:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-06 20:05:22] INFO: ✅ Redis connected
+[2025-11-06 20:05:22] INFO: 🚀 Redis ready
+[2025-11-06 20:05:22] INFO: 🔗 Redis client connected successfully
+[2025-11-06 20:05:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 02:58:51] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 02:58:51] INFO: ✅ Redis connected
+[2025-11-07 02:58:51] INFO: 🚀 Redis ready
+[2025-11-07 02:58:51] INFO: 🔗 Redis client connected successfully
+[2025-11-07 02:59:53] ERROR: ❌ MongoDB Connection Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+[2025-11-07 03:00:32] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:00:32] INFO: ✅ Redis connected
+[2025-11-07 03:00:32] INFO: 🚀 Redis ready
+[2025-11-07 03:00:32] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:01:27] ERROR: ❌ MongoDB Connection Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+[2025-11-07 03:02:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:02:29] INFO: ✅ Redis connected
+[2025-11-07 03:02:29] INFO: 🚀 Redis ready
+[2025-11-07 03:02:29] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:03:08] ERROR: ❌ MongoDB Connection Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+[2025-11-07 03:03:36] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:03:36] INFO: ✅ Redis connected
+[2025-11-07 03:03:36] INFO: 🚀 Redis ready
+[2025-11-07 03:03:36] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:03:48] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:12:31] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:12:31] INFO: ✅ Redis connected
+[2025-11-07 03:12:31] INFO: 🚀 Redis ready
+[2025-11-07 03:12:31] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:12:33] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 03:12:42] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:12:42] INFO: ✅ Redis connected
+[2025-11-07 03:12:42] INFO: 🚀 Redis ready
+[2025-11-07 03:12:42] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:12:44] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 03:24:55] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:24:55] INFO: ✅ Redis connected
+[2025-11-07 03:24:55] INFO: 🚀 Redis ready
+[2025-11-07 03:24:55] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:24:56] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:25:05] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:25:05] INFO: ✅ Redis connected
+[2025-11-07 03:25:05] INFO: 🚀 Redis ready
+[2025-11-07 03:25:05] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:25:06] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 03:25:36] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:25:36] INFO: ✅ Redis connected
+[2025-11-07 03:25:36] INFO: 🚀 Redis ready
+[2025-11-07 03:25:36] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:25:38] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:25:49] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:25:49] INFO: ✅ Redis connected
+[2025-11-07 03:25:49] INFO: 🚀 Redis ready
+[2025-11-07 03:25:49] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:25:50] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:26:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:26:20] INFO: ✅ Redis connected
+[2025-11-07 03:26:20] INFO: 🚀 Redis ready
+[2025-11-07 03:26:20] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:26:21] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 03:28:05] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:28:05] INFO: ✅ Redis connected
+[2025-11-07 03:28:05] INFO: 🚀 Redis ready
+[2025-11-07 03:28:05] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:28:06] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:28:14] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:28:14] INFO: ✅ Redis connected
+[2025-11-07 03:28:14] INFO: 🚀 Redis ready
+[2025-11-07 03:28:14] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:28:15] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 03:28:38] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:28:38] INFO: ✅ Redis connected
+[2025-11-07 03:28:38] INFO: 🚀 Redis ready
+[2025-11-07 03:28:38] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:28:39] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:28:51] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:28:51] INFO: ✅ Redis connected
+[2025-11-07 03:28:51] INFO: 🚀 Redis ready
+[2025-11-07 03:28:51] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:28:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 03:42:40] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:42:40] INFO: ✅ Redis connected
+[2025-11-07 03:42:40] INFO: 🚀 Redis ready
+[2025-11-07 03:42:40] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:42:41] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:43:00] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:43:00] INFO: ✅ Redis connected
+[2025-11-07 03:43:00] INFO: 🚀 Redis ready
+[2025-11-07 03:43:00] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:43:01] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:43:10] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:43:10] INFO: ✅ Redis connected
+[2025-11-07 03:43:10] INFO: 🚀 Redis ready
+[2025-11-07 03:43:10] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:43:11] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 03:48:18] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:48:18] INFO: ✅ Redis connected
+[2025-11-07 03:48:18] INFO: 🚀 Redis ready
+[2025-11-07 03:48:18] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:48:19] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 03:48:35] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:48:35] INFO: ✅ Redis connected
+[2025-11-07 03:48:35] INFO: 🚀 Redis ready
+[2025-11-07 03:48:35] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:48:36] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 03:48:45] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:48:45] INFO: ✅ Redis connected
+[2025-11-07 03:48:45] INFO: 🚀 Redis ready
+[2025-11-07 03:48:45] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:48:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:49:00] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:49:00] INFO: ✅ Redis connected
+[2025-11-07 03:49:00] INFO: 🚀 Redis ready
+[2025-11-07 03:49:00] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:49:01] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 03:50:26] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:50:26] INFO: ✅ Redis connected
+[2025-11-07 03:50:26] INFO: 🚀 Redis ready
+[2025-11-07 03:50:26] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:50:27] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 03:50:44] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 03:50:44] INFO: ✅ Redis connected
+[2025-11-07 03:50:44] INFO: 🚀 Redis ready
+[2025-11-07 03:50:44] INFO: 🔗 Redis client connected successfully
+[2025-11-07 03:50:45] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 04:51:38] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 04:51:38] INFO: ✅ Redis connected
+[2025-11-07 04:51:38] INFO: 🚀 Redis ready
+[2025-11-07 04:51:38] INFO: 🔗 Redis client connected successfully
+[2025-11-07 04:51:39] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 04:51:58] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 04:51:58] INFO: ✅ Redis connected
+[2025-11-07 04:51:58] INFO: 🚀 Redis ready
+[2025-11-07 04:51:58] INFO: 🔗 Redis client connected successfully
+[2025-11-07 04:51:59] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 05:23:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 05:23:50] INFO: ✅ Redis connected
+[2025-11-07 05:23:50] INFO: 🚀 Redis ready
+[2025-11-07 05:23:50] INFO: 🔗 Redis client connected successfully
+[2025-11-07 05:23:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 05:40:36] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 05:40:36] INFO: ✅ Redis connected
+[2025-11-07 05:40:36] INFO: 🚀 Redis ready
+[2025-11-07 05:40:36] INFO: 🔗 Redis client connected successfully
+[2025-11-07 05:40:37] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 05:42:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 05:42:20] INFO: ✅ Redis connected
+[2025-11-07 05:42:20] INFO: 🚀 Redis ready
+[2025-11-07 05:42:20] INFO: 🔗 Redis client connected successfully
+[2025-11-07 05:42:21] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 05:42:32] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 05:42:32] INFO: ✅ Redis connected
+[2025-11-07 05:42:32] INFO: 🚀 Redis ready
+[2025-11-07 05:42:32] INFO: 🔗 Redis client connected successfully
+[2025-11-07 05:42:33] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 05:43:41] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 05:43:41] INFO: ✅ Redis connected
+[2025-11-07 05:43:41] INFO: 🚀 Redis ready
+[2025-11-07 05:43:41] INFO: 🔗 Redis client connected successfully
+[2025-11-07 05:43:42] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 05:56:15] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 05:56:15] INFO: ✅ Redis connected
+[2025-11-07 05:56:15] INFO: 🚀 Redis ready
+[2025-11-07 05:56:15] INFO: 🔗 Redis client connected successfully
+[2025-11-07 05:56:16] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-07 06:04:31] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 06:04:31] INFO: ✅ Redis connected
+[2025-11-07 06:04:31] INFO: 🚀 Redis ready
+[2025-11-07 06:04:31] INFO: 🔗 Redis client connected successfully
+[2025-11-07 06:04:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 06:04:38] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 06:04:38] INFO: ✅ Redis connected
+[2025-11-07 06:04:38] INFO: 🚀 Redis ready
+[2025-11-07 06:04:38] INFO: 🔗 Redis client connected successfully
+[2025-11-07 06:04:39] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-07 06:15:33] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 06:15:33] INFO: ✅ Redis connected
+[2025-11-07 06:15:33] INFO: 🚀 Redis ready
+[2025-11-07 06:15:33] INFO: 🔗 Redis client connected successfully
+[2025-11-07 06:15:34] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 06:19:39] INFO: ✅ Wallet created for user 68f7f83baf080e1345d36794
+[2025-11-07 11:36:43] INFO: 🟢 Socket connected: cGxveF3FVU8VxZSjAAAB
+[2025-11-07 11:36:43] INFO: 👥 User joined room: 68f7f83baf080e1345d36794
+[2025-11-07 11:36:59] INFO: 🔴 Socket disconnected: cGxveF3FVU8VxZSjAAAB (transport close)
+[2025-11-07 11:37:26] INFO: 🟢 Socket connected: IHtw4owsMpalYEf0AAAD
+[2025-11-07 11:37:26] INFO: 👥 User joined room: 68f7f83baf080e1345d36794
+[2025-11-07 11:37:37] INFO: 🔴 Socket disconnected: IHtw4owsMpalYEf0AAAD (transport close)
+[2025-11-07 11:37:40] INFO: 🟢 Socket connected: 1eizaH9iRj_z7ohFAAAF
+[2025-11-07 11:37:40] INFO: 👥 User joined room: 68f7f83baf080e1345d36794
+[2025-11-07 11:37:42] INFO: 🔴 Socket disconnected: 1eizaH9iRj_z7ohFAAAF (transport close)
+[2025-11-07 11:37:46] INFO: 🟢 Socket connected: iwGRae8o5ZxHGQa4AAAH
+[2025-11-07 11:37:46] INFO: 👥 User joined room: 68f7f83baf080e1345d36794
+[2025-11-07 11:38:17] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-07 11:38:17] INFO: ✅ Redis connected
+[2025-11-07 11:38:17] INFO: 🚀 Redis ready
+[2025-11-07 11:38:17] INFO: 🔗 Redis client connected successfully
+[2025-11-07 11:38:19] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-07 11:38:21] INFO: 🟢 Socket connected: f_OzbVG0lJYBsThCAAAB
+[2025-11-07 11:38:23] INFO: 🔴 Socket disconnected: f_OzbVG0lJYBsThCAAAB (transport close)
+[2025-11-07 11:38:46] INFO: 🟢 Socket connected: Iez-aaODn5sRA_z8AAAD
+[2025-11-07 11:38:46] INFO: 👥 User joined room: 68fcbb430f1c2ac2950aae63
+[2025-11-07 11:38:52] INFO: 🔴 Socket disconnected: Iez-aaODn5sRA_z8AAAD (transport close)
+[2025-11-07 11:38:59] INFO: 🟢 Socket connected: iCX-xpN0eKqDzJ0LAAAF
+[2025-11-07 11:38:59] INFO: 👥 User joined room: 68fcbb430f1c2ac2950aae63
+[2025-11-07 11:39:07] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-07 11:39:10] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-07 11:39:12] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-07 11:39:12] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-07 11:39:12] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-07 11:39:16] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.

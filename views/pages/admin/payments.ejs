@@ -1,123 +1,140 @@
 <!-- views/pages/admin/payments.ejs -->
-<div class="container mx-auto p-6">
-  <h2 class="text-2xl font-bold text-blue-600 mb-6">💳 Payment Management</h2>
+<div class="max-w-7xl mx-auto p-6">
+  <h2 class="text-2xl font-bold text-green-700 mb-6">💰 Payments & Transactions</h2>
 
-  <!-- Report Summary -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white p-4 shadow rounded">
-      <h3 class="font-semibold text-gray-700">Total Revenue</h3>
-      <p class="text-green-600 text-xl font-bold">$<%= report.totalRevenue.toFixed(2) %></p>
-    </div>
-    <div class="bg-white p-4 shadow rounded">
-      <h3 class="font-semibold text-gray-700">Transactions</h3>
-      <p class="text-blue-600 text-xl font-bold"><%= report.totalTransactions %></p>
-    </div>
-    <div class="bg-white p-4 shadow rounded">
-      <h3 class="font-semibold text-gray-700">Pending Escrow</h3>
-      <p class="text-yellow-600 text-xl font-bold">
-        <%= payments.filter(p => p.status === 'in-escrow').length %>
-      </p>
+  <!-- ✅ Manual Payout Box -->
+  <div class="bg-white rounded-xl shadow p-4 mb-6">
+    <h3 class="font-semibold mb-3">💸 Manual Payout</h3>
+    <div class="flex flex-wrap items-center gap-3">
+      <input id="payoutFreelancer" type="text" placeholder="Freelancer ID"
+             class="border rounded px-3 py-2 text-sm w-64">
+
+      <input id="payoutAmount" type="number" placeholder="Amount (₹)"
+             class="border rounded px-3 py-2 text-sm w-40">
+
+      <button id="payoutBtn"
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm">
+        Send Payout
+      </button>
     </div>
   </div>
 
-  <!-- Filter -->
-  <form method="GET" action="/payment/admin/all" class="mb-6 flex flex-wrap gap-2">
-    <input type="text" name="search" placeholder="Search user or project" class="border p-2 rounded flex-grow">
-    <select name="status" class="border p-2 rounded">
-      <option value="">All Status</option>
-      <option value="pending">Pending</option>
-      <option value="in-escrow">In Escrow</option>
-      <option value="released">Released</option>
-      <option value="refunded">Refunded</option>
-    </select>
-    <select name="method" class="border p-2 rounded">
-      <option value="">All Methods</option>
-      <option value="razorpay">Razorpay</option>
-      <option value="paypal">PayPal</option>
-      <option value="bank">Bank</option>
-    </select>
-    <button class="bg-blue-600 text-white px-4 py-2 rounded">Filter</button>
-  </form>
+  <!-- ✅ Transactions Table -->
+  <% if (transactions && transactions.length) { %>
+    <div class="overflow-x-auto bg-white rounded-xl shadow">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-50 text-gray-700">
+          <tr>
+            <th class="p-3 text-left">Type</th>
+            <th class="p-3 text-left">Client</th>
+            <th class="p-3 text-left">Freelancer</th>
+            <th class="p-3 text-left">Milestone</th>
+            <th class="p-3 text-center">Amount</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-center">Created</th>
+            <th class="p-3 text-center">Action</th>
+          </tr>
+        </thead>
 
-  <!-- Payments Table -->
-  <div class="overflow-x-auto">
-    <table class="w-full border-collapse border text-sm md:text-base">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border p-2">Project</th>
-          <th class="border p-2">Client</th>
-          <th class="border p-2">Freelancer</th>
-          <th class="border p-2">Amount</th>
-          <th class="border p-2">Status</th>
-          <th class="border p-2">Method</th>
-          <th class="border p-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (!payments.length) { %>
-          <tr><td colspan="7" class="text-center text-gray-500 py-4">No payments found.</td></tr>
-        <% } else { %>
-          <% payments.forEach(p => { %>
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-2"><%= p.projectTitle %></td>
-              <td class="p-2"><%= p.clientName %></td>
-              <td class="p-2"><%= p.freelancerName %></td>
-              <td class="p-2">$<%= p.amount %></td>
-              <td class="p-2 capitalize"><%= p.status %></td>
-              <td class="p-2"><%= p.paymentMethod %></td>
-              <td class="p-2 space-y-1">
-                <% if (p.status === 'in-escrow') { %>
-                  <button onclick="handlePayment('/payment/admin/release/<%= p._id %>')"
-                          class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded w-full">
-                          Release
+        <tbody>
+          <% transactions.forEach(t => { %>
+            <tr class="border-t hover:bg-gray-50">
+              <td class="p-3"><%= t.type %></td>
+              <td class="p-3"><%= t.client?.fullName || t.client?.email || '-' %></td>
+              <td class="p-3"><%= t.freelancer?.fullName || t.freelancer?.email || '-' %></td>
+              <td class="p-3"><%= t.milestone?.title || ('#' + (t.milestone?._id || '-')) %></td>
+
+              <td class="p-3 text-center">₹<%= t.amount %></td>
+
+              <td class="p-3 text-center">
+                <span class="px-2 py-1 rounded-full text-xs font-semibold
+                  <%= t.status === 'completed'
+                        ? 'bg-green-100 text-green-700'
+                        : t.status === 'pending'
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-red-100 text-red-700' %>">
+                  <%= t.status %>
+                </span>
+              </td>
+
+              <td class="p-3 text-center"><%= new Date(t.createdAt).toLocaleString() %></td>
+
+              <td class="p-3 text-center">
+                <% if (t.type === 'release' && t.freelancer?._id) { %>
+                  <button 
+                    class="quickPayoutBtn bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs"
+                    data-freelancer="<%= t.freelancer?._id %>"
+                    data-amount="<%= t.amount %>">
+                    💸 Payout
                   </button>
-                  <button onclick="handlePayment('/payment/admin/refund/<%= p._id %>')"
-                          class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded w-full">
-                          Refund
-                  </button>
-                <% } %>
-                <% if (p.status === 'pending') { %>
-                  <button onclick="handlePayment('/payment/admin/withdraw/<%= p._id %>')"
-                          class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded w-full">
-                          Approve Withdrawal
-                  </button>
+                <% } else { %>
+                  <span class="text-gray-400 text-xs italic">—</span>
                 <% } %>
               </td>
             </tr>
           <% }) %>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
+        </tbody>
+
+      </table>
+    </div>
+
+  <% } else { %>
+    <div class="bg-white rounded-xl shadow p-10 text-center text-gray-600">No transactions found.</div>
+  <% } %>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-  async function handlePayment(url, method = "POST") {
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ✅ Manual payout button
+  document.getElementById('payoutBtn').addEventListener('click', async () => {
+    const freelancerId = document.getElementById('payoutFreelancer').value.trim();
+    const amount = Number(document.getElementById('payoutAmount').value);
+
+    if (!freelancerId || !amount) {
+      return Swal.fire("Missing info", "Enter Freelancer ID and Amount", "warning");
+    }
+
     const confirm = await Swal.fire({
-      title: "Are you sure?",
-      text: "Proceed with this action?",
+      title: "Confirm Payout",
+      text: `Send ₹${amount}?`,
       icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#2563eb",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, proceed"
+      showCancelButton: true
     });
 
     if (!confirm.isConfirmed) return;
 
-    try {
-      const res = await fetch(url, { method });
-      const data = await res.json();
+    const res = await fetch("/admin/payments/payout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ freelancerId, amount })
+    });
 
-      if (data.success) {
-        Swal.fire("Success", data.message, "success");
-        setTimeout(() => window.location.reload(), 1500);
-      } else {
-        Swal.fire("Error", data.message || "Something went wrong", "error");
-      }
-    } catch (err) {
-      Swal.fire("Error", "Server error occurred", "error");
-    }
-  }
+    const data = await res.json();
+    Swal.fire(data.success ? "✅ Payout Sent" : "❌ Error",
+              data.message || "",
+              data.success ? "success" : "error");
+
+    if (data.success) setTimeout(() => location.reload(), 1000);
+  });
+
+  // ✅ Quick payout buttons in table
+  document.querySelectorAll(".quickPayoutBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const freelancerId = btn.dataset.freelancer;
+      const amount = Number(btn.dataset.amount);
+
+      // autofill manual payout inputs
+      document.getElementById('payoutFreelancer').value = freelancerId;
+      document.getElementById('payoutAmount').value = amount;
+
+      // trigger payout flow
+      document.getElementById("payoutBtn").click();
+    });
+  });
+
+});
 </script>

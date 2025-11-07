@@ -106,12 +106,18 @@ app.use("/admin", adminRoutes);
 const categoryRoutes = require("./app/routes/category.routes");
 app.use("/admin/categories", categoryRoutes);
 
+const adminPaymentRoutes=require("./app/routes/admin.payment.routes");
+app.use("/admin/payments", adminPaymentRoutes);
+
 const disputeRoutes = require("./app/routes/dispute.routes");
 app.use("/admin/disputes", disputeRoutes);
 
 
 const freelancerRoutes = require("./app/routes/freelancer.routes");
 app.use("/freelancer", freelancerRoutes);
+
+const walletRoutes=require("./app/routes/wallet.routes");
+app.use("/freelancer/wallet", walletRoutes)
 
 const clientRoutes = require("./app/routes/client.routes");
 app.use("/client", clientRoutes);

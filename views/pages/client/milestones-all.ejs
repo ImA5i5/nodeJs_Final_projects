@@ -1,16 +1,20 @@
 <!-- ✅ views/pages/client/milestones-all.ejs -->
+
 <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6 mt-10">
+
   <div class="flex items-center justify-between mb-6">
     <h2 class="text-3xl font-bold text-green-700 flex items-center gap-2">
       ⏱ All Milestones
     </h2>
+
     <a href="/client/post-project"
        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow-sm">
        ➕ New Project
     </a>
   </div>
 
-  <% if (milestones && milestones.length > 0) { %>
+  <% if (milestones.length > 0) { %>
+
     <div class="overflow-x-auto">
       <table class="min-w-full border border-gray-200 rounded-lg text-sm">
         <thead class="bg-green-700 text-white">
@@ -23,13 +27,28 @@
             <th class="p-3 text-center">Actions</th>
           </tr>
         </thead>
+
         <tbody>
           <% milestones.forEach(m => { %>
             <tr class="border-b hover:bg-gray-50 transition">
-              <td class="p-3 font-semibold text-gray-800"><%= m.project?.title || "N/A" %></td>
+
+              <!-- ✅ PROJECT NAME -->
+              <td class="p-3 font-semibold text-gray-800">
+                <%= m.project?.title || "N/A" %>
+              </td>
+
+              <!-- ✅ TITLE -->
               <td class="p-3"><%= m.title %></td>
+
+              <!-- ✅ AMOUNT -->
               <td class="p-3 text-center">₹<%= m.amount %></td>
-              <td class="p-3 text-center"><%= m.dueDate ? new Date(m.dueDate).toLocaleDateString() : "—" %></td>
+
+              <!-- ✅ DUE DATE -->
+              <td class="p-3 text-center">
+                <%= m.dueDate ? new Date(m.dueDate).toLocaleDateString() : "—" %>
+              </td>
+
+              <!-- ✅ STATUS BADGE -->
               <td class="p-3 text-center">
                 <span class="px-3 py-1 rounded-full text-xs font-semibold
                   <%= m.status === 'created' ? 'bg-gray-200 text-gray-700' :
@@ -47,22 +66,24 @@
               <td class="p-3 text-center flex justify-center gap-2 flex-wrap">
 
                 <% if (m.status === 'created') { %>
-                  <button onclick="fundMilestone('<%= m._id %>')" 
+                  <button onclick="fundMilestone('<%= m._id %>')"
                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">
                     💰 Fund
                   </button>
                 <% } %>
 
                 <% if (m.status === 'submitted') { %>
-                  <button onclick="viewDeliverables('<%= m._id %>')" 
+                  <button onclick="viewDeliverables('<%= m._id %>')"
                           class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-xs">
                     👀 Review
                   </button>
-                  <button onclick="approveMilestone('<%= m._id %>')" 
+
+                  <button onclick="approveMilestone('<%= m._id %>')"
                           class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">
                     ✅ Approve
                   </button>
-                  <button onclick="requestChanges('<%= m._id %>')" 
+
+                  <button onclick="requestChanges('<%= m._id %>')"
                           class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">
                     🔁 Request Changes
                   </button>
@@ -73,57 +94,80 @@
                 <% } %>
 
               </td>
+
             </tr>
           <% }) %>
         </tbody>
+
       </table>
     </div>
+
   <% } else { %>
+
     <div class="text-center py-12 text-gray-500">
-      <p>No milestones found yet.</p>
+      <p>No milestones found.</p>
     </div>
+
   <% } %>
+
 </div>
 
-<!-- ✅ SweetAlert2 -->
+<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 async function fundMilestone(id) {
   const confirm = await Swal.fire({
     title: "Fund Milestone?",
-    text: "This will move milestone into 'funded' status.",
     icon: "info",
     showCancelButton: true,
     confirmButtonText: "💰 Fund"
   });
   if (!confirm.isConfirmed) return;
+
   const res = await fetch(`/client/milestone/${id}/fund`, { method: "PUT" });
   const data = await res.json();
-  Swal.fire(data.success ? "✅ Funded!" : "❌ Error", data.message || "", data.success ? "success" : "error");
+
+  Swal.fire(
+    data.success ? "✅ Funded!" : "❌ Error",
+    data.message,
+    data.success ? "success" : "error"
+  );
+
   if (data.success) setTimeout(() => location.reload(), 1000);
 }
 
 async function viewDeliverables(id) {
   const res = await fetch(`/client/milestone/${id}/deliverables`);
   const data = await res.json();
+
   const html = data.deliverables?.length
-    ? data.deliverables.map(f => `<a href="${f.fileUrl}" target="_blank" class="block text-blue-600">${f.fileUrl.split('/').pop()}</a>`).join('')
-    : 'No files uploaded yet.';
-  Swal.fire({ title: "Deliverables", html, confirmButtonText: "Close" });
+    ? data.deliverables.map(f =>
+        `<a href="${f.fileUrl}" target="_blank" class="block text-blue-600">${f.fileUrl.split('/').pop()}</a>`
+      ).join('')
+    : "No files uploaded yet.";
+
+  Swal.fire({ title: "Deliverables", html });
 }
 
 async function approveMilestone(id) {
   const confirm = await Swal.fire({
     title: "Approve Milestone?",
-    text: "This will release payment to the freelancer.",
     icon: "success",
     showCancelButton: true,
     confirmButtonText: "✅ Approve"
   });
   if (!confirm.isConfirmed) return;
+
   const res = await fetch(`/client/milestone/${id}/approve`, { method: "PUT" });
   const data = await res.json();
-  Swal.fire(data.success ? "✅ Approved!" : "❌ Error", data.message || "", data.success ? "success" : "error");
+
+  Swal.fire(
+    data.success ? "✅ Approved!" : "❌ Error",
+    data.message,
+    data.success ? "success" : "error"
+  );
+
   if (data.success) setTimeout(() => location.reload(), 1000);
 }
 
@@ -131,17 +175,25 @@ async function requestChanges(id) {
   const { value: feedback } = await Swal.fire({
     title: "Request Changes",
     input: "textarea",
-    inputPlaceholder: "Enter feedback for revision...",
+    inputPlaceholder: "Enter feedback...",
     showCancelButton: true
   });
   if (!feedback) return;
+
   const res = await fetch(`/client/milestone/${id}/request-changes`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ feedback })
   });
+
   const data = await res.json();
-  Swal.fire(data.success ? "🔁 Changes Requested!" : "❌ Error", data.message || "", data.success ? "info" : "error");
+
+  Swal.fire(
+    data.success ? "🔁 Changes Requested!" : "❌ Error",
+    data.message,
+    data.success ? "info" : "error"
+  );
+
   if (data.success) setTimeout(() => location.reload(), 1000);
 }
 </script>

@@ -243,10 +243,94 @@ router.get("/chat/messages/:receiverId", ChatController.getMessages);
 router.get("/notifications", ChatController.getAlerts);
 
 /* ------------------------------------------------------------------
-   💸 PAYMENTS (Client)
+   💸 PAYMENTS (Client) — FIXED
 ------------------------------------------------------------------- */
-router.get("/payments", PaymentController.clientPayments);
-router.post("/payments/deposit", PaymentController.depositEscrow);
+
+// ✅ View payments page (history page)
+router.get(
+  "/payments/:projectId",
+  RoleMiddleware.authorizeRoles("client"),
+  async (req, res) => {
+    try {
+      const Project = require("../models/Project");
+      const Milestone = require("../models/Milestone");
+
+      // ✅ Find project owned by this client
+      const project = await Project.findOne({
+        _id: req.params.projectId,
+        client: req.user._id
+      }).lean();
+
+      if (!project) {
+        return res.status(404).render("pages/error", {
+          layout: "layouts/client-layout",
+          message: "Project not found"
+        });
+      }
+
+      // ✅ Fetch milestones for this project only
+      const milestones = await Milestone.find({
+        project: project._id
+      }).lean();
+
+      res.render("pages/client/payments", {
+        layout: "layouts/client-layout",
+        project,
+        milestones,
+        razorpayKey: process.env.RAZORPAY_KEY_ID
+      });
+
+    } catch (err) {
+      console.error("Project Payments Error:", err);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+router.get(
+  "/payments",
+  RoleMiddleware.authorizeRoles("client"),
+  async (req, res) => {
+    try {
+      const Project = require("../models/Project");
+      const Milestone = require("../models/Milestone");
+
+      const projects = await Project.find({ client: req.user._id })
+        .select("_id title")
+        .lean();
+
+      const projectIds = projects.map(p => p._id);
+
+      const milestones = await Milestone.find({
+        project: { $in: projectIds }
+      })
+        .populate("project", "title")
+        .lean();
+
+      res.render("pages/client/payments-all", {
+        layout: "layouts/client-layout",
+        projects,
+        milestones,
+        razorpayKey: process.env.RAZORPAY_KEY_ID
+      });
+    } catch (err) {
+      console.error("Payments-All Error:", err);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+
+
+// ✅ Create Razorpay Order
+router.post("/payments/create-order", PaymentController.createOrder);
+
+// ✅ Verify Razorpay Payment
+router.post("/payments/verify", PaymentController.verify);
+
+// ✅ Release Milestone Payment
+router.post("/payments/release", PaymentController.release);
+
 
 /* ------------------------------------------------------------------
    ⭐ REVIEWS (Client)

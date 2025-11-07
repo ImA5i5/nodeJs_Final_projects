@@ -5,21 +5,21 @@ const router = express.Router();
 const AdminController = require("../controllers/AdminController");
 const AuthMiddleware = require("../middleware/auth.middleware");
 const RoleMiddleware = require("../middleware/role.middleware");
-const ProjectController = require("../controllers/ProjectController");
-const PaymentController = require("../controllers/PaymentController");
-const DisputeController = require("../controllers/DisputeController");
-const AnalyticsController=require("../controllers/AnalyticsController");
 
+const ProjectController = require("../controllers/ProjectController");
+const AdminPaymentController = require("../controllers/AdminPaymentController");
+const DisputeController = require("../controllers/DisputeController");
+const AnalyticsController = require("../controllers/AnalyticsController");
+
+// ✅ Admin auth protection
 router.use(AuthMiddleware.verifyAccessToken);
 router.use(RoleMiddleware.authorizeRoles("admin"));
 
-// Dashboard
+// ✅ Dashboard
 router.get("/dashboard", AdminController.dashboard);
 
-
-// ✅ User Management
+// ✅ Users
 router.get("/users", AdminController.manageUsers);
-// User Management (AJAX Endpoints)
 router.post("/users/approve/:id", AdminController.approveUserAjax);
 router.post("/users/suspend/:id", AdminController.suspendUserAjax);
 router.post("/users/reset-password/:id", AdminController.resetUserPasswordAjax);
@@ -27,24 +27,24 @@ router.post("/users/verify-identity/:id", AdminController.triggerIdentityVerific
 router.delete("/users/delete/:id", AdminController.deleteUserAjax);
 router.post("/users/verify-email", AdminController.verifyUserByEmailAjax);
 
-// ✅ Projects Management Page (renders projects.ejs)
+// ✅ Project Management
 router.get("/projects", ProjectController.getAllProjects);
 
-// ✅ Payments Page
-router.get("/payments", PaymentController.adminView); // <--- CONNECTED ROUTE
+// ✅ Payments (FIXED)
+router.get("/payments", AdminPaymentController.allTransactions);
+router.post("/payments/payout", AdminPaymentController.payout);
 
-// Payment Actions (AJAX)
-router.post("/payments/release/:id", PaymentController.releaseEscrow);
-router.post("/payments/refund/:id", PaymentController.refundPayment);
-router.post("/payments/withdraw/:id", PaymentController.processWithdrawal);
+// ✅ Project Monitoring (FIXED)
+router.get("/project-monitor", AdminPaymentController.projectMonitor);
 
-//⚖️ DISPUTE MANAGEMENT
-router.get("/disputes", DisputeController.viewAll);
-router.post("/disputes/handle/:id", DisputeController.handleDispute);
-router.post("/disputes/process/:id", DisputeController.processRefundOrPayment);
-router.get("/disputes/history/:id", DisputeController.viewHistory);
+// ✅ Dispute Management
+router.get("/disputes", DisputeController.list);
+router.put("/disputes/resolve", DisputeController.resolve);
 
-//Analytics management
+// ❌ Removed INVALID route (method doesn't exist)
+// router.get("/disputes/history/:id", DisputeController.viewHistory);
+
+// ✅ Reports
 router.get("/reports", AnalyticsController.getStats);
 
 module.exports = router;

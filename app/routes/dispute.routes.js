@@ -1,27 +1,32 @@
 // app/routes/dispute.routes.js
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 
 const DisputeController = require("../controllers/DisputeController");
 const AuthMiddleware = require("../middleware/auth.middleware");
 const RoleMiddleware = require("../middleware/role.middleware");
 
-// ✅ Only admin can manage disputes
+// ✅ Only logged in users can raise disputes
 router.use(AuthMiddleware.verifyAccessToken);
-router.use(RoleMiddleware.authorizeRoles("admin"));
 
-// 🧾 View All Disputes (Admin Dashboard)
-router.get("/", DisputeController.viewAll);
+// ✅ CLIENT: Raise dispute
+router.post(
+  "/raise",
+  RoleMiddleware.authorizeRoles("client"),
+  DisputeController.raise
+);
 
-// 🧠 Handle dispute actions (resolve / in-review)
-router.post("/handle/:id", DisputeController.handleDispute);
+// ✅ ADMIN: List disputes
+router.get(
+  "/",
+  RoleMiddleware.authorizeRoles("admin"),
+  DisputeController.list
+);
 
-// 💸 Approve refund or release payment
-router.post("/process/:id", DisputeController.processRefundOrPayment);
-
-// 🕒 View full dispute history
-router.get("/history/:id", DisputeController.viewHistory);
-router.get("/disputes/history/:id", DisputeController.viewHistory);
-
+// ✅ ADMIN: Resolve dispute
+router.put(
+  "/resolve",
+  RoleMiddleware.authorizeRoles("admin"),
+  DisputeController.resolve
+);
 
 module.exports = router;

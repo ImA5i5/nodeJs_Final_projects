@@ -12,6 +12,7 @@ const UploadMiddleware = require("../middleware/upload.middleware");
 const ChatController = require("../controllers/ChatController");
 const PaymentController = require("../controllers/PaymentController");
 const ReviewController = require("../controllers/ReviewController");
+const WalletController = require("../controllers/WalletController");
 
 const upload = multer({ dest: "uploads/" }); // local temporary upload
 
@@ -66,7 +67,8 @@ router.post("/chat/send", UploadMiddleware.single("file"), ChatController.sendMe
 router.get("/chat/messages/:receiverId", ChatController.getMessages);
 
 // ✅ Add this route — connect Earnings page
-router.get("/earnings", PaymentController.freelancerEarnings);
+// ✅ Freelancer Earnings Page (FIXED)
+router.get("/earnings", WalletController.getEarnings);
 
 
 // ⭐ Reviews

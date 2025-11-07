@@ -81,6 +81,12 @@
               </button>
             <% } %>
 
+            <!-- ✅ Add Payment Button Here -->
+      <a href="/client/payments/<%= project._id %>"
+         class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+         💸 Manage Payments
+      </a>
+
             <!-- Edit / Delete -->
             <a
               href="/client/projects/<%= project._id %>/edit"

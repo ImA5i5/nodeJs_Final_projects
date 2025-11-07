@@ -1,79 +1,66 @@
 <!-- views/pages/admin/dispute-history.ejs -->
-<div class="container mx-auto p-6">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold text-blue-700">🕒 Dispute History - <%= dispute.projectTitle %></h2>
-    <a href="/admin/disputes"
-       class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
-      ← Back to Disputes
-    </a>
+<div class="max-w-7xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">📜 Dispute History</h2>
+    <a href="/admin/disputes" class="text-sm text-blue-600 hover:underline">↩️ Back to Open Disputes</a>
   </div>
 
-  <!-- Dispute Summary Card -->
-  <div class="bg-white shadow rounded p-4 mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-700">
-      <p><span class="font-semibold">Client:</span> <%= dispute.clientName %></p>
-      <p><span class="font-semibold">Freelancer:</span> <%= dispute.freelancerName %></p>
-      <p>
-        <span class="font-semibold">Status:</span>
-        <span class="capitalize font-semibold 
-          <%= dispute.status === 'resolved' ? 'text-green-600' :
-              dispute.status === 'in-review' ? 'text-yellow-600' :
-              dispute.status === 'open' ? 'text-blue-600' : 'text-red-600' %>">
-          <%= dispute.status %>
-        </span>
-      </p>
+  <div class="bg-white rounded-xl shadow p-4 mb-4 flex items-center gap-3">
+    <label class="text-sm text-gray-600">Filter by status:</label>
+    <select id="statusFilter" class="border rounded px-3 py-2 text-sm">
+      <option value="">All</option>
+      <option value="open">Open</option>
+      <option value="resolved">Resolved</option>
+      <option value="closed">Closed</option>
+    </select>
+  </div>
+
+  <% if (disputes && disputes.length) { %>
+    <div class="overflow-x-auto bg-white rounded-xl shadow">
+      <table id="historyTable" class="min-w-full text-sm">
+        <thead class="bg-gray-50 text-gray-700">
+          <tr>
+            <th class="p-3 text-left">Dispute</th>
+            <th class="p-3 text-left">Milestone</th>
+            <th class="p-3 text-left">Raised By</th>
+            <th class="p-3 text-left">Reason</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-left">Resolution</th>
+            <th class="p-3 text-center">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% disputes.forEach(d => { %>
+            <tr class="border-t hover:bg-gray-50" data-status="<%= d.status %>">
+              <td class="p-3 font-mono"><%= d._id %></td>
+              <td class="p-3"><%= d.milestone?.title || ('Milestone #' + d.milestone?._id) %></td>
+              <td class="p-3"><%= d.raisedBy?.fullName || d.raisedBy?.email || 'User' %></td>
+              <td class="p-3"><div class="line-clamp-2 max-w-xs"><%= d.reason %></div></td>
+              <td class="p-3 text-center">
+                <span class="px-2 py-1 rounded-full text-xs font-semibold
+                <%= d.status === 'open' ? 'bg-red-100 text-red-700' :
+                    d.status === 'resolved' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' %>">
+                  <%= d.status %>
+                </span>
+              </td>
+              <td class="p-3"><div class="line-clamp-2 max-w-xs"><%= d.resolution || '-' %></div></td>
+              <td class="p-3 text-center"><%= new Date(d.updatedAt || d.createdAt).toLocaleString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
     </div>
-    <% if (dispute.resolution) { %>
-      <p class="mt-2 text-gray-600"><span class="font-semibold">Resolution:</span> <%= dispute.resolution %></p>
-    <% } %>
-  </div>
-
-  <!-- Timeline Section -->
-  <div class="bg-white shadow rounded p-6">
-    <h3 class="text-xl font-semibold mb-4 text-gray-800">📜 Action Timeline</h3>
-
-    <% if (!dispute.history || dispute.history.length === 0) { %>
-      <p class="text-center text-gray-500">No actions recorded for this dispute yet.</p>
-    <% } else { %>
-      <ol class="relative border-s border-gray-200 dark:border-gray-700 ml-3">
-        <% dispute.history.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).forEach(item => { %>
-          <% 
-            let colorClass, icon;
-            switch (item.action.toLowerCase()) {
-              case "resolved":
-              case "payment released":
-                colorClass = "bg-green-500";
-                icon = "✅";
-                break;
-              case "refund approved":
-                colorClass = "bg-red-500";
-                icon = "💳";
-                break;
-              case "marked in-review":
-                colorClass = "bg-yellow-500";
-                icon = "🕊️";
-                break;
-              default:
-                colorClass = "bg-blue-500";
-                icon = "⚙️";
-            }
-          %>
-          <li class="mb-8 ms-4">
-            <div class="absolute w-3 h-3 rounded-full mt-1.5 -start-1.5 border border-white <%= colorClass %>"></div>
-            <time class="mb-1 text-sm font-normal leading-none text-gray-400">
-              <%= new Date(item.timestamp).toLocaleString() %>
-            </time>
-            <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <span><%= icon %></span> <%= item.action %>
-            </h3>
-            <p class="text-gray-700 mb-1"><%= item.message || "No message provided." %></p>
-            <p class="text-xs text-gray-500 italic">By <%= item.actor %></p>
-          </li>
-        <% }) %>
-      </ol>
-    <% } %>
-  </div>
+  <% } else { %>
+    <div class="bg-white rounded-xl shadow p-10 text-center text-gray-600">No dispute history.</div>
+  <% } %>
 </div>
 
-<!-- Optional: Flowbite for enhanced timeline styling -->
-<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+<script>
+document.getElementById('statusFilter')?.addEventListener('change', (e) => {
+  const val = e.target.value;
+  document.querySelectorAll('#historyTable tbody tr').forEach(tr => {
+    if (!val) { tr.classList.remove('hidden'); return; }
+    tr.dataset.status === val ? tr.classList.remove('hidden') : tr.classList.add('hidden');
+  });
+});
+</script>
