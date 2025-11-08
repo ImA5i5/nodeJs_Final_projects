@@ -1,19 +1,56 @@
 <!-- views/pages/chat/notifications.ejs -->
 
 
-<h1 class="text-2xl font-bold mb-6">🔔 Notifications</h1>
+<div class="max-w-4xl mx-auto mt-10">
 
-<div class="bg-white shadow rounded-lg p-6">
-  <% if (notifications && notifications.length > 0) { %>
-    <ul class="divide-y">
-      <% notifications.forEach(note => { %>
-        <li class="py-3">
-          <p class="text-gray-800"><%= note.message %></p>
-          <span class="text-xs text-gray-500"><%= new Date(note.createdAt).toLocaleString() %></span>
-        </li>
-      <% }) %>
-    </ul>
-  <% } else { %>
-    <p class="text-gray-500">You have no new notifications.</p>
+  <h2 class="text-3xl font-bold text-green-700 mb-6">
+    🔔 Notifications
+  </h2>
+
+  <% if (notifications.length === 0) { %>
+    <p class="text-gray-500 text-center py-10">No notifications yet.</p>
   <% } %>
+
+  <div class="space-y-4">
+    <% notifications.forEach(n => { %>
+      <div id="notif-<%= n._id %>"
+        class="p-4 bg-white shadow rounded-lg border flex justify-between items-center
+        <%= !n.isRead ? 'border-green-500' : '' %>">
+
+        <div>
+          <p class="font-semibold"><%= n.title %></p>
+          <p class="text-sm text-gray-600"><%= n.message %></p>
+          <p class="text-xs text-gray-400 mt-1">
+            <%= new Date(n.createdAt).toLocaleString() %>
+          </p>
+        </div>
+
+        <% if (!n.isRead) { %>
+          <button onclick="markRead('<%= n._id %>')"
+            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">
+            Mark Read
+          </button>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+async function markRead(id) {
+  const res = await fetch(`/notifications/${id}/read`, { method: "PUT" });
+  const data = await res.json();
+
+  Swal.fire(
+    data.success ? "✅ Updated" : "❌ Error",
+    data.message,
+    data.success ? "success" : "error"
+  );
+
+  if (data.success)
+    document.getElementById(`notif-${id}`).classList.remove("border-green-500");
+}
+</script>

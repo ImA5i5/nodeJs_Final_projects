@@ -23,7 +23,7 @@ const Project = require("../models/Project");
 const ClientController = require("../controllers/ClientController");
 const ProjectController = require("../controllers/ProjectController");
 const ClientHireController = require("../controllers/ClientHireController");
-const ChatController = require("../controllers/ChatController");
+
 const PaymentController = require("../controllers/PaymentController");
 const ReviewController = require("../controllers/ReviewController");
 
@@ -187,60 +187,7 @@ router.get(
 );
 
 
-/* ------------------------------------------------------------------
-   💬 CHAT & NOTIFICATIONS
-------------------------------------------------------------------- */
-// Inbox
-router.get("/chat-list", async (req, res, next) => {
-  try {
-    const userId = req.user._id;
 
-    const chats = await Message.aggregate([
-      {
-        $match: {
-          $or: [{ sender: userId }, { receiver: userId }],
-        },
-      },
-      { $sort: { createdAt: -1 } },
-      {
-        $group: {
-          _id: {
-            $cond: [{ $eq: ["$sender", userId] }, "$receiver", "$sender"],
-          },
-          lastMessage: { $first: "$content" },
-          createdAt: { $first: "$createdAt" },
-        },
-      },
-      { $sort: { createdAt: -1 } },
-    ]);
-
-    const populatedChats = await Promise.all(
-      chats.map(async (c) => {
-        const otherUser = await User.findById(c._id).select("fullName profile.profilePic role").lean();
-        return { otherUser, lastMessage: c.lastMessage, createdAt: c.createdAt };
-      })
-    );
-
-    res.render("pages/client/chat-list", {
-      layout: "layouts/client-layout",
-      title: "Chat Inbox",
-      chats: populatedChats,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Chat redirect
-router.get("/chat", (req, res) => res.redirect("/client/chat-list"));
-
-// Chat room
-router.get("/chat/:id", ChatController.chatRoom);
-router.post("/chat/send", UploadMiddleware.single("file"), ChatController.sendMessage);
-router.get("/chat/messages/:receiverId", ChatController.getMessages);
-
-// Notifications polling
-router.get("/notifications", ChatController.getAlerts);
 
 /* ------------------------------------------------------------------
    💸 PAYMENTS (Client) — FIXED

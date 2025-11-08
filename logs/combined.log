@@ -3217,3 +3217,279 @@
 [2025-11-07 11:39:12] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
 [2025-11-07 11:39:12] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
 [2025-11-07 11:39:16] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 02:14:33] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 02:14:33] INFO: ✅ Redis connected
+[2025-11-08 02:14:33] INFO: 🚀 Redis ready
+[2025-11-08 02:14:33] INFO: 🔗 Redis client connected successfully
+[2025-11-08 02:14:38] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 03:42:09] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 03:42:09] INFO: ✅ Redis connected
+[2025-11-08 03:42:09] INFO: 🚀 Redis ready
+[2025-11-08 03:42:09] INFO: 🔗 Redis client connected successfully
+[2025-11-08 03:42:11] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 03:43:12] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 03:43:12] INFO: ✅ Redis connected
+[2025-11-08 03:43:12] INFO: 🚀 Redis ready
+[2025-11-08 03:43:12] INFO: 🔗 Redis client connected successfully
+[2025-11-08 03:43:14] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 03:43:25] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 03:43:25] INFO: ✅ Redis connected
+[2025-11-08 03:43:25] INFO: 🚀 Redis ready
+[2025-11-08 03:43:25] INFO: 🔗 Redis client connected successfully
+[2025-11-08 03:43:27] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 04:05:06] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:05:06] INFO: ✅ Redis connected
+[2025-11-08 04:05:06] INFO: 🚀 Redis ready
+[2025-11-08 04:05:06] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:05:07] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 04:06:32] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:06:32] INFO: ✅ Redis connected
+[2025-11-08 04:06:32] INFO: 🚀 Redis ready
+[2025-11-08 04:06:32] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:06:35] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 04:17:37] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:17:37] INFO: ✅ Redis connected
+[2025-11-08 04:17:37] INFO: 🚀 Redis ready
+[2025-11-08 04:17:37] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:17:39] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 04:27:57] ERROR: Open Chat Error: Cast to ObjectId failed for value ":roomId" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 04:30:19] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:30:19] INFO: ✅ Redis connected
+[2025-11-08 04:30:19] INFO: 🚀 Redis ready
+[2025-11-08 04:30:19] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:30:21] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 04:30:42] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:30:42] INFO: ✅ Redis connected
+[2025-11-08 04:30:42] INFO: 🚀 Redis ready
+[2025-11-08 04:30:42] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:30:43] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 04:31:27] ERROR: Open Chat Error: Cast to ObjectId failed for value "latest" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 04:33:42] ERROR: Open Chat Error: Cast to ObjectId failed for value "latest" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 04:45:45] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:45:45] INFO: ✅ Redis connected
+[2025-11-08 04:45:45] INFO: 🚀 Redis ready
+[2025-11-08 04:45:45] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:45:46] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 04:47:33] ERROR: Open Chat Error: Cast to ObjectId failed for value "latest" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 04:50:12] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:50:12] INFO: ✅ Redis connected
+[2025-11-08 04:50:12] INFO: 🚀 Redis ready
+[2025-11-08 04:50:12] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:50:13] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 04:53:10] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:53:10] INFO: ✅ Redis connected
+[2025-11-08 04:53:10] INFO: 🚀 Redis ready
+[2025-11-08 04:53:10] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:53:12] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:53:12] INFO: ✅ Redis connected
+[2025-11-08 04:53:12] INFO: 🚀 Redis ready
+[2025-11-08 04:53:12] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:53:13] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 04:54:23] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 04:54:23] INFO: ✅ Redis connected
+[2025-11-08 04:54:23] INFO: 🚀 Redis ready
+[2025-11-08 04:54:23] INFO: 🔗 Redis client connected successfully
+[2025-11-08 04:54:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 05:07:30] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:33] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:35] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:35] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:35] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:38] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:48] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:54] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:54] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:55] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:09:44] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:09:44] INFO: ✅ Redis connected
+[2025-11-08 05:09:44] INFO: 🚀 Redis ready
+[2025-11-08 05:09:44] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:09:45] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 05:09:53] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:12:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:12:22] INFO: ✅ Redis connected
+[2025-11-08 05:12:22] INFO: 🚀 Redis ready
+[2025-11-08 05:12:22] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:12:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 05:12:41] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:14:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:14:20] INFO: ✅ Redis connected
+[2025-11-08 05:14:20] INFO: 🚀 Redis ready
+[2025-11-08 05:14:20] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:14:22] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 05:14:36] ERROR: Start Chat Error: client is not defined
+[2025-11-08 05:15:45] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:15:45] INFO: ✅ Redis connected
+[2025-11-08 05:15:45] INFO: 🚀 Redis ready
+[2025-11-08 05:15:45] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:15:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 05:20:15] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:22:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:22:29] INFO: ✅ Redis connected
+[2025-11-08 05:22:29] INFO: 🚀 Redis ready
+[2025-11-08 05:22:29] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:22:31] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 05:23:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:25:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:25:22] INFO: ✅ Redis connected
+[2025-11-08 05:25:22] INFO: 🚀 Redis ready
+[2025-11-08 05:25:22] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:25:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 05:26:00] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:26:00] INFO: ✅ Redis connected
+[2025-11-08 05:26:00] INFO: 🚀 Redis ready
+[2025-11-08 05:26:00] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:26:02] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 05:26:06] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:26:06] INFO: ✅ Redis connected
+[2025-11-08 05:26:06] INFO: 🚀 Redis ready
+[2025-11-08 05:26:06] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:26:08] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 05:26:48] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:32:25] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:32:25] INFO: ✅ Redis connected
+[2025-11-08 05:32:25] INFO: 🚀 Redis ready
+[2025-11-08 05:32:25] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:32:28] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 05:34:42] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:34:42] INFO: ✅ Redis connected
+[2025-11-08 05:34:42] INFO: 🚀 Redis ready
+[2025-11-08 05:34:42] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:34:43] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 05:38:47] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 05:38:47] INFO: ✅ Redis connected
+[2025-11-08 05:38:47] INFO: 🚀 Redis ready
+[2025-11-08 05:38:47] INFO: 🔗 Redis client connected successfully
+[2025-11-08 05:38:49] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 11:45:30] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 11:45:30] INFO: ✅ Redis connected
+[2025-11-08 11:45:30] INFO: 🚀 Redis ready
+[2025-11-08 11:45:30] INFO: 🔗 Redis client connected successfully
+[2025-11-08 11:45:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 11:52:11] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 11:52:11] INFO: ✅ Redis connected
+[2025-11-08 11:52:11] INFO: 🚀 Redis ready
+[2025-11-08 11:52:11] INFO: 🔗 Redis client connected successfully
+[2025-11-08 11:52:13] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 12:05:33] ERROR: File Upload Error: Message validation failed: receiver: Path `receiver` is required.
+[2025-11-08 12:20:51] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:20:51] INFO: ✅ Redis connected
+[2025-11-08 12:20:51] INFO: 🚀 Redis ready
+[2025-11-08 12:20:51] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:20:53] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 12:21:16] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:21:16] INFO: ✅ Redis connected
+[2025-11-08 12:21:16] INFO: 🚀 Redis ready
+[2025-11-08 12:21:16] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:21:18] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 12:34:53] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:34:53] INFO: ✅ Redis connected
+[2025-11-08 12:34:53] INFO: 🚀 Redis ready
+[2025-11-08 12:34:53] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:34:55] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 12:35:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:35:29] INFO: ✅ Redis connected
+[2025-11-08 12:35:29] INFO: 🚀 Redis ready
+[2025-11-08 12:35:29] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:35:31] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 12:45:02] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:45:02] INFO: ✅ Redis connected
+[2025-11-08 12:45:02] INFO: 🚀 Redis ready
+[2025-11-08 12:45:02] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:45:09] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 12:45:23] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:45:23] INFO: ✅ Redis connected
+[2025-11-08 12:45:23] INFO: 🚀 Redis ready
+[2025-11-08 12:45:23] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:45:26] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:45:26] INFO: ✅ Redis connected
+[2025-11-08 12:45:26] INFO: 🚀 Redis ready
+[2025-11-08 12:45:26] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:46:19] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 12:46:39] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:46:39] INFO: ✅ Redis connected
+[2025-11-08 12:46:39] INFO: 🚀 Redis ready
+[2025-11-08 12:46:39] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:46:41] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 12:48:11] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 12:48:19] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 12:48:19] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 12:48:36] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:48:36] INFO: ✅ Redis connected
+[2025-11-08 12:48:36] INFO: 🚀 Redis ready
+[2025-11-08 12:48:36] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:48:39] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 12:48:45] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:48:45] INFO: ✅ Redis connected
+[2025-11-08 12:48:45] INFO: 🚀 Redis ready
+[2025-11-08 12:48:45] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:48:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 12:55:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:55:20] INFO: ✅ Redis connected
+[2025-11-08 12:55:20] INFO: 🚀 Redis ready
+[2025-11-08 12:55:20] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:55:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 12:55:47] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:55:47] INFO: ✅ Redis connected
+[2025-11-08 12:55:47] INFO: 🚀 Redis ready
+[2025-11-08 12:55:47] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:55:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 12:59:12] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 12:59:12] INFO: ✅ Redis connected
+[2025-11-08 12:59:12] INFO: 🚀 Redis ready
+[2025-11-08 12:59:12] INFO: 🔗 Redis client connected successfully
+[2025-11-08 12:59:15] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 13:24:01] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 13:24:01] INFO: ✅ Redis connected
+[2025-11-08 13:24:01] INFO: 🚀 Redis ready
+[2025-11-08 13:24:01] INFO: 🔗 Redis client connected successfully
+[2025-11-08 13:24:03] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 13:27:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 13:27:21] INFO: ✅ Redis connected
+[2025-11-08 13:27:21] INFO: 🚀 Redis ready
+[2025-11-08 13:27:21] INFO: 🔗 Redis client connected successfully
+[2025-11-08 13:27:24] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 13:27:24] INFO: ✅ Redis connected
+[2025-11-08 13:27:24] INFO: 🚀 Redis ready
+[2025-11-08 13:27:24] INFO: 🔗 Redis client connected successfully
+[2025-11-08 13:27:26] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 13:28:25] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 13:28:25] INFO: ✅ Redis connected
+[2025-11-08 13:28:25] INFO: 🚀 Redis ready
+[2025-11-08 13:28:25] INFO: 🔗 Redis client connected successfully
+[2025-11-08 13:28:27] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-08 13:29:24] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 13:29:24] INFO: ✅ Redis connected
+[2025-11-08 13:29:24] INFO: 🚀 Redis ready
+[2025-11-08 13:29:24] INFO: 🔗 Redis client connected successfully
+[2025-11-08 13:29:26] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 13:31:55] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 13:31:55] INFO: ✅ Redis connected
+[2025-11-08 13:31:55] INFO: 🚀 Redis ready
+[2025-11-08 13:31:55] INFO: 🔗 Redis client connected successfully
+[2025-11-08 13:31:57] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 13:34:02] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 13:34:02] INFO: ✅ Redis connected
+[2025-11-08 13:34:02] INFO: 🚀 Redis ready
+[2025-11-08 13:34:02] INFO: 🔗 Redis client connected successfully
+[2025-11-08 13:34:04] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 14:13:57] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 14:13:57] INFO: ✅ Redis connected
+[2025-11-08 14:13:57] INFO: 🚀 Redis ready
+[2025-11-08 14:13:57] INFO: 🔗 Redis client connected successfully
+[2025-11-08 14:14:00] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 14:29:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 14:29:21] INFO: ✅ Redis connected
+[2025-11-08 14:29:21] INFO: 🚀 Redis ready
+[2025-11-08 14:29:21] INFO: 🔗 Redis client connected successfully
+[2025-11-08 14:29:29] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-08 14:35:18] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 14:35:18] INFO: ✅ Redis connected
+[2025-11-08 14:35:18] INFO: 🚀 Redis ready
+[2025-11-08 14:35:18] INFO: 🔗 Redis client connected successfully
+[2025-11-08 14:35:20] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net

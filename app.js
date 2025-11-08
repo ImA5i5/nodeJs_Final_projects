@@ -14,7 +14,7 @@ const RedisStore = require("connect-redis")(session);
 const redisClient = require("./app/config/redis");
 const db = require("./app/config/db");
 const winston = require("./app/config/winston");
-const { Server } = require("socket.io");
+const socketio = require("socket.io");
 const http = require("http");
 const cors = require("cors");
 const methodOverride = require("method-override");
@@ -22,8 +22,9 @@ const methodOverride = require("method-override");
 // Initialize Express App
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-app.set("io", io);
+const io = socketio(server, {
+  cors: { origin: "*" }
+});
 
 // Connect Database
 db();
@@ -126,8 +127,7 @@ app.use("/client", clientRoutes);
 const clientHireRoutes = require("./app/routes/ClientHire.routes");
 app.use("/client", clientHireRoutes);
 
-const clientChatRoutes = require("./app/routes/clientChat.routes");
-app.use("/client", clientChatRoutes);
+
 
 const projectRoutes = require("./app/routes/project.routes");
 app.use("/project", projectRoutes);
@@ -174,54 +174,57 @@ const errorHandler = require("./app/middleware/error.middleware");
 app.use(errorHandler);
 
 
-// Socket.io Setup (Chat)
-const onlineUsers = new Map();
+// ✅ Make available in controllers
+global.io = io;
 
 io.on("connection", (socket) => {
-  winston.info(`🟢 Socket connected: ${socket.id}`);
+  console.log("✅ User connected:", socket.id);
 
-  // User joins their unique room
-  socket.on("joinRoom", (userId) => {
-    if (!userId) return;
-    socket.join(userId.toString());
-    onlineUsers.set(userId.toString(), socket.id);
-    io.emit("userOnline", { userId });
-    winston.info(`👥 User joined room: ${userId}`);
+  /* ---------------------------------------------------------
+     1️⃣ USER joins their personal notification room
+     (used to send real-time "newMessage" pop-ups)
+  ----------------------------------------------------------*/
+  socket.on("joinUser", (userId) => {
+    socket.join(`user_${userId}`);
+    console.log(`✅ User joined personal room → user_${userId}`);
   });
 
-  // Handle message events
-  socket.on("chatMessage", (msg) => {
-    if (!msg || !msg.room) return;
-    io.to(msg.room.toString()).emit("message", msg);
-    winston.info(`💬 Message sent to room ${msg.room}`);
+  /* ---------------------------------------------------------
+     2️⃣ USER joins a chat room (for real-time message stream)
+  ----------------------------------------------------------*/
+  socket.on("joinRoom", (roomId) => {
+    socket.join(roomId);
+    console.log("✅ User joined chat room:", roomId);
   });
 
-  // Typing indicators
-  socket.on("typing", (data) => {
-    if (!data.room) return;
-    io.to(data.room.toString()).emit("showTyping", { sender: data.sender });
-  });
+  /* ---------------------------------------------------------
+     3️⃣ WHEN CLIENT OR FREELANCER SENDS A NEW MESSAGE
+     (broadcast to room & notify receiver)
+  ----------------------------------------------------------*/
+  socket.on("sendMessage", (payload) => {
+  console.log("✅ Received real-time payload:", payload);
 
-  socket.on("stopTyping", (data) => {
-    if (!data.room) return;
-    io.to(data.room.toString()).emit("hideTyping", { sender: data.sender });
-  });
+  const { roomId, receiverId, message } = payload;
 
-  // Read receipt event
-  socket.on("messageRead", (data) => {
-    io.to(data.room.toString()).emit("readReceipt", data);
-  });
+  if (!message) {
+    return console.log("❌ ERROR: Message object missing in payload!");
+  }
 
-  // Disconnect event
-  socket.on("disconnect", (reason) => {
-    for (const [userId, sid] of onlineUsers.entries()) {
-      if (sid === socket.id) {
-        onlineUsers.delete(userId);
-        io.emit("userOffline", { userId });
-        break;
-      }
-    }
-    winston.info(`🔴 Socket disconnected: ${socket.id} (${reason})`);
+  io.to(roomId).emit("newMessage", message);
+
+  io.to(receiverId.toString()).emit("notification", {
+    from: message.sender,
+    text: message.content || "📎 File attachment",
+    message,
+  });
+});
+
+
+  /* ---------------------------------------------------------
+     4️⃣ DISCONNECT
+  ----------------------------------------------------------*/
+  socket.on("disconnect", () => {
+    console.log("❌ User disconnected:", socket.id);
   });
 });
 

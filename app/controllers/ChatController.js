@@ -1,212 +1,324 @@
 // app/controllers/ChatController.js
+
+const ChatRoom = require("../models/ChatRoom");
 const Message = require("../models/Message");
-const User = require("../models/User");
-const Notification = require("../models/Notification");
-const cloudinary = require("../config/cloudinary");
+const FileService = require("../services/file.service");
 const winston = require("../config/winston");
 
 class ChatController {
-  /**
-   * 💬 Render chat room between freelancer & client
-   */
-  static async chatRoom(req, res, next) {
+
+  /* ---------------------------------------------------
+    ✅ 1. CHAT LIST (client & freelancer)
+  ----------------------------------------------------*/
+  static async chatList(req, res) {
     try {
-      const receiverId = req.params.id;
+      const userId = req.user._id.toString();
 
-      // Mark all unread messages from receiver → as read
-      await Message.updateMany(
-        { sender: receiverId, receiver: req.user._id, isRead: false },
-        { $set: { isRead: true } }
-      );
-
-      // Fetch all messages in conversation
-      const messages = await Message.find({
-        $or: [
-          { sender: req.user._id, receiver: receiverId },
-          { sender: receiverId, receiver: req.user._id },
-        ],
+      const rooms = await ChatRoom.find({
+        $or: [{ client: userId }, { freelancer: userId }]
       })
-        .populate("sender receiver", "fullName role profile.profilePic")
-        .sort({ createdAt: 1 });
-
-      const receiver = await User.findById(receiverId).lean();
-
-      res.render("pages/freelancer/chat", {
-        layout: "layouts/freelancer-layout",
-        title: `Chat with ${receiver.fullName}`,
-        messages,
-        receiver,
-        user: req.user,
-      });
-    } catch (err) {
-      winston.error("ChatRoom Error: " + err.message);
-      next(err);
-    }
-  }
-
-  /**
-   * 📤 Send a message (text or file)
-   */
-  static async sendMessage(req, res) {
-    try {
-      const { receiverId, content, projectId } = req.body;
-      let fileUrl = null;
-
-      // Optional file upload
-      if (req.file) {
-        const uploaded = await cloudinary.uploader.upload(req.file.path, {
-          folder: "freelancer_chat_files",
-        });
-        fileUrl = uploaded.secure_url;
-      }
-
-      // Create the message
-      const message = await Message.create({
-        project: projectId || null,
-        sender: req.user._id,
-        receiver: receiverId,
-        content,
-        file: fileUrl,
-      });
-
-      // 🔔 Create Notification for Receiver
-      await Notification.create({
-        user: receiverId,
-        message: `${req.user.fullName} sent you a message.`,
-        type: "message",
-      });
-
-      // 🔄 Emit real-time event to both users
-      const io = req.app.get("io");
-      io.to(receiverId.toString()).emit("newMessage", {
-        sender: req.user._id,
-        content,
-        file: fileUrl,
-        createdAt: message.createdAt,
-      });
-
-      res.status(201).json({ success: true, message });
-    } catch (err) {
-      winston.error("SendMessage Error: " + err.message);
-      res.status(500).json({ success: false, message: "Failed to send message" });
-    }
-  }
-
-  /**
-   * 📬 Fetch messages between two users (AJAX refresh)
-   */
-  static async getMessages(req, res) {
-    try {
-      const { receiverId } = req.params;
-
-      const messages = await Message.find({
-        $or: [
-          { sender: req.user._id, receiver: receiverId },
-          { sender: receiverId, receiver: req.user._id },
-        ],
-      })
-        .populate("sender receiver", "fullName profile.profilePic")
-        .sort({ createdAt: 1 });
-
-      // Mark messages as read
-      await Message.updateMany(
-        { sender: receiverId, receiver: req.user._id, isRead: false },
-        { $set: { isRead: true } }
-      );
-
-      res.json({ success: true, messages });
-    } catch (err) {
-      winston.error("GetMessages Error: " + err.message);
-      res.status(500).json({ success: false, message: "Error loading messages" });
-    }
-  }
-
-  /**
-   * 🔔 Fetch unread messages count (for notifications or badges)
-   */
-  static async unreadCount(req, res) {
-    try {
-      const count = await Message.countDocuments({
-        receiver: req.user._id,
-        isRead: false,
-      });
-
-      res.json({ success: true, unreadCount: count });
-    } catch (err) {
-      winston.error("UnreadCount Error: " + err.message);
-      res.status(500).json({ success: false, message: "Error counting unread messages" });
-    }
-  }
-
-  /**
-   * 📜 Fetch all chat partners (chat list)
-   */
- static async chatList(req, res, next) {
-    try {
-      // Get all chat partners (freelancer’s active conversations)
-      const chats = await Message.aggregate([
-        {
-          $match: {
-            $or: [{ sender: req.user._id }, { receiver: req.user._id }],
-          },
-        },
-        { $sort: { createdAt: -1 } },
-        {
-          $group: {
-            _id: {
-              $cond: [
-                { $eq: ["$sender", req.user._id] },
-                "$receiver",
-                "$sender",
-              ],
-            },
-            lastMessage: { $first: "$content" },
-            createdAt: { $first: "$createdAt" },
-          },
-        },
-        { $sort: { createdAt: -1 } },
-      ]);
-
-      // Populate user info for display
-      const populatedChats = await Promise.all(
-        chats.map(async (chat) => {
-          const otherUser = await User.findById(chat._id).lean();
-          return {
-            otherUser,
-            lastMessage: chat.lastMessage,
-            createdAt: chat.createdAt,
-          };
-        })
-      );
-
-      res.render("pages/freelancer/chat-list", {
-        layout: "layouts/freelancer-layout",
-        title: "Messages",
-        chats: populatedChats,
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-
-   /**
-   * 🔔 Fetch alerts (new messages, deliverables, etc.)
-   */
-  static async getAlerts(req, res) {
-    try {
-      const notifications = await Notification.find({
-        user: req.user._id,
-        isRead: false,
-      })
-        .sort({ createdAt: -1 })
-        .limit(10)
+        .populate("client freelancer", "fullName avatar")
+        .sort({ updatedAt: -1 })
         .lean();
 
-      res.json({ success: true, notifications });
+      // ✅ Add otherUser to each room
+      rooms.forEach(room => {
+        room.otherUser =
+          room.client._id.toString() === userId
+            ? room.freelancer
+            : room.client;
+      });
+
+      res.render("pages/chat/chat-list", {
+        layout:
+          req.user.role === "client"
+            ? "layouts/client-layout"
+            : "layouts/freelancer-layout",
+        rooms,
+        user: req.user,
+        userId
+      });
+
     } catch (err) {
-      res.status(500).json({ success: false, message: "Error loading notifications" });
+      winston.error("Chat List Error: " + err.message);
+      res.status(500).send("Chat list loading failed");
     }
   }
+
+  /* ---------------------------------------------------
+    ✅ 2. OPEN CHAT ROOM
+  ----------------------------------------------------*/
+  static async openChat(req, res) {
+    try {
+      const roomId = req.params.roomId;
+      const userId = req.user._id.toString();
+
+      const room = await ChatRoom.findById(roomId)
+        .populate("client freelancer", "fullName avatar")
+        .lean();
+
+      if (!room) return res.status(404).send("Chat room not found");
+
+      const messages = await Message.find({ room: roomId })
+        .sort({ createdAt: 1 })
+        .lean();
+
+      // ✅ Mark unread as read
+      await Message.updateMany(
+        { room: roomId, receiver: userId, status: { $ne: "read" } },
+        { $set: { status: "read" } }
+      );
+
+      // ✅ Determine other participant
+      const isClient = room.client._id.toString() === userId;
+      const otherUser = isClient ? room.freelancer : room.client;
+
+      res.render("pages/chat/chat-room", {
+        layout:
+          req.user.role === "client"
+            ? "layouts/client-layout"
+            : "layouts/freelancer-layout",
+        title: `Chat with ${otherUser.fullName}`,
+        room,
+        messages,
+        user: req.user,
+        userId,
+        otherUser
+      });
+
+    } catch (err) {
+      winston.error("Open Chat Error: " + err.message);
+      res.status(500).send("Chat loading failed");
+    }
+  }
+
+  /* ---------------------------------------------------
+    ✅ 3. SEND TEXT MESSAGE
+  ----------------------------------------------------*/
+  static async sendMessage(req, res) {
+  try {
+    const { roomId, content } = req.body;
+
+    const room = await ChatRoom.findById(roomId);
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Chat room not found"
+      });
+    }
+
+    const receiver =
+      room.client.toString() === req.user._id.toString()
+        ? room.freelancer
+        : room.client;
+
+    const message = await Message.create({
+      room: roomId,
+      project: room.project || null,
+      sender: req.user._id,
+      receiver,
+      content,
+      messageType: "text",
+      status: "sent"
+    });
+
+    return res.json({
+      success: true,
+      message: "Message sent",
+      data: message       // ✅ ALWAYS RETURNED
+    });
+
+  } catch (err) {
+    winston.error("Send Message Error: " + err.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send message"
+    });
+  }
+}
+
+
+  /* ---------------------------------------------------
+    ✅ 4. UPLOAD FILE MESSAGE
+  ----------------------------------------------------*/
+  static async uploadFile(req, res) {
+  try {
+    const { roomId } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+    }
+
+    // ✅ Load chat room → to get client, freelancer, and project
+    const room = await ChatRoom.findById(roomId);
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Chat room not found",
+      });
+    }
+
+    // ✅ receiver = opposite user
+    const receiver =
+      room.client.toString() === req.user._id.toString()
+        ? room.freelancer
+        : room.client;
+
+    // ✅ Cloudinary URL (multer-storage-cloudinary gives secure_url as path)
+    const fileUrl = req.file.path; // ✅ This is ALWAYS correct
+
+    // ✅ Create message
+    const msg = await Message.create({
+      room: roomId,
+      project: room.project, // ✅ REQUIRED or validation fails
+      sender: req.user._id,
+      receiver,
+      file: fileUrl,
+      messageType: "file",
+      status: "sent",
+    });
+
+    // ✅ Emit real-time update
+    global.io.to(roomId).emit("newMessage", msg);
+
+    return res.json({
+      success: true,
+      message: "File uploaded successfully",
+      data: msg,
+    });
+  } catch (err) {
+    console.error("Upload ERROR:", err);
+    winston.error("File Upload Error: " + err.message);
+    res.status(500).json({
+      success: false,
+      message: "File upload failed",
+    });
+  }
+}
+
+  /* ---------------------------------------------------
+    ✅ 5. FETCH MESSAGES (AJAX)
+  ----------------------------------------------------*/
+  static async fetchMessages(req, res) {
+    try {
+      const messages = await Message.find({ room: req.params.roomId })
+        .sort({ createdAt: 1 })
+        .lean();
+
+      res.json({ success: true, messages });
+
+    } catch (err) {
+      winston.error("Fetch Messages Error: " + err.message);
+      res.status(500).json({ success: false, message: "Failed to fetch messages" });
+    }
+  }
+
+  /* ---------------------------------------------------
+    ✅ 6. OPEN LATEST CHAT
+  ----------------------------------------------------*/
+  static async openLatestChat(req, res) {
+    try {
+      const userId = req.user._id;
+      const room = await ChatRoom.findOne({
+        $or: [{ client: userId }, { freelancer: userId }]
+      })
+        .sort({ updatedAt: -1 })
+        .lean();
+
+      if (!room) return res.redirect("/chat/list");
+
+      res.redirect(`/chat/room/${room._id}`);
+
+    } catch (err) {
+      winston.error("Open Latest Chat Error: " + err.message);
+      res.status(500).send("Failed to load latest chat");
+    }
+  }
+
+  /* ---------------------------------------------------
+    ✅ 7. START CHAT (client starts)
+  ----------------------------------------------------*/
+  static async startChat(req, res) {
+    try {
+      const userId = req.user._id;
+      const { otherUserId, projectId } = req.body;
+
+      if (!projectId) {
+  return res.status(400).json({
+    success: false,
+    message: "projectId is required for chat"
+  });
+}
+
+      if (!otherUserId)
+        return res
+          .status(400)
+          .json({ success: false, message: "otherUserId is required" });
+
+      const isClient = req.user.role === "client";
+
+      const clientId = isClient ? userId : otherUserId;
+      const freelancerId = isClient ? otherUserId : userId;
+
+      let room = await ChatRoom.findOne({
+        client: clientId,
+        freelancer: freelancerId,
+        project: projectId || null
+      });
+
+      if (!room) {
+        room = await ChatRoom.create({
+          client: clientId,
+          freelancer: freelancerId,
+          project: projectId || null
+        });
+      }
+
+      return res.json({
+        success: true,
+        message: "Chat started",
+        roomId: room._id
+      });
+
+    } catch (err) {
+      winston.error("Start Chat Error: " + err.message);
+      res.status(500).json({ success: false, message: "Failed to start chat" });
+    }
+  }
+
+ static async getNotifications(req, res) {
+  try {
+    const userId = req.user._id;
+
+    const notifications = await Message.find({
+      receiver: userId,
+      sender: { $ne: userId }   // ✅ show only messages from other user
+    })
+      .populate("sender", "fullName avatar")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.render("pages/chat/notifications", {
+      layout:
+        req.user.role === "client"
+          ? "layouts/client-layout"
+          : "layouts/freelancer-layout",
+      notifications,
+      user: req.user,
+    });
+
+  } catch (err) {
+    winston.error("Notifications Error: " + err.message);
+    return res.status(500).send("Failed to load notifications");
+  }
+}
+
+
+
+
 }
 
 module.exports = ChatController;

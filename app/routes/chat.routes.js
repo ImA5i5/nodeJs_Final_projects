@@ -1,39 +1,70 @@
 // app/routes/chat.routes.js
+
 const express = require("express");
 const router = express.Router();
 
 const ChatController = require("../controllers/ChatController");
 const AuthMiddleware = require("../middleware/auth.middleware");
 const RoleMiddleware = require("../middleware/role.middleware");
-const UploadMiddleware = require("../middleware/upload.middleware");
+const Upload = require("../middleware/upload.middleware");
 
-// ✅ Middleware: Protect all chat routes
 router.use(AuthMiddleware.verifyAccessToken);
-router.use(RoleMiddleware.authorizeRoles("freelancer", "client", "admin"));
 
-/**
- * 💬 Chat Routes Overview
- * --------------------------
- * GET   /chat/list           -> Show user's active conversations
- * GET   /chat/room/:id       -> Open a specific chat
- * GET   /chat/messages/:id   -> Fetch conversation messages (AJAX)
- * POST  /chat/send           -> Send a message (text or file)
- * GET   /chat/unread-count   -> Get unread message count
- */
+// ✅ latest chat
+router.get(
+  "/room/latest",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  ChatController.openLatestChat
+);
 
-// 📜 All user chat list (recent chats)
-router.get("/list", ChatController.chatList);
+// ✅ open chat room
+router.get(
+  "/room/:roomId",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  ChatController.openChat
+);
 
-// 💬 Chat Room (Freelancer ↔ Client)
-router.get("/room/:id", ChatController.chatRoom);
+// ✅ chat list
+router.get(
+  "/list",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  ChatController.chatList
+);
 
-// 📩 Fetch messages (AJAX)
-router.get("/messages/:receiverId", ChatController.getMessages);
+// ✅ start chat
+router.post(
+  "/start",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  ChatController.startChat
+);
 
-// 📤 Send message (text + optional file upload)
-router.post("/send", UploadMiddleware.single("file"), ChatController.sendMessage);
+// ✅ send text message
+router.post(
+  "/send",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  ChatController.sendMessage
+);
 
-// 🔔 Unread message count (for notification badge)
-router.get("/unread-count", ChatController.unreadCount);
+// ✅ file upload message
+router.post(
+  "/upload",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  Upload.single("file"),    // ✅ IMPORTANT
+  ChatController.uploadFile
+);
+
+// ✅ fetch messages
+router.get(
+  "/messages/:roomId",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  ChatController.fetchMessages
+);
+
+router.get(
+  "/notifications",
+  RoleMiddleware.authorizeRoles("client", "freelancer"),
+  ChatController.getNotifications
+);
+
 
 module.exports = router;

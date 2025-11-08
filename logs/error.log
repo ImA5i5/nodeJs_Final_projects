@@ -107,3 +107,32 @@
 [2025-11-07 11:39:12] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
 [2025-11-07 11:39:12] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
 [2025-11-07 11:39:16] ERROR: SendMessage Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 04:27:57] ERROR: Open Chat Error: Cast to ObjectId failed for value ":roomId" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 04:31:27] ERROR: Open Chat Error: Cast to ObjectId failed for value "latest" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 04:33:42] ERROR: Open Chat Error: Cast to ObjectId failed for value "latest" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 04:47:33] ERROR: Open Chat Error: Cast to ObjectId failed for value "latest" (type string) at path "_id" for model "ChatRoom"
+[2025-11-08 05:07:30] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:33] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:35] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:35] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:35] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:38] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:48] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:54] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:54] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:07:55] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:09:53] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:12:41] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:14:36] ERROR: Start Chat Error: client is not defined
+[2025-11-08 05:20:15] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:23:37] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 05:26:48] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 12:05:33] ERROR: File Upload Error: Message validation failed: receiver: Path `receiver` is required.
+[2025-11-08 12:48:11] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 12:48:19] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.
+[2025-11-08 12:48:19] ERROR: Send Message Error: Message validation failed: project: Path `project` is required.

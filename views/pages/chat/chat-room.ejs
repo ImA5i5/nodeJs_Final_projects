@@ -1,45 +1,219 @@
 <!-- views/pages/chat/chat-room.ejs -->
+<div class="max-w-5xl mx-auto mt-8">
 
+  <!-- ✅ Header -->
+  <div class="bg-white shadow p-4 rounded-lg flex items-center gap-4 mb-4">
+    <img src="<%= otherUser.avatar || '/default-user.png' %>" 
+         class="w-12 h-12 rounded-full border object-cover" />
 
-<h1 class="text-2xl font-bold mb-4">💬 Chat with <%= receiver.fullName %></h1>
-
-<div id="chat-box" class="bg-white border rounded-lg shadow p-4 h-96 overflow-y-auto mb-4">
-  <% messages.forEach(msg => { %>
-    <div class="<%= msg.sender.toString() === user._id.toString() ? 'text-right' : 'text-left' %> mb-2">
-      <p class="<%= msg.sender.toString() === user._id.toString() ? 'bg-blue-100 text-blue-800 inline-block p-2 rounded-lg' : 'bg-gray-100 text-gray-700 inline-block p-2 rounded-lg' %>">
-        <%= msg.text %>
-      </p>
-      <span class="text-xs text-gray-400 block mt-1">
-        <%= new Date(msg.createdAt).toLocaleTimeString() %>
-      </span>
+    <div>
+      <h2 class="text-xl font-bold"><%= otherUser.fullName %></h2>
+      <p class="text-sm text-gray-500">Chat Room</p>
     </div>
-  <% }) %>
+  </div>
+
+  <!-- ✅ Chat Box -->
+  <div id="chatBox"
+       class="bg-white shadow rounded-lg p-4 h-[60vh] overflow-y-auto space-y-3">
+
+    <% messages.forEach(m => { %>
+      <div class="<%= m.sender.toString() === userId.toString() 
+                   ? 'text-right' 
+                   : 'text-left' %>">
+
+        <!-- ✅ File Message -->
+        <% if (m.file) { %>
+          <a href="<%= m.file %>" target="_blank"
+             class="inline-block bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium">
+            📎 File: <%= m.file.split('/').pop() %>
+          </a>
+        <% } %>
+
+        <!-- ✅ Text Message -->
+        <% if (m.content) { %>
+          <p class="<%= m.sender.toString() === userId.toString()
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-200 text-gray-800'
+                  %> px-3 py-2 rounded-lg inline-block max-w-[70%]">
+            <%= m.content %>
+          </p>
+        <% } %>
+
+        <span class="text-[10px] text-gray-400 block mt-1">
+          <%= new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+        </span>
+      </div>
+    <% }) %>
+
+  </div>
+
+  <!-- ✅ Typing Indicator -->
+  <div id="typingIndicator" class="text-gray-500 text-sm ml-2 mt-1 hidden">
+    <%= otherUser.fullName %> is typing...
+  </div>
+
+  <!-- ✅ Input Section -->
+  <div class="bg-white shadow rounded-lg p-3 mt-4 flex items-center gap-3">
+
+    <!-- File Upload -->
+    <button id="fileBtn"
+            class="bg-gray-200 p-2 rounded hover:bg-gray-300 text-xl">
+      📎
+    </button>
+    <input type="file" id="chatFile" class="hidden" />
+
+    <!-- Message Box -->
+    <input id="chatInput"
+           type="text"
+           placeholder="Type a message..."
+           class="flex-1 border p-2 rounded-lg focus:outline-none" />
+
+    <!-- Send -->
+    <button id="sendBtn"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold">
+      Send
+    </button>
+  </div>
 </div>
 
-<form id="chat-form" action="/chat/send" method="POST" class="flex gap-2">
-  <input type="hidden" name="receiverId" value="<%= receiver._id %>">
-  <input type="text" name="message" placeholder="Type a message..." required class="flex-1 border border-gray-300 p-2 rounded">
-  <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Send</button>
-</form>
 
-<script src="/socket.io/socket.io.js"></script>
+<!-- ✅ Socket.IO + SweetAlert -->
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-  const socket = io();
-  const chatForm = document.getElementById('chat-form');
-  const chatBox = document.getElementById('chat-box');
+/* ---------------------------------------------
+   INITIALIZE SOCKET
+----------------------------------------------*/
+const socket = io();
+socket.emit("joinRoom", "<%= room._id %>");
+socket.emit("joinUser", "<%= userId %>");
 
-  chatForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const message = e.target.message.value;
-    const receiverId = e.target.receiverId.value;
-    socket.emit('chatMessage', { message, receiverId });
-    e.target.message.value = '';
+/* ---------------------------------------------
+   DOM ELEMENTS
+----------------------------------------------*/
+const chatBox = document.getElementById("chatBox");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+const fileBtn = document.getElementById("fileBtn");
+const fileInput = document.getElementById("chatFile");
+const typingIndicator = document.getElementById("typingIndicator");
+
+function scrollBottom() {
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+scrollBottom();
+
+/* ---------------------------------------------
+   SEND TEXT MESSAGE (AJAX)
+----------------------------------------------*/
+sendBtn.addEventListener("click", sendTextMessage);
+chatInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendTextMessage();
+  socket.emit("typing", { roomId: "<%= room._id %>" });
+});
+
+function sendTextMessage() {
+  const content = chatInput.value.trim();
+  if (!content) return;
+
+  fetch("/chat/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      roomId: "<%= room._id %>",
+      content
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      socket.emit("sendMessage", {
+        roomId: "<%= room._id %>",
+        receiverId: "<%= otherUser._id %>",
+        message: data.data
+      });
+      chatInput.value = "";
+    }
+  });
+}
+
+/* ---------------------------------------------
+   RECEIVE REAL-TIME MESSAGE
+----------------------------------------------*/
+socket.on("newMessage", (m) => {
+  const mine = m.sender === "<%= userId %>";
+
+  const html = `
+    <div class="${mine ? 'text-right' : 'text-left'}">
+      
+      ${m.file ? `
+        <a href="${m.file}" target="_blank"
+           class="inline-block bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium">
+           📎 File: ${m.file.split('/').pop()}
+        </a>
+      ` : ""}
+
+      ${m.content ? `
+        <p class="${mine
+          ? 'bg-green-600 text-white'
+          : 'bg-gray-200 text-gray-800'
+        } px-3 py-2 rounded-lg inline-block max-w-[70%]">
+          ${m.content}
+        </p>
+      ` : ""}
+
+      <span class="text-[10px] text-gray-400 block mt-1">
+        ${new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      </span>
+    </div>
+  `;
+
+  chatBox.insertAdjacentHTML("beforeend", html);
+  scrollBottom();
+});
+
+/* ---------------------------------------------
+   FILE UPLOAD
+----------------------------------------------*/
+fileBtn.addEventListener("click", () => fileInput.click());
+
+fileInput.addEventListener("change", async () => {
+  if (!fileInput.files.length) return;
+
+  const form = new FormData();
+  form.append("file", fileInput.files[0]);
+  form.append("roomId", "<%= room._id %>");
+
+  Swal.fire({
+    title: "Uploading...",
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading()
   });
 
-  socket.on('newMessage', (msg) => {
-    const div = document.createElement('div');
-    div.innerHTML = `<p class='inline-block bg-gray-100 p-2 rounded-lg'>${msg.text}</p>`;
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
+  const res = await fetch("/chat/upload", {
+    method: "POST",
+    body: form
   });
+
+  const data = await res.json();
+  Swal.close();
+
+  if (!data.success) {
+    return Swal.fire("Error", data.message, "error");
+  }
+
+  // ✅ DO NOT EMIT AGAIN — backend already emitted “newMessage”
+  // So we only clear file input.
+  fileInput.value = "";
+});
+
+
+/* ---------------------------------------------
+   TYPING INDICATOR
+----------------------------------------------*/
+socket.on("typing", () => {
+  typingIndicator.classList.remove("hidden");
+  setTimeout(() => typingIndicator.classList.add("hidden"), 1500);
+});
 </script>
