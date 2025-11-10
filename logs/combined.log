@@ -3493,3 +3493,643 @@
 [2025-11-08 14:35:18] INFO: 🚀 Redis ready
 [2025-11-08 14:35:18] INFO: 🔗 Redis client connected successfully
 [2025-11-08 14:35:20] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 20:09:09] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 20:09:09] INFO: ✅ Redis connected
+[2025-11-08 20:09:09] INFO: 🚀 Redis ready
+[2025-11-08 20:09:09] INFO: 🔗 Redis client connected successfully
+[2025-11-08 20:09:40] ERROR: ❌ MongoDB Connection Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+[2025-11-08 20:10:30] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 20:10:30] INFO: ✅ Redis connected
+[2025-11-08 20:10:30] INFO: 🚀 Redis ready
+[2025-11-08 20:10:30] INFO: 🔗 Redis client connected successfully
+[2025-11-08 20:11:16] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-08 20:20:13] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-08 20:20:13] INFO: ✅ Redis connected
+[2025-11-08 20:20:13] INFO: 🚀 Redis ready
+[2025-11-08 20:20:13] INFO: 🔗 Redis client connected successfully
+[2025-11-08 20:20:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 01:50:12] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 01:50:12] INFO: ✅ Redis connected
+[2025-11-09 01:50:12] INFO: 🚀 Redis ready
+[2025-11-09 01:50:12] INFO: 🔗 Redis client connected successfully
+[2025-11-09 01:50:15] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 02:00:33] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 02:00:33] INFO: ✅ Redis connected
+[2025-11-09 02:00:33] INFO: 🚀 Redis ready
+[2025-11-09 02:00:33] INFO: 🔗 Redis client connected successfully
+[2025-11-09 02:00:35] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 02:34:46] INFO: 📧 Notification sent to test08@yopmail.com | 🎉 You've been hired for "kbidbibii"
+[2025-11-09 02:34:46] WARN: Hire: failed to create in-app message: Message validation failed: room: Path `room` is required.
+[2025-11-09 03:08:33] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:08:33] INFO: ✅ Redis connected
+[2025-11-09 03:08:33] INFO: 🚀 Redis ready
+[2025-11-09 03:08:33] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:08:34] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 03:09:06] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:09:06] INFO: ✅ Redis connected
+[2025-11-09 03:09:06] INFO: 🚀 Redis ready
+[2025-11-09 03:09:06] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:09:07] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 03:09:11] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:09:11] INFO: ✅ Redis connected
+[2025-11-09 03:09:11] INFO: 🚀 Redis ready
+[2025-11-09 03:09:11] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:09:12] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 03:11:09] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:11:09] INFO: ✅ Redis connected
+[2025-11-09 03:11:09] INFO: 🚀 Redis ready
+[2025-11-09 03:11:09] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:11:12] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 03:11:31] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:11:31] INFO: ✅ Redis connected
+[2025-11-09 03:11:31] INFO: 🚀 Redis ready
+[2025-11-09 03:11:31] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:11:33] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 03:11:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:11:50] INFO: ✅ Redis connected
+[2025-11-09 03:11:50] INFO: 🚀 Redis ready
+[2025-11-09 03:11:50] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:11:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 03:20:41] INFO: 📧 Notification sent to test08@yopmail.com | 🎉 You've been hired for "voknolv lf"
+[2025-11-09 03:20:41] WARN: Hire: failed to create in-app message: Message validation failed: room: Path `room` is required.
+[2025-11-09 03:32:06] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:32:06] INFO: ✅ Redis connected
+[2025-11-09 03:32:06] INFO: 🚀 Redis ready
+[2025-11-09 03:32:06] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:32:08] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 03:32:17] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:32:17] INFO: ✅ Redis connected
+[2025-11-09 03:32:17] INFO: 🚀 Redis ready
+[2025-11-09 03:32:17] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:32:19] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 03:34:49] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 03:34:49] INFO: ✅ Redis connected
+[2025-11-09 03:34:49] INFO: 🚀 Redis ready
+[2025-11-09 03:34:49] INFO: 🔗 Redis client connected successfully
+[2025-11-09 03:34:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 03:43:51] WARN: ⚠️ Attempted to send email without 'email' specified.
+[2025-11-09 04:00:28] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:00:28] INFO: ✅ Redis connected
+[2025-11-09 04:00:28] INFO: 🚀 Redis ready
+[2025-11-09 04:00:28] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:00:30] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:08:48] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:08:48] INFO: ✅ Redis connected
+[2025-11-09 04:08:48] INFO: 🚀 Redis ready
+[2025-11-09 04:08:48] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:08:50] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:08:59] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:08:59] INFO: ✅ Redis connected
+[2025-11-09 04:08:59] INFO: 🚀 Redis ready
+[2025-11-09 04:08:59] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:09:02] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:09:02] INFO: ✅ Redis connected
+[2025-11-09 04:09:02] INFO: 🚀 Redis ready
+[2025-11-09 04:09:02] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:09:04] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:09:16] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:09:16] INFO: ✅ Redis connected
+[2025-11-09 04:09:16] INFO: 🚀 Redis ready
+[2025-11-09 04:09:16] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:09:18] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:09:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:09:50] INFO: ✅ Redis connected
+[2025-11-09 04:09:50] INFO: 🚀 Redis ready
+[2025-11-09 04:09:50] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:09:53] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:10:00] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:10:00] INFO: ✅ Redis connected
+[2025-11-09 04:10:00] INFO: 🚀 Redis ready
+[2025-11-09 04:10:00] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:10:04] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:10:27] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:10:27] INFO: ✅ Redis connected
+[2025-11-09 04:10:27] INFO: 🚀 Redis ready
+[2025-11-09 04:10:27] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:10:29] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:12:59] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:12:59] INFO: ✅ Redis connected
+[2025-11-09 04:12:59] INFO: 🚀 Redis ready
+[2025-11-09 04:12:59] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:13:04] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:13:53] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:13:53] INFO: ✅ Redis connected
+[2025-11-09 04:13:53] INFO: 🚀 Redis ready
+[2025-11-09 04:13:53] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:13:55] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 04:15:54] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:15:54] INFO: ✅ Redis connected
+[2025-11-09 04:15:54] INFO: 🚀 Redis ready
+[2025-11-09 04:15:54] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:15:57] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:18:39] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:18:39] INFO: ✅ Redis connected
+[2025-11-09 04:18:39] INFO: 🚀 Redis ready
+[2025-11-09 04:18:39] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:18:41] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:18:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:18:50] INFO: ✅ Redis connected
+[2025-11-09 04:18:50] INFO: 🚀 Redis ready
+[2025-11-09 04:18:50] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:18:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:21:02] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:21:02] INFO: ✅ Redis connected
+[2025-11-09 04:21:02] INFO: 🚀 Redis ready
+[2025-11-09 04:21:02] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:21:04] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:21:11] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:21:11] INFO: ✅ Redis connected
+[2025-11-09 04:21:11] INFO: 🚀 Redis ready
+[2025-11-09 04:21:11] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:21:13] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 04:21:33] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:21:33] INFO: ✅ Redis connected
+[2025-11-09 04:21:33] INFO: 🚀 Redis ready
+[2025-11-09 04:21:33] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:21:35] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:28:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:28:29] INFO: ✅ Redis connected
+[2025-11-09 04:28:29] INFO: 🚀 Redis ready
+[2025-11-09 04:28:29] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:28:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:28:55] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:28:55] INFO: ✅ Redis connected
+[2025-11-09 04:28:55] INFO: 🚀 Redis ready
+[2025-11-09 04:28:55] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:28:57] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:29:31] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:29:31] INFO: ✅ Redis connected
+[2025-11-09 04:29:31] INFO: 🚀 Redis ready
+[2025-11-09 04:29:31] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:29:35] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:29:35] INFO: ✅ Redis connected
+[2025-11-09 04:29:35] INFO: 🚀 Redis ready
+[2025-11-09 04:29:35] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:29:37] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:29:47] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:29:47] INFO: ✅ Redis connected
+[2025-11-09 04:29:47] INFO: 🚀 Redis ready
+[2025-11-09 04:29:47] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:29:49] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 04:30:42] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:30:42] INFO: ✅ Redis connected
+[2025-11-09 04:30:42] INFO: 🚀 Redis ready
+[2025-11-09 04:30:42] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:30:46] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:31:16] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:31:16] INFO: ✅ Redis connected
+[2025-11-09 04:31:16] INFO: 🚀 Redis ready
+[2025-11-09 04:31:16] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:31:19] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 04:31:43] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:31:43] INFO: ✅ Redis connected
+[2025-11-09 04:31:43] INFO: 🚀 Redis ready
+[2025-11-09 04:31:43] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:31:45] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:31:48] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:31:48] INFO: ✅ Redis connected
+[2025-11-09 04:31:48] INFO: 🚀 Redis ready
+[2025-11-09 04:31:48] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:31:51] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:37:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:37:21] INFO: ✅ Redis connected
+[2025-11-09 04:37:21] INFO: 🚀 Redis ready
+[2025-11-09 04:37:21] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:37:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 04:38:11] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:38:11] INFO: ✅ Redis connected
+[2025-11-09 04:38:11] INFO: 🚀 Redis ready
+[2025-11-09 04:38:11] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:38:13] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 04:49:44] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:49:44] INFO: ✅ Redis connected
+[2025-11-09 04:49:44] INFO: 🚀 Redis ready
+[2025-11-09 04:49:44] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:49:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 04:52:14] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:52:14] INFO: ✅ Redis connected
+[2025-11-09 04:52:14] INFO: 🚀 Redis ready
+[2025-11-09 04:52:14] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:52:17] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 04:52:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 04:52:21] INFO: ✅ Redis connected
+[2025-11-09 04:52:21] INFO: 🚀 Redis ready
+[2025-11-09 04:52:21] INFO: 🔗 Redis client connected successfully
+[2025-11-09 04:52:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 11:18:03] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 11:18:03] INFO: ✅ Redis connected
+[2025-11-09 11:18:03] INFO: 🚀 Redis ready
+[2025-11-09 11:18:03] INFO: 🔗 Redis client connected successfully
+[2025-11-09 11:18:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 13:07:03] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:07:03] INFO: ✅ Redis connected
+[2025-11-09 13:07:03] INFO: 🚀 Redis ready
+[2025-11-09 13:07:03] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:07:05] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 13:12:03] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:12:03] INFO: ✅ Redis connected
+[2025-11-09 13:12:03] INFO: 🚀 Redis ready
+[2025-11-09 13:12:03] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:12:05] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 13:12:44] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:12:44] INFO: ✅ Redis connected
+[2025-11-09 13:12:44] INFO: 🚀 Redis ready
+[2025-11-09 13:12:44] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:12:45] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 13:13:03] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:13:03] INFO: ✅ Redis connected
+[2025-11-09 13:13:03] INFO: 🚀 Redis ready
+[2025-11-09 13:13:03] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:13:05] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 13:13:26] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:13:26] INFO: ✅ Redis connected
+[2025-11-09 13:13:26] INFO: 🚀 Redis ready
+[2025-11-09 13:13:26] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:13:28] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 13:14:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:14:20] INFO: ✅ Redis connected
+[2025-11-09 13:14:20] INFO: 🚀 Redis ready
+[2025-11-09 13:14:20] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:14:21] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 13:27:54] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:27:54] INFO: ✅ Redis connected
+[2025-11-09 13:27:54] INFO: 🚀 Redis ready
+[2025-11-09 13:27:54] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:27:56] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 13:28:04] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:28:04] INFO: ✅ Redis connected
+[2025-11-09 13:28:04] INFO: 🚀 Redis ready
+[2025-11-09 13:28:04] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:28:06] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 13:42:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:42:29] INFO: ✅ Redis connected
+[2025-11-09 13:42:30] INFO: 🚀 Redis ready
+[2025-11-09 13:42:30] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:42:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 13:43:04] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 13:43:04] INFO: ✅ Redis connected
+[2025-11-09 13:43:04] INFO: 🚀 Redis ready
+[2025-11-09 13:43:04] INFO: 🔗 Redis client connected successfully
+[2025-11-09 13:43:06] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 14:27:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 14:27:29] INFO: ✅ Redis connected
+[2025-11-09 14:27:29] INFO: 🚀 Redis ready
+[2025-11-09 14:27:29] INFO: 🔗 Redis client connected successfully
+[2025-11-09 14:27:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 14:29:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 14:29:20] INFO: ✅ Redis connected
+[2025-11-09 14:29:20] INFO: 🚀 Redis ready
+[2025-11-09 14:29:20] INFO: 🔗 Redis client connected successfully
+[2025-11-09 14:29:22] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 14:39:12] INFO: ✅ Razorpay Order created: order_RdaRlRTGSOA7LG
+[2025-11-09 14:40:57] INFO: ✅ Razorpay Order created: order_RdaTcIYyGbfdGp
+[2025-11-09 14:43:06] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-09 14:49:03] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 14:49:03] INFO: ✅ Redis connected
+[2025-11-09 14:49:03] INFO: 🚀 Redis ready
+[2025-11-09 14:49:03] INFO: 🔗 Redis client connected successfully
+[2025-11-09 14:49:05] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 14:49:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 14:49:29] INFO: ✅ Redis connected
+[2025-11-09 14:49:29] INFO: 🚀 Redis ready
+[2025-11-09 14:49:29] INFO: 🔗 Redis client connected successfully
+[2025-11-09 14:49:31] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 14:52:03] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 14:52:03] INFO: ✅ Redis connected
+[2025-11-09 14:52:03] INFO: 🚀 Redis ready
+[2025-11-09 14:52:03] INFO: 🔗 Redis client connected successfully
+[2025-11-09 14:52:05] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 14:55:26] ERROR: Release Milestone Error: PaymentController.releaseMilestoneInternal is not a function
+[2025-11-09 15:03:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:03:22] INFO: ✅ Redis connected
+[2025-11-09 15:03:22] INFO: 🚀 Redis ready
+[2025-11-09 15:03:22] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:03:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 15:04:06] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:04:06] INFO: ✅ Redis connected
+[2025-11-09 15:04:06] INFO: 🚀 Redis ready
+[2025-11-09 15:04:06] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:04:08] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:04:40] INFO: ✅ Credited ₹6000 to wallet of 68f7f83baf080e1345d36794
+[2025-11-09 15:04:46] INFO: 📧 Notification sent to test2001@yopmail.com | ✅ Payment Released
+[2025-11-09 15:09:17] INFO: ✅ Razorpay Order created: order_RdaxYJmzjf6sRQ
+[2025-11-09 15:14:07] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:14:07] INFO: ✅ Redis connected
+[2025-11-09 15:14:07] INFO: 🚀 Redis ready
+[2025-11-09 15:14:07] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:14:09] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:20:34] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:20:34] INFO: ✅ Redis connected
+[2025-11-09 15:20:34] INFO: 🚀 Redis ready
+[2025-11-09 15:20:34] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:20:36] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:20:49] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:20:49] INFO: ✅ Redis connected
+[2025-11-09 15:20:49] INFO: 🚀 Redis ready
+[2025-11-09 15:20:49] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:20:51] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:21:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:21:20] INFO: ✅ Redis connected
+[2025-11-09 15:21:20] INFO: 🚀 Redis ready
+[2025-11-09 15:21:20] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:21:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 15:21:37] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:21:37] INFO: ✅ Redis connected
+[2025-11-09 15:21:37] INFO: 🚀 Redis ready
+[2025-11-09 15:21:37] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:21:40] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 15:22:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:22:29] INFO: ✅ Redis connected
+[2025-11-09 15:22:29] INFO: 🚀 Redis ready
+[2025-11-09 15:22:29] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:22:31] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 15:23:00] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:23:00] INFO: ✅ Redis connected
+[2025-11-09 15:23:00] INFO: 🚀 Redis ready
+[2025-11-09 15:23:00] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:23:02] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:23:36] INFO: ✅ Debited ₹6000 from wallet of 68f7f83baf080e1345d36794
+[2025-11-09 15:23:42] INFO: 📧 Notification sent to test08@yopmail.com | 💸 Payout Completed
+[2025-11-09 15:27:13] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:27:13] INFO: ✅ Redis connected
+[2025-11-09 15:27:13] INFO: 🚀 Redis ready
+[2025-11-09 15:27:13] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:27:15] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:27:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:27:21] INFO: ✅ Redis connected
+[2025-11-09 15:27:21] INFO: 🚀 Redis ready
+[2025-11-09 15:27:21] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:27:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 15:28:44] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:28:44] INFO: ✅ Redis connected
+[2025-11-09 15:28:44] INFO: 🚀 Redis ready
+[2025-11-09 15:28:44] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:28:46] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 15:47:38] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:47:38] INFO: ✅ Redis connected
+[2025-11-09 15:47:38] INFO: 🚀 Redis ready
+[2025-11-09 15:47:38] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:47:39] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:50:41] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:50:41] INFO: ✅ Redis connected
+[2025-11-09 15:50:41] INFO: 🚀 Redis ready
+[2025-11-09 15:50:41] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:50:43] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 15:52:01] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:52:02] INFO: ✅ Redis connected
+[2025-11-09 15:52:02] INFO: 🚀 Redis ready
+[2025-11-09 15:52:02] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:52:03] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-09 15:56:36] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 15:56:36] INFO: ✅ Redis connected
+[2025-11-09 15:56:36] INFO: 🚀 Redis ready
+[2025-11-09 15:56:36] INFO: 🔗 Redis client connected successfully
+[2025-11-09 15:56:38] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 16:01:39] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:01:39] INFO: ✅ Redis connected
+[2025-11-09 16:01:39] INFO: 🚀 Redis ready
+[2025-11-09 16:01:39] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:01:41] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 16:04:19] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:04:19] INFO: ✅ Redis connected
+[2025-11-09 16:04:19] INFO: 🚀 Redis ready
+[2025-11-09 16:04:19] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:04:21] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 16:04:23] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:04:23] INFO: ✅ Redis connected
+[2025-11-09 16:04:23] INFO: 🚀 Redis ready
+[2025-11-09 16:04:23] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:04:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 16:06:27] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:06:27] INFO: ✅ Redis connected
+[2025-11-09 16:06:27] INFO: 🚀 Redis ready
+[2025-11-09 16:06:27] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:06:29] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 16:08:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:08:21] INFO: ✅ Redis connected
+[2025-11-09 16:08:21] INFO: 🚀 Redis ready
+[2025-11-09 16:08:21] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:08:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 16:08:26] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:08:26] INFO: ✅ Redis connected
+[2025-11-09 16:08:26] INFO: 🚀 Redis ready
+[2025-11-09 16:08:26] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:08:28] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-09 16:23:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:23:20] INFO: ✅ Redis connected
+[2025-11-09 16:23:20] INFO: 🚀 Redis ready
+[2025-11-09 16:23:20] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:23:22] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-09 16:31:11] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-09 16:31:11] INFO: ✅ Redis connected
+[2025-11-09 16:31:11] INFO: 🚀 Redis ready
+[2025-11-09 16:31:11] INFO: 🔗 Redis client connected successfully
+[2025-11-09 16:31:12] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 02:28:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 02:28:29] INFO: ✅ Redis connected
+[2025-11-10 02:28:29] INFO: 🚀 Redis ready
+[2025-11-10 02:28:29] INFO: 🔗 Redis client connected successfully
+[2025-11-10 02:28:31] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 02:39:41] INFO: ✅ Razorpay Order created: order_RdmiqwU6Hl7l2W
+[2025-11-10 02:41:49] INFO: ✅ Razorpay Order created: order_Rdml6XK0xhuXis
+[2025-11-10 02:42:26] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-10 02:47:39] INFO: ✅ Credited ₹50 to wallet of 68f7f83baf080e1345d36794
+[2025-11-10 02:47:45] INFO: 📧 Notification sent to test2001@yopmail.com | ✅ Payment Released
+[2025-11-10 04:04:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 04:04:20] INFO: ✅ Redis connected
+[2025-11-10 04:04:20] INFO: 🚀 Redis ready
+[2025-11-10 04:04:20] INFO: 🔗 Redis client connected successfully
+[2025-11-10 04:04:22] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 04:04:27] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 04:04:27] INFO: ✅ Redis connected
+[2025-11-10 04:04:27] INFO: 🚀 Redis ready
+[2025-11-10 04:04:27] INFO: 🔗 Redis client connected successfully
+[2025-11-10 04:04:29] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 04:05:13] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 04:05:13] INFO: ✅ Redis connected
+[2025-11-10 04:05:13] INFO: 🚀 Redis ready
+[2025-11-10 04:05:13] INFO: 🔗 Redis client connected successfully
+[2025-11-10 04:05:15] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 04:05:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 04:05:22] INFO: ✅ Redis connected
+[2025-11-10 04:05:22] INFO: 🚀 Redis ready
+[2025-11-10 04:05:22] INFO: 🔗 Redis client connected successfully
+[2025-11-10 04:05:25] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 04:39:10] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 04:39:10] INFO: ✅ Redis connected
+[2025-11-10 04:39:10] INFO: 🚀 Redis ready
+[2025-11-10 04:39:10] INFO: 🔗 Redis client connected successfully
+[2025-11-10 04:39:12] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 04:42:30] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 04:42:30] INFO: ✅ Redis connected
+[2025-11-10 04:42:30] INFO: 🚀 Redis ready
+[2025-11-10 04:42:30] INFO: 🔗 Redis client connected successfully
+[2025-11-10 04:42:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 04:58:28] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 04:58:28] INFO: ✅ Redis connected
+[2025-11-10 04:58:28] INFO: 🚀 Redis ready
+[2025-11-10 04:58:28] INFO: 🔗 Redis client connected successfully
+[2025-11-10 04:58:29] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 05:16:38] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 05:16:38] INFO: ✅ Redis connected
+[2025-11-10 05:16:38] INFO: 🚀 Redis ready
+[2025-11-10 05:16:38] INFO: 🔗 Redis client connected successfully
+[2025-11-10 05:16:39] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 05:17:30] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 05:17:30] INFO: ✅ Redis connected
+[2025-11-10 05:17:30] INFO: 🚀 Redis ready
+[2025-11-10 05:17:30] INFO: 🔗 Redis client connected successfully
+[2025-11-10 05:17:31] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 05:34:45] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 05:34:45] INFO: ✅ Redis connected
+[2025-11-10 05:34:45] INFO: 🚀 Redis ready
+[2025-11-10 05:34:45] INFO: 🔗 Redis client connected successfully
+[2025-11-10 05:34:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 05:35:19] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 05:35:19] INFO: ✅ Redis connected
+[2025-11-10 05:35:19] INFO: 🚀 Redis ready
+[2025-11-10 05:35:19] INFO: 🔗 Redis client connected successfully
+[2025-11-10 05:35:20] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 05:35:55] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 05:35:55] INFO: ✅ Redis connected
+[2025-11-10 05:35:55] INFO: 🚀 Redis ready
+[2025-11-10 05:35:55] INFO: 🔗 Redis client connected successfully
+[2025-11-10 05:35:56] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 05:47:27] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 05:47:27] INFO: ✅ Redis connected
+[2025-11-10 05:47:27] INFO: 🚀 Redis ready
+[2025-11-10 05:47:27] INFO: 🔗 Redis client connected successfully
+[2025-11-10 05:47:30] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 05:48:33] ERROR: Create Milestone Error: Milestone validation failed: freelancer: Path `freelancer` is required.
+[2025-11-10 05:50:26] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 05:50:26] INFO: ✅ Redis connected
+[2025-11-10 05:50:26] INFO: 🚀 Redis ready
+[2025-11-10 05:50:26] INFO: 🔗 Redis client connected successfully
+[2025-11-10 05:50:28] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 05:53:57] INFO: ✅ Razorpay Order created: order_Rdq24337YauYzE
+[2025-11-10 05:54:32] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-10 05:57:36] INFO: ✅ Debited ₹10 from wallet of 68f7f83baf080e1345d36794
+[2025-11-10 06:02:32] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:02:32] INFO: ✅ Redis connected
+[2025-11-10 06:02:32] INFO: 🚀 Redis ready
+[2025-11-10 06:02:32] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:02:33] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 06:05:35] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:05:35] INFO: ✅ Redis connected
+[2025-11-10 06:05:35] INFO: 🚀 Redis ready
+[2025-11-10 06:05:35] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:05:37] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 06:13:01] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:13:01] INFO: ✅ Redis connected
+[2025-11-10 06:13:01] INFO: 🚀 Redis ready
+[2025-11-10 06:13:01] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:13:02] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 06:18:08] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:18:08] INFO: ✅ Redis connected
+[2025-11-10 06:18:08] INFO: 🚀 Redis ready
+[2025-11-10 06:18:08] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:18:09] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 06:18:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:18:21] INFO: ✅ Redis connected
+[2025-11-10 06:18:21] INFO: 🚀 Redis ready
+[2025-11-10 06:18:21] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:18:23] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:18:23] INFO: ✅ Redis connected
+[2025-11-10 06:18:23] INFO: 🚀 Redis ready
+[2025-11-10 06:18:23] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:18:25] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 06:18:31] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:18:31] INFO: ✅ Redis connected
+[2025-11-10 06:18:31] INFO: 🚀 Redis ready
+[2025-11-10 06:18:31] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:18:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 06:21:24] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:21:24] INFO: ✅ Redis connected
+[2025-11-10 06:21:24] INFO: 🚀 Redis ready
+[2025-11-10 06:21:24] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:21:25] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 06:37:02] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:37:02] INFO: ✅ Redis connected
+[2025-11-10 06:37:02] INFO: 🚀 Redis ready
+[2025-11-10 06:37:02] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:37:04] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 06:37:45] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:37:45] INFO: ✅ Redis connected
+[2025-11-10 06:37:45] INFO: 🚀 Redis ready
+[2025-11-10 06:37:45] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:37:46] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 06:40:35] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:40:35] INFO: ✅ Redis connected
+[2025-11-10 06:40:35] INFO: 🚀 Redis ready
+[2025-11-10 06:40:35] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:40:36] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 06:41:16] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:41:16] INFO: ✅ Redis connected
+[2025-11-10 06:41:16] INFO: 🚀 Redis ready
+[2025-11-10 06:41:16] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:41:18] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 06:42:19] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 06:42:19] INFO: ✅ Redis connected
+[2025-11-10 06:42:19] INFO: 🚀 Redis ready
+[2025-11-10 06:42:19] INFO: 🔗 Redis client connected successfully
+[2025-11-10 06:42:22] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 06:44:00] INFO: ✅ Razorpay Order created: order_RdqsvwOwrNzXDa
+[2025-11-10 06:44:32] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-10 06:54:05] INFO: ✅ Credited ₹150 to wallet of 68f7f83baf080e1345d36794
+[2025-11-10 06:54:11] INFO: 📧 Notification sent to test2001@yopmail.com | ✅ Payment Released
+[2025-11-10 07:00:56] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:00:56] INFO: ✅ Redis connected
+[2025-11-10 07:00:56] INFO: 🚀 Redis ready
+[2025-11-10 07:00:56] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:00:57] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 07:02:18] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:02:18] INFO: ✅ Redis connected
+[2025-11-10 07:02:18] INFO: 🚀 Redis ready
+[2025-11-10 07:02:18] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:02:19] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 07:06:16] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:06:16] INFO: ✅ Redis connected
+[2025-11-10 07:06:16] INFO: 🚀 Redis ready
+[2025-11-10 07:06:16] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:06:17] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 07:06:31] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:06:31] INFO: ✅ Redis connected
+[2025-11-10 07:06:31] INFO: 🚀 Redis ready
+[2025-11-10 07:06:31] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:06:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 07:11:17] INFO: ✅ Razorpay Order created: order_RdrLkGD020rBf2
+[2025-11-10 07:11:48] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-10 07:13:37] INFO: ✅ Credited ₹10 to wallet of 68f7f83baf080e1345d36794
+[2025-11-10 07:13:43] INFO: 📧 Notification sent to test2001@yopmail.com | ✅ Payment Released
+[2025-11-10 07:18:37] INFO: ✅ Debited ₹10 from wallet of 68f7f83baf080e1345d36794
+[2025-11-10 07:18:42] INFO: 📧 Notification sent to test08@yopmail.com | 💸 Payout Completed
+[2025-11-10 07:29:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:29:50] INFO: ✅ Redis connected
+[2025-11-10 07:29:50] INFO: 🚀 Redis ready
+[2025-11-10 07:29:50] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:29:51] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 07:31:08] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:31:08] INFO: ✅ Redis connected
+[2025-11-10 07:31:08] INFO: 🚀 Redis ready
+[2025-11-10 07:31:08] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:31:10] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-10 07:38:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:38:50] INFO: ✅ Redis connected
+[2025-11-10 07:38:50] INFO: 🚀 Redis ready
+[2025-11-10 07:38:50] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:38:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 07:40:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:40:22] INFO: ✅ Redis connected
+[2025-11-10 07:40:22] INFO: 🚀 Redis ready
+[2025-11-10 07:40:22] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:40:24] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-10 07:45:21] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:45:21] INFO: ✅ Redis connected
+[2025-11-10 07:45:21] INFO: 🚀 Redis ready
+[2025-11-10 07:45:21] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:45:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-10 07:46:26] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-10 07:46:26] INFO: ✅ Redis connected
+[2025-11-10 07:46:26] INFO: 🚀 Redis ready
+[2025-11-10 07:46:26] INFO: 🔗 Redis client connected successfully
+[2025-11-10 07:46:28] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net

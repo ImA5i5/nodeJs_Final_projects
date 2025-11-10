@@ -1,252 +1,389 @@
 // app/controllers/MilestoneController.js
+
 const Milestone = require("../models/Milestone");
+const Dispute = require("../models/Dispute");
 const Project = require("../models/Project");
-const Payment = require("../models/Payment"); // if you have one
 const winston = require("../config/winston");
-const EmailService = require("../services/email.service"); // if present
-const updateProjectProgress = require("../utils/updateProjectProgress");
+const FileService = require("../services/file.service");
+const PaymentController = require("./PaymentController");
+const PaymentService = require("../services/PaymentService"); // for escrow + release
 
 class MilestoneController {
-  // Client: Create milestone (client own project)
+  /* =====================================================
+     ✅ CLIENT — CREATE MILESTONE
+  ======================================================*/
   static async create(req, res) {
-    try {
-      const { projectId } = req.params;
-      const { title, description, amount, dueDate } = req.body;
+  try {
+    const { projectId } = req.params;
+    const { title, description, amount, dueDate } = req.body;
 
-      const project = await Project.findById(projectId);
-      if (!project) return res.status(404).json({ success: false, message: "Project not found" });
-      if (project.client.toString() !== req.user._id.toString())
-        return res.status(403).json({ success: false, message: "Not authorized" });
+    const project = await Project.findOne({
+      _id: projectId,
+      client: req.user._id,
+    });
 
-      const m = await Milestone.create({
-        project: projectId,
-        title,
-        description,
-        amount,
-        dueDate: dueDate ? new Date(dueDate) : null,
-        createdBy: req.user._id,
-        assignedTo: project.hiredFreelancer || null,
-        status: "created"
+    if (!project) {
+      return res.status(403).json({ success: false, message: "Unauthorized" });
+    }
+
+    // ✅ FIX: Check if freelancer hired
+    if (!project.hiredFreelancer) {
+      return res.status(400).json({
+        success: false,
+        message: "Please hire a freelancer before creating milestones."
       });
-
-      res.json({ success: true, message: "Milestone created", milestone: m });
-    } catch (err) {
-      winston.error("Milestone create error: " + err.message);
-      res.status(500).json({ success: false, message: "Server error" });
     }
+
+    const milestone = await Milestone.create({
+      project: projectId,
+      client: req.user._id,
+      freelancer: project.hiredFreelancer, // ✅ Will not be missing now
+      title,
+      description,
+      amount,
+      dueDate,
+      status: "created",
+      createdBy: req.user._id,
+      assignedTo: project.hiredFreelancer,
+    });
+
+    return res.json({
+      success: true,
+      message: "Milestone created",
+      milestone,
+    });
+
+  } catch (err) {
+    console.error("Create Milestone Error:", err);
+    return res.status(500).json({ success: false, message: "Server Error" });
   }
+}
 
-  // Client: Deposit funds to escrow for a milestone
-  static async depositEscrow(req, res) {
+
+  /* =====================================================
+     ✅ CLIENT — FUND (ESCROW)
+  ======================================================*/
+  static async fund(req, res) {
     try {
-      const { id } = req.params; // milestoneId
-      const milestone = await Milestone.findById(id).populate("project");
-      if (!milestone) return res.status(404).json({ success: false, message: "Milestone not found" });
-      if (milestone.project.client.toString() !== req.user._id.toString())
-        return res.status(403).json({ success: false, message: "Not authorized" });
+      const milestoneId = req.params.id;
 
-      // TODO: integrate real payment gateway; here we simulate escrow creation
-      // Example: create Payment record with status "in-escrow"
-      // const payment = await Payment.create({ client: req.user._id, milestone: id, amount: milestone.amount, status: "in-escrow" });
+      const milestone = await Milestone.findById(milestoneId);
 
-      milestone.status = "funded";
-      await milestone.save();
-
-      // Optionally notify freelancer
-      try {
-        await EmailService.sendNotification(
-          milestone.assignedToEmail || "freelancer@example.com",
-          `Escrow funded for milestone: ${milestone.title}`,
-          `Client has funded ₹${milestone.amount} for milestone "${milestone.title}".`
-        );
-      } catch (e) { winston.warn("Escrow email failed: " + e.message); }
-
-      res.json({ success: true, message: "Escrow funded successfully", milestone });
-    } catch (err) {
-      winston.error("depositEscrow error: " + err.message);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  }
-
-  // Freelancer: Start / mark in-progress
-  static async start(req, res) {
-    try {
-      const { id } = req.params; // milestoneId
-      const milestone = await Milestone.findById(id).populate("project");
-      if (!milestone) return res.status(404).json({ success: false, message: "Not found" });
-      // ensure this freelancer is assigned to project
-      if (milestone.assignedTo?.toString() !== req.user._id.toString())
-        return res.status(403).json({ success: false, message: "Not authorized" });
-
-      if (!["funded", "created"].includes(milestone.status))
-        return res.status(400).json({ success: false, message: "Milestone not fundable or already started" });
-
-      milestone.status = "in-progress";
-      await milestone.save();
-
-      res.json({ success: true, message: "Milestone started", milestone });
-    } catch (err) {
-      winston.error("start milestone error: " + err.message);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  }
-
-  // Freelancer: Upload deliverables (files array already uploaded and URLs present in req.files)
-  static async uploadDeliverables(req, res) {
-    try {
-      const { id } = req.params;
-      const milestone = await Milestone.findById(id).populate("project");
-      if (!milestone) return res.status(404).json({ success: false, message: "Not found" });
-      if (milestone.assignedTo?.toString() !== req.user._id.toString())
-        return res.status(403).json({ success: false, message: "Not authorized" });
-
-      const uploaded = (req.files || []).map(f => f.path || f.secure_url || f.location); // adapt to cloudinary
-      milestone.attachments.push(...uploaded);
-      milestone.status = "submitted";
-      await milestone.save();
-
-      // notify client
-      try {
-        const client = await User.findById(milestone.project.client);
-        await EmailService.sendNotification(client.email, `Milestone submitted: ${milestone.title}`, `Freelancer uploaded deliverables for milestone "${milestone.title}".`);
-      } catch (e) { winston.warn(e.message); }
-
-      res.json({ success: true, message: "Deliverables uploaded and submitted for review", milestone });
-    } catch (err) {
-      winston.error("uploadDeliverables error: " + err.message);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  }
-
-  // Client: Review -> approve (release payment) or request revision
-  static async clientReviewAction(req, res) {
-    try {
-      const { id } = req.params; // milestoneId
-      const { action, note } = req.body; // action = 'approve'|'request_revision'
-      const milestone = await Milestone.findById(id).populate("project");
-      if (!milestone) return res.status(404).json({ success: false, message: "Not found" });
-      if (milestone.project.client.toString() !== req.user._id.toString())
-        return res.status(403).json({ success: false, message: "Not authorized" });
-
-      if (action === "approve") {
-        // release funds → Payment integration here
-        milestone.status = "released"; // or "completed" if this finalizes
-        await milestone.save();
-
-        // optionally record a Payment document with status 'released'
-        res.json({ success: true, message: "Milestone approved and payment released", milestone });
-      } else if (action === "request_revision") {
-        milestone.status = "revision-requested";
-        await milestone.save();
-        res.json({ success: true, message: "Revision requested", milestone });
-      } else {
-        res.status(400).json({ success: false, message: "Invalid action" });
+      if (!milestone || milestone.client.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ success: false, message: "Unauthorized" });
       }
-    } catch (err) {
-      winston.error("clientReviewAction error: " + err.message);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  }
 
-  // Admin: List / monitor milestones (optional)
-  static async listForProject(req, res) {
-    try {
-      const { projectId } = req.params;
-      const milestones = await Milestone.find({ project: projectId }).populate("assignedTo createdBy").lean();
-      res.json({ success: true, milestones });
-    } catch (err) {
-      winston.error(err.message);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  }
+      if (milestone.status !== "created") {
+        return res.status(400).json({
+          success: false,
+          message: "Milestone already funded or started",
+        });
+      }
 
-  //define progressbar for Client Approves Milestone
-  static async approveMilestone(req, res) {
-    try {
-      const milestone = await Milestone.findById(req.params.id).populate("project");
-
-      if (!milestone) return res.status(404).json({ success: false, message: "Milestone not found" });
-      if (milestone.status !== "submitted")
-        return res.status(400).json({ success: false, message: "Milestone not in submitted state." });
-
-      milestone.status = "released";
-      milestone.releasedAt = new Date();
-      await milestone.save();
-
-      // ✅ Update project progress
-      await updateProjectProgress(milestone.project._id);
-
-      // ✅ Notify freelancer
-      await EmailService.sendNotification(
-        milestone.project.hiredFreelancer.email,
-        `✅ Milestone "${milestone.title}" Approved`,
-        `Your milestone has been approved and payment released!`
+      // ✅ Delegating to PaymentController → Razorpay
+      const result = await PaymentController.depositEscrowForMilestoneInternal(
+        milestoneId,
+        milestone.amount,
+        req.user
       );
 
-      res.json({ success: true, message: "Milestone approved and progress updated." });
+      return res.json(result);
     } catch (err) {
-      console.error("Approve Milestone Error:", err);
-      res.status(500).json({ success: false, message: "Error approving milestone" });
+      winston.error("Fund Milestone Error: " + err.message);
+      return res.status(500).json({ success: false, message: "Server error" });
     }
   }
 
-  //progress bar for  Freelancer Submits Milestone
-  static async submitMilestone(req, res) {
-  try {
-    const milestone = await Milestone.findById(req.params.id).populate("project");
-    if (!milestone) return res.status(404).json({ success: false });
-    if (milestone.status !== "in-progress")
-      return res.status(400).json({ success: false, message: "Milestone not in progress" });
+  /* =====================================================
+     ✅ FREELANCER — START WORK
+  ======================================================*/
+  static async start(req, res) {
+    try {
+      const milestoneId = req.params.id;
+      const milestone = await Milestone.findById(milestoneId);
 
-    milestone.status = "submitted";
-    milestone.submittedAt = new Date();
+      if (!milestone || milestone.freelancer.toString() !== req.user._id.toString())
+        return res.status(403).json({ success: false, message: "Unauthorized" });
+
+      if (milestone.status !== "funded")
+        return res.status(400).json({
+          success: false,
+          message: "Milestone must be funded before work can start.",
+        });
+
+      milestone.status = "in-progress";
+      milestone.updatedAt = new Date();
+      await milestone.save();
+
+      return res.json({ success: true, message: "Work started", milestone });
+    } catch (err) {
+      winston.error("Start Milestone Error: " + err.message);
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+
+  /* =====================================================
+     ✅ FREELANCER — SUBMIT WORK
+  ======================================================*/
+  static async submit(req, res) {
+    try {
+      const milestoneId = req.params.id;
+
+      const milestone = await Milestone.findById(milestoneId);
+      if (!milestone || milestone.freelancer.toString() !== req.user._id.toString())
+        return res.status(403).json({ success: false, message: "Unauthorized" });
+
+      if (milestone.status !== "in-progress")
+        return res.status(400).json({
+          success: false,
+          message: "Milestone is not in-progress",
+        });
+
+      let uploadedFiles = [];
+
+      if (req.files) {
+        for (let file of req.files) uploadedFiles.push(file.path);
+      }
+
+      milestone.status = "submitted";
+      milestone.deliverables = uploadedFiles;
+      milestone.updatedAt = new Date();
+      await milestone.save();
+
+      return res.json({
+        success: true,
+        message: "Work submitted",
+        milestone,
+      });
+    } catch (err) {
+      winston.error("Submit Milestone Error: " + err.message);
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+
+  /* =====================================================
+     ✅ CLIENT — APPROVE & RELEASE PAYMENT
+  ======================================================*/
+  static async release(req, res) {
+    try {
+      const milestoneId = req.params.id;
+
+      const milestone = await Milestone.findById(milestoneId);
+      if (!milestone)
+        return res.json({ success: false, message: "Milestone not found" });
+
+      if (milestone.client.toString() !== req.user._id.toString())
+        return res.json({ success: false, message: "Unauthorized" });
+
+      if (!["submitted", "under-review"].includes(milestone.status))
+        return res.json({ success: false, message: "Milestone not ready for release" });
+
+      // ✅ Correct function call (your system uses PaymentService)
+      const result = await PaymentService.releasePayment(
+        req.user,
+        milestone.freelancer,
+        milestoneId,
+        milestone.amount
+      );
+
+      if (!result.success)
+        return res.json({ success: false, message: result.message });
+
+      return res.json({
+        success: true,
+        message: "Payment released successfully"
+      });
+
+    } catch (err) {
+      return res.json({
+        success: false,
+        message: err.message
+      });
+    }
+  }
+
+  /* =====================================================
+     ✅ CLIENT — REQUEST REVISION
+  ======================================================*/
+  static async requestRevision(req, res) {
+    try {
+      const milestoneId = req.params.id;
+      const { note } = req.body;
+
+      const milestone = await Milestone.findById(milestoneId);
+
+      if (!milestone || milestone.client.toString() !== req.user._id.toString())
+        return res.status(403).json({ success: false, message: "Unauthorized" });
+
+      if (!["submitted", "under-review"].includes(milestone.status))
+        return res.status(400).json({
+          success: false,
+          message: "Milestone not in submitted state",
+        });
+
+      milestone.status = "revision-requested";
+      milestone.notes = note;
+      await milestone.save();
+
+      return res.json({
+        success: true,
+        message: "Revision requested",
+      });
+    } catch (err) {
+      winston.error("Request Revision Error: " + err.message);
+      return res.status(500).json({ success: false, message: "Server Error" });
+    }
+  }
+
+  /* =====================================================
+     ✅ FREELANCER — RESUME AFTER REVISION
+  ======================================================*/
+  static async resume(req, res) {
+    try {
+      const milestoneId = req.params.id;
+
+      const milestone = await Milestone.findById(milestoneId);
+
+      if (milestone.freelancer.toString() !== req.user._id.toString())
+        return res.status(403).json({ success: false, message: "Unauthorized" });
+
+      if (milestone.status !== "revision-requested")
+        return res.status(400).json({
+          success: false,
+          message: "Milestone not in revision state",
+        });
+
+      milestone.status = "in-progress";
+      milestone.notes = "";
+      await milestone.save();
+
+      return res.json({
+        success: true,
+        message: "Milestone resumed",
+      });
+    } catch (err) {
+      winston.error("Resume Milestone Error: " + err.message);
+      return res.status(500).json({ success: false, message: "Server Error" });
+    }
+  }
+
+  /* =====================================================
+     ✅ CLIENT — OPEN DISPUTE
+  ======================================================*/
+ 
+// ✅ Client opens dispute
+static async dispute(req, res) {
+  try {
+    const milestoneId = req.params.id;
+    const { reason, description } = req.body;
+
+    if (!reason || reason.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Reason is required."
+      });
+    }
+
+    const milestone = await Milestone.findById(milestoneId);
+
+    if (!milestone) {
+      return res.status(404).json({
+        success: false,
+        message: "Milestone not found."
+      });
+    }
+
+    const ALLOWED = [
+      "created",
+      "funded",
+      "in-progress",
+      "submitted",
+      "under-review",
+      "revision-requested"
+    ];
+
+    console.log("DISPUTE CHECK — CURRENT STATUS:", milestone.status);
+
+    if (!ALLOWED.includes(milestone.status)) {
+      return res.status(400).json({
+        success: false,
+        message: "This milestone cannot be disputed now."
+      });
+    }
+
+    // ✅ CREATE DISPUTE — ALL REQUIRED FIELDS INCLUDED
+    const dispute = await Dispute.create({
+      milestone: milestone._id,
+      project: milestone.project,
+      client: milestone.client,
+      freelancer: milestone.freelancer,
+      raisedBy: req.user._id,
+      reason,
+      description: description || null,
+      status: "open",
+
+      history: [
+        {
+          action: "dispute-opened",
+          message: reason,
+          actor: "client",
+        },
+      ],
+    });
+
+    // ✅ UPDATE MILESTONE STATUS
+    milestone.status = "disputed";
     await milestone.save();
 
-    // Optional: recalc progress (if you want partial progress shown)
-    await updateProjectProgress(milestone.project._id);
+    return res.json({
+      success: true,
+      message: "✅ Dispute opened successfully",
+      dispute
+    });
 
-    await EmailService.sendNotification(
-      milestone.project.client.email,
-      `🚀 Milestone "${milestone.title}" Submitted`,
-      `Freelancer has submitted this milestone for review.`
-    );
-
-    res.json({ success: true, message: "Milestone submitted for review." });
   } catch (err) {
-    console.error("Submit Milestone Error:", err);
-    res.status(500).json({ success: false, message: "Error submitting milestone" });
+    console.error("DISPUTE ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
   }
 }
 
-//progress bar for Client Requests Changes
-static async requestChanges(req, res) {
+static async viewProjectMilestones(req, res) {
   try {
-    const { feedback } = req.body;
-    const milestone = await Milestone.findById(req.params.id).populate("project");
-    if (!milestone) return res.status(404).json({ success: false });
-    if (milestone.status !== "submitted")
-      return res.status(400).json({ success: false, message: "Not in submitted state" });
+    const projectId = req.params.id;
 
-    milestone.status = "revision-requested";
-    milestone.revisionFeedback = feedback;
-    milestone.revisionRequestedAt = new Date();
-    await milestone.save();
+    const project = await Project.findOne({
+      _id: projectId,
+      client: req.user._id
+    }).lean();
 
-    // ✅ Update progress — may decrease progress if previously counted
-    await updateProjectProgress(milestone.project._id);
+    if (!project) {
+      return res.status(404).render("errors/404");
+    }
 
-    await EmailService.sendNotification(
-      milestone.project.hiredFreelancer.email,
-      `🔁 Revision Requested for "${milestone.title}"`,
-      `Client requested revisions: ${feedback}`
-    );
+    const milestones = await Milestone.find({
+      project: projectId
+    }).lean();
 
-    res.json({ success: true, message: "Revision requested." });
+    res.render("pages/client/milestones", {
+      layout: "layouts/client-layout",
+      title: `${project.title} – Milestones`,
+      project,
+      milestones,
+      razorpayKey: process.env.RAZORPAY_KEY_ID   
+    });
+
   } catch (err) {
-    console.error("Request Changes Error:", err);
-    res.status(500).json({ success: false, message: "Error requesting changes" });
+    console.error(err);
+    res.status(500).render("errors/500");
   }
 }
+
+
+
+
 
 
 }

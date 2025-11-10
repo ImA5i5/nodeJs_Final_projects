@@ -1,0 +1,41 @@
+<!-- views/pages/client/view-review.ejs -->
+<div class="max-w-3xl mx-auto bg-white p-6 mt-10 shadow rounded-lg">
+  <h2 class="text-2xl font-bold text-green-700 mb-4">
+    ⭐ Your Review for <%= review.freelancer.fullName %>
+  </h2>
+
+  <p class="text-gray-600 mb-2">
+    Project: <b><%= review.project.title %></b>
+  </p>
+
+  <!-- Rating -->
+  <div class="flex text-3xl mb-4">
+    <% for(let i=1;i<=5;i++){ %>
+      <span class="<%= i <= review.rating ? 'text-yellow-400' : 'text-gray-300' %>">★</span>
+    <% } %>
+  </div>
+
+  <!-- Feedback -->
+  <p class="text-gray-700 mb-4"><%= review.feedback %></p>
+
+  <!-- Tags -->
+  <% if (review.tags && review.tags.length) { %>
+    <div class="mb-4">
+      <% review.tags.forEach(t => { %>
+        <span class="px-3 py-1 bg-gray-200 rounded text-sm mr-2"><%= t %></span>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <!-- Freelancer Reply -->
+  <% if (review.reply) { %>
+    <div class="border-l-4 border-green-500 bg-green-50 p-4 rounded">
+      <p class="font-semibold text-green-700">Freelancer Reply:</p>
+      <p class="text-gray-700 mt-1"><%= review.reply %></p>
+    </div>
+  <% } %>
+
+  <div class="mt-6">
+    <a href="/client/reviews" class="text-blue-600 underline">← Back to My Reviews</a>
+  </div>
+</div>

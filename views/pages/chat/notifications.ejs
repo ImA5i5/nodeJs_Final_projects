@@ -1,56 +1,179 @@
 <!-- views/pages/chat/notifications.ejs -->
 
+<div class="max-w-5xl mx-auto mt-10">
 
-<div class="max-w-4xl mx-auto mt-10">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-3xl font-bold text-green-700">🔔 Notifications</h2>
 
-  <h2 class="text-3xl font-bold text-green-700 mb-6">
-    🔔 Notifications
-  </h2>
+    <% if (notifications.length > 0) { %>
+      <button onclick="markAllRead()"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
+        ✅ Mark All as Read
+      </button>
+
+      <button onclick="deleteAllNotifs()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm ml-3">
+        🗑 Delete All
+      </button>
+    <% } %>
+  </div>
 
   <% if (notifications.length === 0) { %>
-    <p class="text-gray-500 text-center py-10">No notifications yet.</p>
+    <p class="text-center text-gray-500 py-12">No notifications yet.</p>
   <% } %>
 
   <div class="space-y-4">
     <% notifications.forEach(n => { %>
       <div id="notif-<%= n._id %>"
-        class="p-4 bg-white shadow rounded-lg border flex justify-between items-center
-        <%= !n.isRead ? 'border-green-500' : '' %>">
+        class="p-4 bg-white border rounded-lg shadow flex justify-between
+               <%= !n.isRead ? 'border-green-400' : 'border-gray-200' %>">
 
         <div>
-          <p class="font-semibold"><%= n.title %></p>
+          <p class="font-semibold text-gray-800"><%= n.title %></p>
           <p class="text-sm text-gray-600"><%= n.message %></p>
+
           <p class="text-xs text-gray-400 mt-1">
             <%= new Date(n.createdAt).toLocaleString() %>
           </p>
         </div>
 
-        <% if (!n.isRead) { %>
-          <button onclick="markRead('<%= n._id %>')"
-            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">
-            Mark Read
+        <div class="flex gap-2">
+
+          <% if (!n.isRead) { %>
+            <button
+              onclick="markRead('<%= n._id %>')"
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">
+              ✅ Read
+            </button>
+          <% } %>
+
+          <button
+            onclick="deleteNotif('<%= n._id %>')"
+            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">
+            🗑
           </button>
-        <% } %>
+
+        </div>
       </div>
     <% }) %>
   </div>
 
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+/* ---------------------------------------------------------
+✅ Mark ONE as read
+---------------------------------------------------------*/
 async function markRead(id) {
   const res = await fetch(`/notifications/${id}/read`, { method: "PUT" });
   const data = await res.json();
 
   Swal.fire(
-    data.success ? "✅ Updated" : "❌ Error",
+    data.success ? "✅ Done" : "❌ Error",
     data.message,
     data.success ? "success" : "error"
   );
 
-  if (data.success)
-    document.getElementById(`notif-${id}`).classList.remove("border-green-500");
+  if (data.success) {
+    document.getElementById(`notif-${id}`).classList.remove("border-green-400");
+    updateNotifBadge(-1);
+  }
 }
+
+/* ---------------------------------------------------------
+✅ Mark ALL as read
+---------------------------------------------------------*/
+async function markAllRead() {
+  const res = await fetch(`/notifications/read-all`, { method: "PUT" });
+  const data = await res.json();
+
+  Swal.fire(
+    data.success ? "✅ All Read" : "❌ Error",
+    data.message,
+    data.success ? "success" : "error"
+  );
+
+  if (data.success) {
+    document.querySelectorAll("[id^='notif-']").forEach(div =>
+      div.classList.remove("border-green-400")
+    );
+    resetNotifBadge();
+  }
+}
+
+/* ---------------------------------------------------------
+✅ Delete one notification
+---------------------------------------------------------*/
+async function deleteNotif(id) {
+  const confirm = await Swal.fire({
+    title: "Delete?",
+    text: "This notification will be removed.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it"
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  const res = await fetch(`/notifications/${id}`, { method: "DELETE" });
+  const data = await res.json();
+
+  Swal.fire(data.success ? "✅ Deleted" : "❌ Error", data.message, data.success ? "success" : "error");
+
+  if (data.success) {
+    document.getElementById(`notif-${id}`).remove();
+    updateNotifBadge(-1);
+  }
+}
+
+/* ---------------------------------------------------------
+✅ Delete ALL
+---------------------------------------------------------*/
+async function deleteAllNotifs() {
+  const confirm = await Swal.fire({
+    title: "Delete All?",
+    text: "This will remove ALL notifications.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Delete All"
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  const res = await fetch(`/notifications`, { method: "DELETE" });
+  const data = await res.json();
+
+  Swal.fire(data.success ? "✅ All Deleted" : "❌ Error", data.message, data.success ? "success" : "error");
+
+  if (data.success) {
+    document.querySelectorAll("[id^='notif-']").forEach(n => n.remove());
+    resetNotifBadge();
+  }
+}
+
+
+
+/* ---------------------------------------------------------
+ ✅ BADGE UPDATES (REAL TIME)
+---------------------------------------------------------*/
+function updateNotifBadge(change) {
+  const badge = document.getElementById("notif-badge");
+  if (!badge) return;
+
+  let count = parseInt(badge.innerText) + change;
+  badge.innerText = Math.max(count, 0);
+  badge.classList.toggle("hidden", count <= 0);
+}
+
+function resetNotifBadge() {
+  const badge = document.getElementById("notif-badge");
+  if (!badge) return;
+
+  badge.innerText = "0";
+  badge.classList.add("hidden");
+}
+
 </script>

@@ -1,0 +1,97 @@
+<!-- views/pages/freelancer/review-details.ejs -->
+ <div class="max-w-3xl mx-auto bg-white p-6 mt-10 shadow rounded-lg">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold text-green-700">⭐ Review Details</h2>
+    <a href="/freelancer/reviews" class="text-blue-600 underline">← Back to Reviews</a>
+  </div>
+
+  <!-- Header -->
+  <div class="flex items-start justify-between">
+    <div>
+      <h3 class="text-lg font-semibold">💼 <%= review.project?.title %></h3>
+      <p class="text-sm text-gray-600">
+        By: <b><%= review.client?.fullName %></b> •
+        <span class="text-gray-500"><%= new Date(review.createdAt).toLocaleString() %></span>
+      </p>
+    </div>
+
+    <!-- Stars -->
+    <div class="flex text-yellow-400 text-2xl">
+      <% for (let i = 1; i <= 5; i++) { %>
+        <span><%= i <= review.rating ? "★" : "☆" %></span>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Feedback -->
+  <div class="mt-4">
+    <p class="text-gray-800"><%= review.feedback %></p>
+  </div>
+
+  <!-- Tags -->
+  <% if (review.tags && review.tags.length) { %>
+    <div class="mt-3">
+      <% review.tags.forEach(t => { %>
+        <span class="inline-block px-2 py-1 text-xs bg-gray-100 rounded mr-2"><%= t %></span>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <!-- Reply Section -->
+  <div class="mt-6 border-t pt-4">
+    <h4 class="font-semibold text-gray-800 mb-2">Your Public Reply</h4>
+
+    <% if (review.reply) { %>
+      <div class="border-l-4 border-green-500 bg-green-50 p-3 rounded">
+        <p class="text-sm text-green-800 font-semibold">You replied:</p>
+        <p class="text-sm text-gray-700 mt-1"><%= review.reply %></p>
+        <p class="text-xs text-gray-500 mt-1">
+          Replied on <%= new Date(review.repliedAt).toLocaleString() %>
+        </p>
+      </div>
+    <% } else { %>
+      <button id="replyBtn"
+              class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+        💬 Add Reply
+      </button>
+    <% } %>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+const reviewId = "<%= review._id %>";
+
+const replyBtn = document.getElementById("replyBtn");
+if (replyBtn) {
+  replyBtn.addEventListener("click", async () => {
+    const { value: reply } = await Swal.fire({
+      title: "Reply to Review",
+      input: "textarea",
+      inputLabel: "Your public reply (visible on your profile)",
+      inputPlaceholder: "Thank you! It was great working with you...",
+      inputAttributes: { maxlength: 500 },
+      showCancelButton: true,
+      confirmButtonText: "Submit Reply",
+      confirmButtonColor: "#16a34a"
+    });
+
+    if (!reply) return;
+
+    const res = await fetch("/review/reply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reviewId, reply })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      Swal.fire("✅ Reply Added", "Your response has been posted.", "success")
+        .then(() => location.reload());
+    } else {
+      Swal.fire("❌ Error", data.message || "Could not add reply.", "error");
+    }
+  });
+}
+</script>

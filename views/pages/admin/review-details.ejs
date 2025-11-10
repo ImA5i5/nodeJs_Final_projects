@@ -1,0 +1,81 @@
+<!-- views/pages/admin/review-details.ejs -->
+ <div class="max-w-4xl mx-auto mt-10 bg-white rounded-lg shadow-md p-6">
+  <h2 class="text-3xl font-bold text-green-700 mb-6">📄 Review Details</h2>
+
+  <div class="border-b pb-5 mb-6">
+    <h3 class="text-lg font-semibold">
+      Project: <%= review.project?.title %>
+    </h3>
+
+    <p class="text-sm text-gray-500 mt-1">
+      Client: <b><%= review.client?.fullName %></b>  
+      • Freelancer: <b><%= review.freelancer?.fullName %></b>
+    </p>
+
+    <div class="mt-3 text-yellow-500 text-2xl">
+      <% for (let i = 1; i <= 5; i++) { %>
+        <span><%= i <= review.rating ? "★" : "☆" %></span>
+      <% } %>
+    </div>
+
+    <p class="mt-4 text-gray-700"><%= review.feedback %></p>
+
+    <% if (review.tags?.length) { %>
+      <div class="mt-3">
+        <% review.tags.forEach(tag => { %>
+          <span class="inline-block bg-gray-100 px-2 py-1 rounded text-xs mr-2">
+            #<%= tag %>
+          </span>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Freelancer reply -->
+  <% if (review.reply) { %>
+    <div class="bg-green-50 p-4 rounded border border-green-200 mb-6">
+      <h4 class="font-semibold text-green-700">Freelancer Reply:</h4>
+      <p class="mt-2 text-gray-700"><%= review.reply %></p>
+      <p class="text-xs text-gray-500 mt-1">Replied on <%= new Date(review.repliedAt).toLocaleDateString() %></p>
+    </div>
+  <% } %>
+
+  <!-- Moderation Buttons -->
+  <div class="flex gap-4">
+    <% if (!review.removed) { %>
+      <button onclick="moderateReview('<%= review._id %>', 'remove')"
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+        ❌ Remove Review
+      </button>
+    <% } else { %>
+      <button onclick="moderateReview('<%= review._id %>', 'restore')"
+              class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+        ✅ Restore Review
+      </button>
+    <% } %>
+
+    <a href="/admin/reviews"
+       class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">⬅ Back</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+async function moderateReview(reviewId, action) {
+  const res = await fetch("/admin/reviews/moderate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reviewId, action })
+  });
+
+  const data = await res.json();
+
+  Swal.fire({
+    title: data.success ? "✅ Updated" : "❌ Error",
+    text: data.message,
+    icon: data.success ? "success" : "error",
+  });
+
+  if (data.success) setTimeout(() => location.reload(), 800);
+}
+</script>

@@ -1,29 +1,36 @@
-// app/routes/payment.routes.js
 const router = require("express").Router();
 const PaymentController = require("../controllers/PaymentController");
-const RoleMiddleware = require("../middleware/role.middleware");
+const Role = require("../middleware/role.middleware");
 const AuthMiddleware = require("../middleware/auth.middleware");
 router.use(AuthMiddleware.verifyAccessToken);
 
-// ✅ Client: Create Razorpay order
+// ✅ Create Razorpay order
 router.post(
   "/create-order",
-  RoleMiddleware.authorizeRoles("client"),
+  Role.authorizeRoles("client"),
   PaymentController.createOrder
 );
 
-// ✅ Razorpay success verification
+// ✅ Verify Razorpay signature
 router.post(
   "/verify",
-  RoleMiddleware.authorizeRoles("client"),
+  Role.authorizeRoles("client"),
   PaymentController.verify
 );
 
-// ✅ Client: Release milestone payment → goes to freelancer wallet
+// ✅ Release payment (old style, request body)
 router.post(
   "/release",
-  RoleMiddleware.authorizeRoles("client"),
+  Role.authorizeRoles("client"),
   PaymentController.release
 );
+
+// ✅ Release payment by milestone id (recommended)
+router.put(
+  "/milestone/:id/release",
+  Role.authorizeRoles("client"),
+  PaymentController.releaseMilestone
+);
+
 
 module.exports = router;

@@ -66,6 +66,7 @@
                 >
                   <%= project.status.charAt(0).toUpperCase() + project.status.slice(1) %>
                 </span>
+               
               </td>
 
               <!-- Visibility -->
@@ -80,6 +81,8 @@
               <!-- Actions -->
               <td class="py-3 px-4 text-center flex justify-center gap-2">
                 <% if (project.status === 'pending') { %>
+                  
+
                   <button data-id="<%= project._id %>"
                     class="approveBtn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
                     ✅ Approve

@@ -143,48 +143,64 @@ router.post("/hire/:freelancerId/:projectId", ClientHireController.hireFreelance
 ------------------------------------------------------------------- */
 // app/routes/client.routes.js
 router.get("/milestones", async (req, res, next) => {
-  const projects = await Project.find({ client: req.user._id }).select("_id title");
-  const milestones = await Milestone.find({
-    project: { $in: projects.map(p => p._id) },
-  }).populate("project", "title");
+  try {
+    const projects = await Project.find({ client: req.user._id }).select("_id title").lean();
 
-  res.render("pages/client/milestones", {
-    layout: "layouts/client-layout",
-    title: "My Milestones",
-    project: projects[0] || null,
-    milestones,
-  });
+    const project = projects[0] || null;
+
+    let milestones = [];
+
+    if (project) {
+      milestones = await Milestone.find({ project: project._id })
+        .populate("project", "title")
+        .lean();
+    }
+
+    res.render("pages/client/milestones", {
+      layout: "layouts/client-layout",
+      title: "My Milestones",
+      project,
+      milestones,
+      razorpayKey: process.env.RAZORPAY_KEY_ID   // ✅ FIXED
+    });
+  } catch (err) {
+    next(err);
+  }
 });
+
 
 
 router.get(
   "/projects/:id/milestones",
   RoleMiddleware.authorizeRoles("client"),
   async (req, res, next) => {
-    const Project = require("../models/Project");
-    const Milestone = require("../models/Milestone");
     try {
-      // Find all projects by this client
-      const projects = await Project.find({ client: req.user._id }, "_id title").lean();
+      const projects = await Project.find({ client: req.user._id })
+        .select("_id title")
+        .lean();
 
-      // Extract all project IDs
       const projectIds = projects.map(p => p._id);
 
-      // Fetch milestones for those projects
-      const milestones = await Milestone.find({ project: { $in: projectIds } })
-        .populate("project", "title")
-        .lean();
+      const milestones = await Milestone.find({
+        project: { $in: projectIds }
+      })
+      .populate("project", "title")
+      .lean();
 
       res.render("pages/client/milestones-all", {
         layout: "layouts/client-layout",
+        title: "All Milestones",
         projects,
         milestones,
+        razorpayKey: process.env.RAZORPAY_KEY_ID   // ✅ FIXED
       });
+
     } catch (err) {
       next(err);
     }
   }
 );
+
 
 
 
@@ -279,12 +295,7 @@ router.post("/payments/verify", PaymentController.verify);
 router.post("/payments/release", PaymentController.release);
 
 
-/* ------------------------------------------------------------------
-   ⭐ REVIEWS (Client)
-------------------------------------------------------------------- */
-router.get("/reviews", ReviewController.getClientReviews);
-router.get("/review/:projectId", ReviewController.reviewForm);
-router.post("/review", ReviewController.submitReview);
+
 
 /* ------------------------------------------------------------------
    ✅ EXPORT

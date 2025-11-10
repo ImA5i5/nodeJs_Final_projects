@@ -279,79 +279,33 @@ static async viewHiredProjects(req, res, next) {
   /**
  * ✅ Mark project as completed (Client action)
  */
-static async markProjectCompleted(req, res) {
+static async approveFinalWork(req, res) {
   try {
-    const project = await Project.findOne({
-      _id: req.params.id,
-      client: req.user._id,
-    })
-      .populate("hiredFreelancer", "fullName email")
-      .populate("client", "fullName email");
-
-    if (!project)
+    const project = await Project.findById(req.params.id);
+    if (!project) {
       return res.status(404).json({ success: false, message: "Project not found." });
+    }
 
-    if (project.status === "completed")
-      return res.json({ success: false, message: "This project is already completed." });
+    if (project.client.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: "Unauthorized." });
+    }
 
-    // ✅ Update project status
+    // ✅ FINAL APPROVAL → COMPLETED
     project.status = "completed";
-    project.updatedAt = new Date();
+    project.completedAt = new Date();
     await project.save();
 
-    // ✅ Prepare email data
-    const freelancerName = project.hiredFreelancer?.fullName || "Freelancer";
-    const freelancerEmail = project.hiredFreelancer?.email;
-    const clientName = project.client?.fullName || "Client";
-    const clientEmail = project.client?.email;
-
-    // ✅ Send email notifications via EmailService
-    const EmailService = require("../services/email.service");
-    const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
-
-    // 🎯 Notify freelancer
-    await EmailService.sendNotification(
-      freelancerEmail,
-      "🎉 Project Completed by Client",
-      `
-        <p>Hi ${freelancerName},</p>
-        <p>Your project <b>${project.title}</b> has been marked <b>completed</b> by ${clientName}.</p>
-        <p>Congratulations on completing the work! You can now view the final details in your dashboard.</p>
-      `
-    );
-
-    // 📩 Notify admin
-    await EmailService.sendNotification(
-      adminEmail,
-      `✅ Project Completed: ${project.title}`,
-      `
-        <p>The project <b>${project.title}</b> by client <b>${clientName}</b> has been marked as <b>completed</b>.</p>
-        <p>Freelancer: ${freelancerName} (${freelancerEmail})</p>
-      `
-    );
-
-    // (Optional) Notify client confirmation
-    await EmailService.sendNotification(
-      clientEmail,
-      "✅ Project Completion Confirmed",
-      `
-        <p>Hi ${clientName},</p>
-        <p>Your project <b>${project.title}</b> has been successfully marked as completed.</p>
-        <p>Thank you for using Freelancer Marketplace!</p>
-      `
-    );
-
-    winston.info(`Project "${project.title}" marked completed by ${clientName}`);
-
-    res.json({
+    return res.json({
       success: true,
-      message: "Project marked as completed and notifications sent successfully!",
+      message: "✅ Project Approved & Completed Successfully!"
     });
+
   } catch (err) {
-    winston.error("Mark Project Completed Error: " + err.message);
-    res.status(500).json({ success: false, message: "Server error marking project completed." });
+    winston.error("Approve Final Work Error: " + err.message);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 }
+
 
 }
 

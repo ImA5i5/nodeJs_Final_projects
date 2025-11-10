@@ -1,219 +1,128 @@
-<!-- ✅ views/pages/client/milestones.ejs -->
+<!-- views/pages/client/milestones.ejs -->
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow mt-10">
 
-<div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
-  <h2 class="text-3xl font-bold text-green-700 mb-6 flex items-center gap-2">
-    ⏱ Milestones for <%= project.title %>
-  </h2>
+  <!-- HEADER -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-green-700 flex items-center gap-2">
+      ⏱ Milestones — <%= project.title %>
+    </h2>
 
-  <!-- ✅ CREATE MILESTONE FORM -->
-  <form id="createMilestoneForm" class="grid md:grid-cols-4 gap-3 mb-8">
-    <input name="title" placeholder="Milestone title" required class="p-2 border rounded-md" />
-    <input name="amount" type="number" placeholder="Amount (₹)" required class="p-2 border rounded-md" />
-    <input name="dueDate" type="date" class="p-2 border rounded-md" />
-    <textarea name="description" placeholder="Description" class="md:col-span-4 p-2 border rounded-md"></textarea>
-
-    <button
-      type="submit"
-      class="md:col-span-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-md transition">
+    <!-- Create Milestone Button -->
+    <button id="btnCreate"
+      class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
       ➕ Create Milestone
     </button>
-  </form>
+  </div>
 
-  <!-- ✅ MILESTONE LIST -->
-  <div id="milestoneList" class="space-y-4">
+  <!-- EMPTY MESSAGE -->
+  <% if (!milestones || milestones.length === 0) { %>
+    <div class="text-center text-gray-500 py-10">
+      No milestones yet. Create one above.
+    </div>
+  <% } %>
 
-    <% if (milestones.length) { %>
+  <!-- MILESTONE LIST -->
+  <div class="space-y-4">
+    <% milestones.forEach(m => { %>
+      <div id="ms-<%= m._id %>" 
+        class="border rounded-lg p-4 shadow-sm bg-gray-50 flex justify-between items-start">
 
-      <% milestones.forEach(m => { %>
-        <div
-          class="border rounded-lg p-4 shadow-sm flex justify-between items-start hover:shadow-md transition"
-          id="milestone-<%= m._id %>"
-        >
-          <div>
-            <h4 class="text-lg font-semibold text-gray-800"><%= m.title %> — ₹<%= m.amount %></h4>
+        <!-- LEFT INFO -->
+        <div class="pr-4">
+          <h4 class="text-lg font-semibold text-gray-800"><%= m.title %></h4>
+          <p class="text-sm text-gray-600"><%= m.description || "No description" %></p>
 
-            <p class="text-sm text-gray-600"><%= m.description || 'No description' %></p>
+          <div class="text-sm text-gray-500 mt-2 space-x-3">
+            <span>💰 ₹<%= m.amount %></span>
+            <span>📅 <%= m.dueDate ? new Date(m.dueDate).toLocaleDateString() : "—" %></span>
 
-            <p class="text-xs text-gray-500 mt-1">
-              Due: <%= m.dueDate ? new Date(m.dueDate).toLocaleDateString() : 'N/A' %>
-            </p>
-
-            <!-- ✅ STATUS BADGE -->
-            <span class="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full
-              <%= m.status === 'created' ? 'bg-yellow-100 text-yellow-700'
-                : m.status === 'funded' ? 'bg-blue-100 text-blue-700'
-                : m.status === 'submitted' ? 'bg-purple-100 text-purple-700'
-                : m.status === 'revision-requested' ? 'bg-orange-100 text-orange-700'
-                : (m.status === 'released' || m.status === 'completed') ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-700' %>">
+            <span class="px-2 py-0.5 rounded text-xs font-semibold
+              <%= m.status === 'created' ? 'bg-gray-100 text-gray-700' :
+                  m.status === 'funded' ? 'bg-blue-100 text-blue-700' :
+                  m.status === 'in-progress' ? 'bg-yellow-100 text-yellow-700' :
+                  m.status === 'submitted' ? 'bg-purple-100 text-purple-700' :
+                  m.status === 'under-review' ? 'bg-indigo-100 text-indigo-700' :
+                  m.status === 'revision-requested' ? 'bg-orange-100 text-orange-700' :
+                  m.status === 'released' ? 'bg-green-100 text-green-700' :
+                  m.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
+                  m.status === 'disputed' ? 'bg-red-100 text-red-700' :
+                  'bg-gray-100 text-gray-500' %>">
               <%= m.status %>
             </span>
           </div>
 
-          <!-- ✅ ACTION BUTTONS -->
-          <div class="flex flex-col gap-2 text-right">
+          <!-- DELIVERABLES -->
+          <% if (m.deliverables?.length) { %>
+            <div class="mt-3">
+              <button 
+                class="viewDeliverablesBtn text-blue-600 underline text-sm"
+                data-files='<%- JSON.stringify(m.deliverables) %>'>
+                👀 View Deliverables (<%= m.deliverables.length %>)
+              </button>
+            </div>
+          <% } %>
 
-            <!-- FUND -->
-            <% if (m.status === 'created') { %>
-              <button
-                class="depositBtn bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded"
-                data-id="<%= m._id %>">💰 Fund Escrow</button>
-            <% } %>
+          <!-- REVISION NOTE -->
+          <% if (m.status === "revision-requested" && m.notes) { %>
+            <p class="mt-2 text-sm text-orange-700">
+              ✏️ Revision note: <%= m.notes %>
+            </p>
+          <% } %>
+        </div>
 
-            <!-- APPROVE / REQUEST REVISION -->
-            <% if (m.status === 'submitted') { %>
-              <button
-                class="approveBtn bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded"
-                data-id="<%= m._id %>">✅ Approve & Release</button>
+        <!-- ACTION BUTTONS -->
+        <div class="flex flex-col gap-2 items-end min-w-[200px]">
 
-              <button
-                class="reviseBtn bg-orange-500 hover:bg-orange-600 text-white text-sm px-3 py-1 rounded"
-                data-id="<%= m._id %>">✏️ Request Revision</button>
-            <% } %>
+          <% if (m.status === "created") { %>
+            <button 
+              class="fundBtn bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm"
+              data-id="<%= m._id %>"
+              data-amount="<%= m.amount %>">
+              💳 Fund (Razorpay)
+            </button>
+          <% } %>
 
-            <% if (m.status === 'funded' || m.status === 'in-progress') { %>
-              <span class="text-xs text-gray-500 italic">Freelancer working...</span>
-            <% } %>
+          <% if (["submitted", "under-review"].includes(m.status)) { %>
+            <button 
+              class="approveBtn bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm"
+              data-id="<%= m._id %>">
+              ✅ Approve & Release
+            </button>
 
-            <% if (m.status === 'released' || m.status === 'completed') { %>
-              <span class="text-xs text-green-600 font-semibold">✅ Done</span>
-            <% } %>
+            <button 
+              class="revisionBtn bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded text-sm"
+              data-id="<%= m._id %>">
+              ✏️ Request Revision
+            </button>
+          <% } %>
 
-            <% if (m.status === 'revision-requested') { %>
-              <span class="text-xs text-orange-600 italic">Awaiting resubmission...</span>
-            <% } %>
-
-          </div>
+          <% if (!["disputed", "released", "completed"].includes(m.status)) { %>
+            <button 
+              class="disputeBtn bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded text-sm"
+              data-id="<%= m._id %>">
+              🚩 Open Dispute
+            </button>
+          <% } %>
 
         </div>
-      <% }) %>
 
-    <% } else { %>
-
-      <div class="text-center py-10 text-gray-500">No milestones yet. Create one above.</div>
-
-    <% } %>
-
+      </div>
+    <% }) %>
   </div>
+
 </div>
 
+<!-- ✅ Razorpay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <!-- ✅ SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- ✅ Global Variables for JS -->
 <script>
-
-/* ✅ 1️⃣ CREATE MILESTONE */
-document.getElementById("createMilestoneForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const data = Object.fromEntries(new FormData(e.target).entries());
-
-  Swal.fire({ title: "Creating...", didOpen: () => Swal.showLoading() });
-
-  const res = await fetch(`/milestone/project/<%= project._id %>/milestone`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-
-  const json = await res.json();
-  Swal.close();
-
-  if (json.success)
-    Swal.fire("✅ Created", json.message, "success").then(() => location.reload());
-  else
-    Swal.fire("❌ Error", json.message, "error");
-});
-
-/* ✅ 2️⃣ FUND MILESTONE */
-document.querySelectorAll(".depositBtn").forEach(btn => {
-  btn.addEventListener("click", async () => {
-    const id = btn.dataset.id;
-
-    const confirm = await Swal.fire({
-      title: "Fund milestone?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "💰 Fund"
-    });
-
-    if (!confirm.isConfirmed) return;
-
-    Swal.fire({ title: "Processing...", didOpen: () => Swal.showLoading() });
-
-    const res = await fetch(`/milestone/milestone/${id}/deposit`, { method: "POST" });
-    const json = await res.json();
-    Swal.close();
-
-    if (json.success)
-      Swal.fire("✅ Funded", json.message, "success").then(() => location.reload());
-    else
-      Swal.fire("❌ Error", json.message, "error");
-  });
-});
-
-/* ✅ 3️⃣ APPROVE & RELEASE */
-document.querySelectorAll(".approveBtn").forEach(btn => {
-  btn.addEventListener("click", async () => {
-    const id = btn.dataset.id;
-
-    const confirm = await Swal.fire({
-      title: "Approve milestone?",
-      icon: "success",
-      showCancelButton: true,
-      confirmButtonText: "✅ Approve"
-    });
-
-    if (!confirm.isConfirmed) return;
-
-    Swal.fire({ title: "Releasing...", didOpen: () => Swal.showLoading() });
-
-    const res = await fetch(`/milestone/milestone/${id}/review`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "approve" })
-    });
-
-    const json = await res.json();
-    Swal.close();
-
-    if (json.success)
-      Swal.fire("✅ Released", json.message, "success").then(() => location.reload());
-    else
-      Swal.fire("❌ Error", json.message, "error");
-  });
-});
-
-/* ✅ 4️⃣ REQUEST REVISION */
-document.querySelectorAll(".reviseBtn").forEach(btn => {
-  btn.addEventListener("click", async () => {
-    const id = btn.dataset.id;
-
-    const { value: note } = await Swal.fire({
-      title: "Request Revision",
-      input: "textarea",
-      inputPlaceholder: "Describe needed changes...",
-      showCancelButton: true
-    });
-
-    if (!note) return;
-
-    Swal.fire({ title: "Sending...", didOpen: () => Swal.showLoading() });
-
-    const res = await fetch(`/milestone/milestone/${id}/review`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "request_revision", note })
-    });
-
-    const json = await res.json();
-    Swal.close();
-
-    if (json.success)
-      Swal.fire("✅ Requested", json.message, "success").then(() => location.reload());
-    else
-      Swal.fire("❌ Error", json.message, "error");
-  });
-});
+  window.RZP_KEY = "<%= razorpayKey || '' %>";
+  window.PROJECT_ID = "<%= project._id %>";
 </script>
+
+<!-- ✅ External JS (NO inline JS) -->
+<script src="/js/client/milestones.js"></script>

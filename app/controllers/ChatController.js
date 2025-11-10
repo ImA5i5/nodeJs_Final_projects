@@ -242,52 +242,52 @@ class ChatController {
     ✅ 7. START CHAT (client starts)
   ----------------------------------------------------*/
   static async startChat(req, res) {
-    try {
-      const userId = req.user._id;
-      const { otherUserId, projectId } = req.body;
+  try {
+    const userId = req.user._id;
+    const { otherUserId, projectId = null } = req.body;
 
-      if (!projectId) {
-  return res.status(400).json({
-    success: false,
-    message: "projectId is required for chat"
-  });
-}
+    if (!otherUserId) {
+      return res.status(400).json({
+        success: false,
+        message: "otherUserId is required"
+      });
+    }
 
-      if (!otherUserId)
-        return res
-          .status(400)
-          .json({ success: false, message: "otherUserId is required" });
+    // ✅ Determine roles automatically
+    const isClient = req.user.role === "client";
+    const clientId = isClient ? userId : otherUserId;
+    const freelancerId = isClient ? otherUserId : userId;
 
-      const isClient = req.user.role === "client";
+    // ✅ Check if chat already exists (project optional)
+    let room = await ChatRoom.findOne({
+      client: clientId,
+      freelancer: freelancerId,
+      project: projectId // ✅ can be null!
+    });
 
-      const clientId = isClient ? userId : otherUserId;
-      const freelancerId = isClient ? otherUserId : userId;
-
-      let room = await ChatRoom.findOne({
+    if (!room) {
+      room = await ChatRoom.create({
         client: clientId,
         freelancer: freelancerId,
-        project: projectId || null
+        project: projectId
       });
-
-      if (!room) {
-        room = await ChatRoom.create({
-          client: clientId,
-          freelancer: freelancerId,
-          project: projectId || null
-        });
-      }
-
-      return res.json({
-        success: true,
-        message: "Chat started",
-        roomId: room._id
-      });
-
-    } catch (err) {
-      winston.error("Start Chat Error: " + err.message);
-      res.status(500).json({ success: false, message: "Failed to start chat" });
     }
+
+    return res.json({
+      success: true,
+      roomId: room._id,
+      message: "Chat started successfully"
+    });
+
+  } catch (err) {
+    winston.error("Start Chat Error: " + err.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to start chat"
+    });
   }
+}
+
 
  static async getNotifications(req, res) {
   try {

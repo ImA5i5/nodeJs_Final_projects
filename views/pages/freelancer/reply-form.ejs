@@ -1,0 +1,93 @@
+<!-- views/pages/freelancer/reply-form.ejs -->
+ <div class="max-w-3xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-3xl font-bold text-green-700">💬 Reply to Review</h2>
+    <a href="/freelancer/reviews" class="text-blue-600 underline">← Back to Reviews</a>
+  </div>
+
+  <!-- Review Summary -->
+  <div class="border-b pb-4 mb-5">
+    <h3 class="text-lg font-semibold text-gray-800">
+      Project: <%= review.project?.title %>
+    </h3>
+
+    <p class="text-sm text-gray-500 mt-1">
+      Reviewed by <b><%= review.client?.fullName %></b> on
+      <%= new Date(review.createdAt).toLocaleDateString() %>
+    </p>
+
+    <!-- Stars -->
+    <div class="flex items-center mt-2 text-yellow-400 text-xl">
+      <% for (let i = 1; i <= 5; i++) { %>
+        <span><%= i <= review.rating ? "★" : "☆" %></span>
+      <% } %>
+    </div>
+
+    <p class="text-gray-700 mt-3"><%= review.feedback %></p>
+
+    <% if (review.tags && review.tags.length) { %>
+      <div class="mt-2">
+        <% review.tags.forEach(tag => { %>
+          <span class="inline-block px-2 py-1 bg-gray-100 rounded text-xs mr-2">
+            <%= tag %>
+          </span>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Reply Form -->
+  <form id="replyForm" class="space-y-4">
+    <textarea
+      id="replyText"
+      name="reply"
+      placeholder="Write your reply here..."
+      class="w-full border p-3 rounded-md focus:ring-2 focus:ring-green-400"
+      rows="4"
+      maxlength="400"
+      required
+    ></textarea>
+
+    <button
+      type="submit"
+      class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded shadow">
+      ✅ Submit Reply
+    </button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+const reviewId = "<%= review._id %>";
+
+document.getElementById("replyForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const reply = document.getElementById("replyText").value.trim();
+  if (!reply) {
+    return Swal.fire("❌ Error", "Reply cannot be empty.", "error");
+  }
+
+  Swal.fire({
+    title: "Submitting...",
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading(),
+  });
+
+  const res = await fetch("/review/reply", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reviewId, reply }),
+  });
+
+  const data = await res.json();
+  Swal.close();
+
+  if (data.success) {
+    Swal.fire("✅ Reply Submitted", "Your reply is now visible publicly.", "success")
+      .then(() => window.location.href = "/freelancer/reviews");
+  } else {
+    Swal.fire("❌ Error", data.message || "Could not submit reply.", "error");
+  }
+});
+</script>

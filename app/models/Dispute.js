@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const disputeSchema = new mongoose.Schema(
   {
     project: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+    milestone: { type: mongoose.Schema.Types.ObjectId, ref: "Milestone", required: true },
+    raisedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     client: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     freelancer: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     reason: { type: String, required: true },
@@ -13,7 +15,12 @@ const disputeSchema = new mongoose.Schema(
       enum: ["open", "in-review", "resolved", "rejected"],
       default: "open",
     },
-    resolution: { type: String },
+    adminNote: String,
+    resolution: {
+    type: String,
+    enum: ["refund-client", "release-freelancer", "need-info", null],
+    default: null
+  },
     // 🧾 Keep record of all dispute actions
     history: [
       {

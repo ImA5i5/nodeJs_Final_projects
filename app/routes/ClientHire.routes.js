@@ -60,10 +60,11 @@ router.post("/proposals/:id/reject", ClientHireController.rejectProposal);
  */
 router.post("/hire/:freelancerId/:projectId", ClientHireController.hireFreelancer);
 
-/**
- * ✅ Mark project completed (AJAX)
- * PATCH /client/projects/:id/complete
- */
-router.patch("/projects/:id/complete", ClientHireController.markProjectCompleted);
+
+// ✅ Client approves final work (marks project as completed)
+router.post(
+  "/project/:id/approve-final",
+  ClientHireController.approveFinalWork
+);
 
 module.exports = router;

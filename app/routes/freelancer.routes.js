@@ -55,9 +55,44 @@ router.get("/earnings", WalletController.getEarnings);
 
 
 // ⭐ Reviews
-router.get("/reviews", ReviewController.getFreelancerReviews);
-router.post("/reviews/respond", ReviewController.respondToReview);
-router.get("/reviews/ajax", ReviewController.getReviewsAjax);
+// app/routes/freelancer.routes.js
+router.get("/freelancer/reviews",
+  AuthMiddleware.verifyAccessToken,
+  RoleMiddleware.authorizeRoles("freelancer"),
+  async (req, res) => {
+    const Review = require("../models/Review");
+    const reviews = await Review.find({ freelancer: req.user._id, removed: false })
+      .populate("project", "title")
+      .populate("client", "fullName")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.render("pages/freelancer/reviews", {
+      layout: "layouts/freelancer-layout",
+      reviews
+    });
+  }
+);
+
+router.get("/freelancer/review/:reviewId",
+  AuthMiddleware.verifyAccessToken,
+  RoleMiddleware.authorizeRoles("freelancer"),
+  async (req, res) => {
+    const Review = require("../models/Review");
+    const review = await Review.findOne({ _id: req.params.reviewId, freelancer: req.user._id })
+      .populate("project", "title")
+      .populate("client", "fullName")
+      .lean();
+
+    if (!review) return res.status(404).send("Review not found");
+
+    res.render("pages/freelancer/review-details", {
+      layout: "layouts/freelancer-layout",
+      review
+    });
+  }
+);
+
 
 
 

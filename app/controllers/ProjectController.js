@@ -967,18 +967,17 @@ static async viewAllMilestones(req, res, next) {
    * 📋 1. Get all projects (with filter)
    * Admin can filter by status, search by title.
    */
-  static async getAllProjects(req, res, next) {
+static async getAllProjects(req, res, next) {
   try {
     const { status, search } = req.query;
 
-    // 🧠 Build match query (filters)
     const match = {};
     if (status) match.status = status;
     if (search) match.title = { $regex: search, $options: "i" };
 
-    // 🧩 Aggregate with safe defaults
     const projects = await Project.aggregate([
       { $match: match },
+
       {
         $lookup: {
           from: "users",
@@ -988,33 +987,46 @@ static async viewAllMilestones(req, res, next) {
         },
       },
       { $unwind: "$client" },
+
       {
         $project: {
           _id: 1,
           title: 1,
           budget: 1,
-          // ✅ Ensure status always exists, fallback = "pending"
-          status: { $ifNull: ["$status", "pending"] },
+
+          // ✅ CLEAN + NORMALIZED STATUS
+          status: {
+            $toLower: {
+              $trim: {
+                input: { $ifNull: ["$status", "pending"] }
+              }
+            }
+          },
+
           isActive: 1,
           createdAt: 1,
           clientName: "$client.fullName",
           clientEmail: "$client.email",
         },
       },
+
       { $sort: { createdAt: -1 } },
     ]);
 
-    // ✅ Render admin page
     res.render("pages/admin/projects", {
       layout: "layouts/admin-layout",
       title: "Manage Projects",
       projects,
     });
+
   } catch (err) {
     winston.error("Project List Error: " + err.message);
     next(err);
   }
 }
+
+
+
 
 
   /**

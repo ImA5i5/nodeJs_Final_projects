@@ -4,48 +4,81 @@ const router = express.Router();
 const MilestoneController = require("../controllers/MilestoneController");
 const Auth = require("../middleware/auth.middleware");
 const Role = require("../middleware/role.middleware");
-const UploadMiddleware = require("../middleware/upload.middleware");
+const Upload = require("../middleware/upload.middleware");
 
-// Protect
 router.use(Auth.verifyAccessToken);
 
-// Client creates milestone for their project
-router.post("/project/:projectId/milestone", Role.authorizeRoles("client"), MilestoneController.create);
+/* ----------------------------------------------------
+   ✅ CLIENT ROUTES
+-----------------------------------------------------*/
 
-// Client deposit escrow for a milestone
-router.post("/milestone/:id/deposit", Role.authorizeRoles("client"), MilestoneController.depositEscrow);
-
-// Freelancer starts milestone (mark in-progress)
-router.post("/milestone/:id/start", Role.authorizeRoles("freelancer"), MilestoneController.start);
-
-// Freelancer uploads deliverables (files)
-router.post("/milestone/:id/upload", Role.authorizeRoles("freelancer"), UploadMiddleware.multiple("attachments", 5), MilestoneController.uploadDeliverables);
-
-// Client reviews: approve / request revision
-router.post("/milestone/:id/review", Role.authorizeRoles("client"), MilestoneController.clientReviewAction);
-
-// List milestones for a project (client/freelancer can view)
-router.get("/project/:projectId/milestones", Auth.verifyAccessToken, MilestoneController.listForProject);
-
-// 📤 Submit milestone for client review
+router.get(
+  "/project/:id/milestones",
+  Role.authorizeRoles("client"),
+  MilestoneController.viewProjectMilestones
+);
+// Create milestone
 router.post(
-  "/freelancer/:id/submit",
+  "/:projectId/create",
+  Role.authorizeRoles("client"),
+  MilestoneController.create
+);
+
+// Fund
+router.post(
+  "/:id/fund",
+  Role.authorizeRoles("client"),
+  MilestoneController.fund
+);
+
+// Approve & Release
+router.post(
+  "/:id/release",
+  Role.authorizeRoles("client"),
+  MilestoneController.release
+);
+
+// Request revision
+router.post(
+  "/:id/request-revision",
+  Role.authorizeRoles("client"),
+  MilestoneController.requestRevision
+);
+
+// Open dispute
+router.post(
+  "/:id/dispute",
+  Role.authorizeRoles("client"),
+  MilestoneController.dispute
+);
+
+
+
+
+/* ----------------------------------------------------
+   ✅ FREELANCER ROUTES
+-----------------------------------------------------*/
+
+// Start work
+router.post(
+  "/:id/start",
   Role.authorizeRoles("freelancer"),
-  MilestoneController.submitMilestone
+  MilestoneController.start
 );
 
-// ✅ Approve milestone (release payment)
-router.put(
-  "/client/:id/approve",
-  Role.authorizeRoles("client"),
-  MilestoneController.approveMilestone
+// Submit
+router.post(
+  "/:id/submit",
+  Role.authorizeRoles("freelancer"),
+  Upload.multiple("files", 5),
+  MilestoneController.submit
 );
 
-// 🔁 Request revision (send back to freelancer)
-router.put(
-  "/client/:id/request-changes",
-  Role.authorizeRoles("client"),
-  MilestoneController.requestChanges
+// Resume after revision
+router.post(
+  "/:id/resume",
+  Role.authorizeRoles("freelancer"),
+  MilestoneController.resume
 );
 
 module.exports = router;

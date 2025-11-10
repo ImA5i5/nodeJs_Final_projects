@@ -68,6 +68,12 @@
 
           <!-- Actions -->
           <div class="flex flex-wrap justify-end gap-3 mt-5">
+            <!-- ⏱ View Milestones (NEW BUTTON) -->
+<a href="/milestone/project/<%= project._id %>/milestones"
+   class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm">
+   ⏱ View Milestones
+</a>
+
             <!-- 👀 Review / ✅ Approve / 🔁 Request Changes -->
             <% if (project.status === 'submitted') { %>
               <button onclick="reviewDeliverables('<%= project._id %>')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm">
@@ -103,18 +109,25 @@
             </button>
 
             <!-- ⭐ Review section -->
-            <% if (project.status === 'completed' && project.hiredFreelancer) { %>
-              <% if (project.reviewed) { %>
-                <span class="text-gray-500 text-sm flex items-center gap-1">✅ Reviewed</span>
-              <% } else { %>
-                <a
-                  href="/client/review/<%= project._id %>"
-                  class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm"
-                >
-                  ⭐ Leave Review
-                </a>
-              <% } %>
-            <% } %>
+            <!-- ⭐ Review (only when project is completed) -->
+<% if (project.status === 'completed' && project.hiredFreelancer) { %>
+  <% if (project.reviewed) { %>
+    <a
+      href="/review/view/<%= project._id %>"
+      class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1.5 rounded text-sm"
+    >
+      ✅ View Review
+    </a>
+  <% } else { %>
+    <a
+      href="/review/write/<%= project._id %>"
+      class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm"
+    >
+      ⭐ Leave Review
+    </a>
+  <% } %>
+<% } %>
+
           </div>
         </div>
       <% }) %>

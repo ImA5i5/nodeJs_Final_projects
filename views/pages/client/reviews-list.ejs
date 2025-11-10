@@ -1,0 +1,37 @@
+<!-- views/pages/client/reviews-list.ejs -->
+
+<div class="max-w-5xl mx-auto bg-white p-6 mt-10 shadow rounded-lg">
+  <h2 class="text-3xl font-bold text-green-700 mb-6">⭐ My Reviews</h2>
+
+  <% if (!reviews.length) { %>
+    <p class="text-gray-500 text-center">You haven't submitted any reviews yet.</p>
+  <% } else { %>
+    <div class="space-y-4">
+      <% reviews.forEach(r => { %>
+        <div class="border p-4 rounded shadow-sm hover:shadow-md transition">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-semibold">💼 <%= r.project.title %></h3>
+
+            <!-- Stars -->
+            <div class="flex text-yellow-400 text-xl">
+              <% for(let i=1;i<=5;i++){ %>
+                <span><%= i <= r.rating ? "★" : "☆" %></span>
+              <% } %>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-600 mt-1">
+            Freelancer: <b><%= r.freelancer.fullName %></b>
+          </p>
+
+          <p class="text-gray-700 mt-3"><%= r.feedback.substring(0, 120) %>...</p>
+
+          <a href="/review/view/<%= r.project._id %>"
+             class="text-blue-600 underline text-sm mt-3 inline-block">
+             View Full Review →
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

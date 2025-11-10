@@ -13,25 +13,71 @@ class FreelancerController {
  /**
    * 🏠 Freelancer Dashboard
    */
-  static async dashboard(req, res, next) {
+   static async dashboard(req, res) {
     try {
-      const [bids, earnings] = await Promise.all([
-        Bid.find({ freelancer: req.user._id }).populate("project"),
-        Payment.aggregate([
-          { $match: { freelancer: req.user._id, status: "released" } },
-          { $group: { _id: null, total: { $sum: "$amount" } } },
-        ]),
-      ]);
+      const freelancerId = req.user._id;
 
+      // ✅ Total Bids
+      const bids = await Bid.find({ freelancer: freelancerId }).populate("project");
+
+      // ✅ Total Earnings
+      const paidMilestones = await Payment.find({
+        freelancer: freelancerId,
+        status: "released"
+      });
+
+      const earnings = paidMilestones.reduce((sum, p) => sum + p.amount, 0);
+
+      // ✅ ⭐ RATING
+      const rating = req.user?.profile?.rating || 0;
+
+      // ✅ ACTIVE PROJECTS (REQUIRED)
+      const activeProjects = await Project.countDocuments({
+        hiredFreelancer: freelancerId,
+        status: "in-progress"
+      });
+
+      // ✅ COMPLETED PROJECTS (REQUIRED)
+      const completedProjects = await Project.countDocuments({
+        hiredFreelancer: freelancerId,
+        status: "completed"
+      });
+
+      // ✅ Recent Payments
+      const recentPayments = await Payment.find({
+        freelancer: freelancerId,
+        status: "released"
+      })
+        .populate("project")
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .lean();
+
+      // ✅ Monthly Earnings Graph Data
+      const monthlyMap = Array(12).fill(0);
+      paidMilestones.forEach(p => {
+        const m = new Date(p.createdAt).getMonth();
+        monthlyMap[m] += p.amount;
+      });
+
+      // ✅ RENDER DASHBOARD
       res.render("pages/freelancer/dashboard", {
         layout: "layouts/freelancer-layout",
+        title: "Freelancer Dashboard",
+
         bids,
-        earnings: earnings[0]?.total || 0,
-        user: req.user,
+        earnings,
+        rating,
+        activeProjects,
+        completedProjects,
+        recentPayments,
+        monthlyEarnings: monthlyMap,
+        user: req.user
       });
+
     } catch (err) {
-      winston.error("Freelancer Dashboard Error: " + err.message);
-      next(err);
+      console.error("Dashboard Error:", err);
+      res.status(500).render("errors/500");
     }
   }
 

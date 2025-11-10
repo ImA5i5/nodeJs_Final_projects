@@ -113,6 +113,9 @@ app.use("/admin/payments", adminPaymentRoutes);
 const disputeRoutes = require("./app/routes/dispute.routes");
 app.use("/admin/disputes", disputeRoutes);
 
+const adminReviewRoutes = require("./app/routes/adminReview.routes");
+app.use("/admin/reviews", adminReviewRoutes);
+
 
 const freelancerRoutes = require("./app/routes/freelancer.routes");
 app.use("/freelancer", freelancerRoutes);
@@ -146,6 +149,10 @@ app.use("/review", reviewRoutes);
 
 const milestoneRoutes = require("./app/routes/milestone.routes");
 app.use("/milestone", milestoneRoutes);
+
+const notificationRoutes = require("./app/routes/notification.routes");
+app.use("/notifications", notificationRoutes);
+
 
 
 

@@ -1,69 +1,46 @@
-// app/routes/review.routes.js
 const express = require("express");
 const router = express.Router();
-
 const ReviewController = require("../controllers/ReviewController");
-const AuthMiddleware = require("../middleware/auth.middleware");
-const RoleMiddleware = require("../middleware/role.middleware");
+const Auth = require("../middleware/auth.middleware");
+const Role = require("../middleware/role.middleware");
 
-// ✅ Protect all review routes
-router.use(AuthMiddleware.verifyAccessToken);
+router.use(Auth.verifyAccessToken);
 
-/* --------------------------------------------------------------------------
-   🌟 FREELANCER REVIEW ROUTES
--------------------------------------------------------------------------- */
-
-// 🧾 View all reviews received
+// ✅ Client opens review page
 router.get(
-  "/freelancer",
-  RoleMiddleware.authorizeRoles("freelancer"),
-  ReviewController.getFreelancerReviews
+  "/write/:projectId",
+  Role.authorizeRoles("client"),
+  ReviewController.reviewPage
 );
 
-// 💬 Respond to a review (AJAX)
+// ✅ Submit Review (client)
 router.post(
-  "/freelancer/respond",
-  RoleMiddleware.authorizeRoles("freelancer"),
-  ReviewController.respondToReview
+  "/submit",
+  Role.authorizeRoles("client"),
+  ReviewController.submit
 );
 
-// 🔄 Refresh freelancer reviews via AJAX
-router.get(
-  "/freelancer/ajax",
-  RoleMiddleware.authorizeRoles("freelancer"),
-  ReviewController.getReviewsAjax
-);
-
-/* --------------------------------------------------------------------------
-   💬 CLIENT REVIEW ROUTES
--------------------------------------------------------------------------- */
-
-// 📝 Render review form (after project completion)
-router.get(
-  "/client/review/:projectId",
-  RoleMiddleware.authorizeRoles("client"),
-  ReviewController.reviewForm
-);
-
-// ✅ Submit a new review
+// ✅ Freelancer Reply
 router.post(
-  "/client/submit",
-  RoleMiddleware.authorizeRoles("client"),
-  ReviewController.submitReview
+  "/reply",
+  Role.authorizeRoles("freelancer"),
+  ReviewController.reply
 );
 
-// 👀 View all reviews written by the client
-router.get(
-  "/client",
-  RoleMiddleware.authorizeRoles("client"),
-  ReviewController.getClientReviews
+// ✅ Admin Moderation
+router.post(
+  "/moderate",
+  Role.authorizeRoles("admin"),
+  ReviewController.moderate
 );
 
-// 🔄 AJAX endpoint to refresh client reviews
 router.get(
-  "/client/ajax",
-  RoleMiddleware.authorizeRoles("client"),
-  ReviewController.getClientReviewsAjax
+  "/list",
+  Role.authorizeRoles("client"),
+  ReviewController.clientReviewList
 );
+
+// ✅ View review
+router.get("/view/:projectId", ReviewController.view);
 
 module.exports = router;

@@ -1,0 +1,95 @@
+<!-- views/pages/admin/reviews-list.ejs -->
+
+<div class="max-w-6xl mx-auto mt-10 bg-white rounded-lg shadow-md p-6">
+  <h2 class="text-3xl font-bold text-green-700 mb-6">⭐ All Reviews</h2>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full border border-gray-200 text-sm">
+      <thead class="bg-green-700 text-white">
+        <tr>
+          <th class="p-3 text-left">Project</th>
+          <th class="p-3 text-left">Client</th>
+          <th class="p-3 text-left">Freelancer</th>
+          <th class="p-3 text-center">Rating</th>
+          <th class="p-3 text-center">Status</th>
+          <th class="p-3 text-center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (reviews.length) { %>
+          <% reviews.forEach(r => { %>
+          <tr class="border-b hover:bg-gray-50 transition">
+            <td class="p-3"><%= r.project?.title %></td>
+            <td class="p-3"><%= r.client?.fullName %></td>
+            <td class="p-3"><%= r.freelancer?.fullName %></td>
+
+            <td class="p-3 text-center font-semibold text-yellow-500">
+              <%= r.rating %> ⭐
+            </td>
+
+            <td class="p-3 text-center">
+              <% if (r.removed) { %>
+                <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium">Removed</span>
+              <% } else { %>
+                <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">Active</span>
+              <% } %>
+            </td>
+
+            <td class="p-3 text-center flex gap-2 justify-center">
+              <a href="/admin/reviews/<%= r._id %>"
+                 class="text-blue-600 underline text-xs">👁 View</a>
+
+              <% if (!r.removed) { %>
+                <button onclick="moderateReview('<%= r._id %>', 'remove')"
+                  class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 text-xs rounded">
+                  ❌ Remove
+                </button>
+              <% } else { %>
+                <button onclick="moderateReview('<%= r._id %>', 'restore')"
+                  class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 text-xs rounded">
+                  ✅ Restore
+                </button>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" class="p-5 text-center text-gray-500">No reviews found.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+async function moderateReview(reviewId, action) {
+  const confirm = await Swal.fire({
+    title: action === "remove" ? "Remove Review?" : "Restore Review?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  const res = await fetch("/admin/reviews/moderate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reviewId, action })
+  });
+
+  const data = await res.json();
+
+  Swal.fire({
+    title: data.success ? "✅ Success" : "❌ Error",
+    text: data.message,
+    icon: data.success ? "success" : "error",
+  });
+
+  if (data.success) setTimeout(() => location.reload(), 800);
+}
+</script>
