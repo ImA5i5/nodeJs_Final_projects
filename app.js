@@ -97,9 +97,51 @@ app.use((req, res, next) => {
   next();
 });
 
+
+// ✅ ✅ API ROUTES
+// ✅ API ROUTES MUST COME FIRST
+const apiAuthRoutes = require("./app/routes/api/api.auth.routes");
+app.use("/api/auth", apiAuthRoutes);
+
+const apiAdminRoutes = require("./app/routes/api/api.admin.routes");
+app.use("/api/admin", apiAdminRoutes);
+
+const apiCategoryRoutes = require("./app/routes/api/api.category.routes");
+app.use("/api/category", apiCategoryRoutes);
+
+const apiFreelancerRoutes = require("./app/routes/api/api.freelancer.routes");
+app.use("/api/freelancer", apiFreelancerRoutes);
+
+
+const apiProjectRoutes = require("./app/routes/api/api.project.routes");
+app.use("/api/project", apiProjectRoutes);
+
+const apiBidRoutes = require("./app/routes/api/api.bid.routes");
+app.use("/api/bid", apiBidRoutes);
+
+const apiMilestoneRoutes = require("./app/routes/api/api.milestone.routes");
+app.use("/api/milestone", apiMilestoneRoutes);
+
+const apiPaymentRoutes = require("./app/routes/api/api.payment.routes");
+app.use("/api/payment", apiPaymentRoutes);
+
+
+const chatApiRoutes = require("./app/routes/api/api.chat.routes");
+app.use("/api/chat", chatApiRoutes);
+
+const ReviewRoutes = require("./app/routes/api/api.review.routes");
+app.use("/api/review", ReviewRoutes);
+
+
+
+
+
 // Import Routes
 const authRoutes = require("./app/routes/auth.routes");
 app.use("/auth", authRoutes);
+app.get("/register", (req, res) => res.redirect("/auth/register"));
+app.get("/login", (req, res) => res.redirect("/auth/login"));
+
 
 const adminRoutes = require("./app/routes/admin.routes");
 app.use("/admin", adminRoutes);
@@ -152,6 +194,12 @@ app.use("/milestone", milestoneRoutes);
 
 const notificationRoutes = require("./app/routes/notification.routes");
 app.use("/notifications", notificationRoutes);
+
+const AnalyticsRoutes = require("./app/routes/api/api.analytics.routes");
+app.use("/api/analytics", AnalyticsRoutes);
+
+
+
 
 
 
