@@ -224,6 +224,10 @@ app.use((req, res) => {
   });
 });
 
+app.get("/logout", (req, res) => {
+  return res.redirect("/auth/logout");
+});
+
 // Error Middleware (centralized)
 const errorHandler = require("./app/middleware/error.middleware");
 app.use(errorHandler);

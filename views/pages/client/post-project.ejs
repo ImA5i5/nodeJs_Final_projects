@@ -43,7 +43,8 @@
       >
         <option value="">Select Category</option>
         <% categories.forEach(cat => { %>
-          <option value="<%= cat._id %>"><%= cat.name %></option>
+          <option value="<%= cat._id.toString() %>"><%= cat.name %></option>
+
         <% }) %>
       </select>
     </div>
@@ -141,19 +142,22 @@
 
   // ✅ Populate subcategories dynamically
   categorySelect.addEventListener("change", () => {
-    const selected = categories.find((c) => c._id === categorySelect.value);
-    subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
-    if (selected && selected.subcategories) {
-      selected.subcategories
-        .filter((sub) => sub.isApproved)
-        .forEach((sub) => {
-          const opt = document.createElement("option");
-          opt.value = sub.name;
-          opt.textContent = sub.name;
-          subcategorySelect.appendChild(opt);
-        });
-    }
-  });
+  const selected = categories.find(c => c._id.toString() === categorySelect.value);
+
+  subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+
+  if (selected && selected.subcategories) {
+    selected.subcategories
+      .filter(sub => sub.isApproved)
+      .forEach(sub => {
+        const opt = document.createElement("option");
+        opt.value = sub.name;
+        opt.textContent = sub.name;
+        subcategorySelect.appendChild(opt);
+      });
+  }
+});
+
 
   // ✅ File preview (for image/pdf)
   fileInput.addEventListener("change", () => {

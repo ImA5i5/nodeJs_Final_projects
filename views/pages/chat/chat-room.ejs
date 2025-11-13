@@ -3,8 +3,9 @@
 
   <!-- ✅ Header -->
   <div class="bg-white shadow p-4 rounded-lg flex items-center gap-4 mb-4">
-    <img src="<%= otherUser.avatar || '/default-user.png' %>" 
-         class="w-12 h-12 rounded-full border object-cover" />
+    <img src="<%= otherUser.profile?.profilePic || '/default-user.png' %>"
+     class="w-12 h-12 rounded-full border object-cover" />
+
 
     <div>
       <h2 class="text-xl font-bold"><%= otherUser.fullName %></h2>

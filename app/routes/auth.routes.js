@@ -20,6 +20,12 @@ router.post("/verify-otp", AuthController.verifyOtp);
 router.get("/login", AuthController.getLogin);
 router.post("/login", RateLimitMiddleware.loginLimiter, AuthController.login);
 
+// ----- Forgot / Reset Password -----
+router.get("/forgot", AuthController.getForgot);          // show form
+router.post("/forgot", AuthController.postForgot);        // handle email -> send token
+router.get("/reset/:token", AuthController.getReset);     // show reset form (token in URL)
+router.post("/reset/:token", AuthController.postReset);   // set new password
+
 // 4️⃣ Logout
 router.get("/logout", AuthController.logout);
 

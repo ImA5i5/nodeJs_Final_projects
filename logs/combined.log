@@ -5239,3 +5239,66 @@
 [2025-11-13 06:13:49] INFO: 🚀 Redis ready
 [2025-11-13 06:13:49] INFO: 🔗 Redis client connected successfully
 [2025-11-13 06:13:50] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 06:17:18] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 06:17:18] INFO: ✅ Redis connected
+[2025-11-13 06:17:18] INFO: 🚀 Redis ready
+[2025-11-13 06:17:18] INFO: 🔗 Redis client connected successfully
+[2025-11-13 06:17:20] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 12:13:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:13:29] INFO: ✅ Redis connected
+[2025-11-13 12:13:29] INFO: 🚀 Redis ready
+[2025-11-13 12:13:29] INFO: 🔗 Redis client connected successfully
+[2025-11-13 12:13:30] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 12:14:01] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:14:01] INFO: 🔗 Redis client connected successfully
+[2025-11-13 12:14:02] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 12:14:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:14:30] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 12:30:31] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:30:32] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 12:30:42] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:30:43] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 12:31:18] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:31:19] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 12:31:43] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:31:44] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 12:32:23] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:32:26] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:32:27] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 12:32:56] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:32:57] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 12:33:40] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:33:41] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 12:34:40] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:34:41] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 12:42:34] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:42:35] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 12:51:30] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:51:33] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 12:59:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 12:59:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 14:47:19] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:47:21] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 14:47:44] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:47:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 14:48:37] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:48:40] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 14:57:43] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:57:47] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:57:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:57:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-13 14:58:10] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:58:15] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:58:18] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 14:58:44] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:58:48] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:58:51] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 14:58:56] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 17:05:46] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 17:05:48] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 17:30:41] INFO: 📧 Notification sent to test08@yopmail.com | 🎉 You've been hired for "Feasibility Study and Prototype Development of a Low-Cost Solar-Powered Water Purification System for Rural Communities"
+[2025-11-13 17:30:41] WARN: Hire: failed to create in-app message: Message validation failed: room: Path `room` is required.
+[2025-11-13 17:38:21] INFO: ✅ Razorpay Order created: order_RfDdUKWhbnQtoR
+[2025-11-13 17:38:55] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-13 17:41:57] INFO: ✅ Credited ₹2000 to wallet of 68f7f83baf080e1345d36794
+[2025-11-13 17:42:03] INFO: 📧 Notification sent to test08@yopmail.com | ✅ Payment Released

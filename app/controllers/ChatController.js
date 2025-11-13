@@ -17,7 +17,7 @@ class ChatController {
       const rooms = await ChatRoom.find({
         $or: [{ client: userId }, { freelancer: userId }]
       })
-        .populate("client freelancer", "fullName avatar")
+        .populate("client freelancer", "fullName profile.profilePic")
         .sort({ updatedAt: -1 })
         .lean();
 
@@ -54,7 +54,7 @@ class ChatController {
       const userId = req.user._id.toString();
 
       const room = await ChatRoom.findById(roomId)
-        .populate("client freelancer", "fullName avatar")
+        .populate("client freelancer", "fullName profile.profilePic")
         .lean();
 
       if (!room) return res.status(404).send("Chat room not found");
@@ -297,7 +297,7 @@ class ChatController {
       receiver: userId,
       sender: { $ne: userId }   // ✅ show only messages from other user
     })
-      .populate("sender", "fullName avatar")
+      .populate("sender", "fullName profile.profilePic")
       .sort({ createdAt: -1 })
       .lean();
 

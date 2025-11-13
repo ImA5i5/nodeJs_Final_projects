@@ -1,0 +1,26 @@
+<!-- views/pages/auth/forgot.ejs -->
+<div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8 mt-12">
+  <h2 class="text-2xl font-bold text-center text-blue-600 mb-6">Forgot Password</h2>
+
+  <% if (error && error.length) { %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded"><%= error[0] %></div>
+  <% } %>
+  <% if (success && success.length) { %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded"><%= success[0] %></div>
+  <% } %>
+
+  <form action="/auth/forgot" method="POST" class="space-y-4">
+    <div>
+      <label for="email" class="block text-sm font-semibold mb-1">Email</label>
+      <input id="email" name="email" type="email" required class="w-full border border-gray-300 rounded p-2" />
+    </div>
+
+    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
+      Send reset link
+    </button>
+  </form>
+
+  <p class="text-center text-sm text-gray-600 mt-4">
+    Remembered your password? <a href="/auth/login" class="text-blue-600 hover:underline">Log in</a>
+  </p>
+</div>

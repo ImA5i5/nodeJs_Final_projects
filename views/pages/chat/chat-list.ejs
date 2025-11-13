@@ -20,8 +20,11 @@
 
         <!-- USER Info -->
         <div class="flex items-center gap-3">
-          <img src="<%= room.otherUser.avatar || '/default-user.png' %>"
-               class="w-12 h-12 rounded-full border">
+          <img 
+    src="<%= room.otherUser.profile?.profilePic || '/default-user.png' %>"
+    class="w-12 h-12 rounded-full border object-cover"
+  />
+
 
           <div>
             <p class="font-semibold text-gray-800"><%= room.otherUser.fullName %></p>
