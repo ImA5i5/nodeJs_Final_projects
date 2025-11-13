@@ -18,6 +18,7 @@ const socketio = require("socket.io");
 const http = require("http");
 const cors = require("cors");
 const methodOverride = require("method-override");
+const { swaggerUi, swaggerSpec } = require("./app/config/swagger");
 
 // Initialize Express App
 const app = express();
@@ -135,7 +136,6 @@ app.use("/api/review", ReviewRoutes);
 
 
 
-
 // Import Routes
 const authRoutes = require("./app/routes/auth.routes");
 app.use("/auth", authRoutes);
@@ -211,7 +211,7 @@ app.get("/auth/login", (req, res) => {
 
 
 
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 
