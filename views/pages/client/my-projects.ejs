@@ -1,17 +1,18 @@
-<!-- ✅ views/pages/client/my-projects.ejs -->
+<!-- views/pages/client/my-projects.ejs -->
 <div class="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+
+  <!-- Header -->
   <div class="flex items-center justify-between mb-6">
     <h2 class="text-3xl font-bold text-green-700 flex items-center gap-2">
       📁 My Projects
     </h2>
-
     <a href="/client/post-project"
-      class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow-sm">
+       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow-sm">
       ➕ Post New Project
     </a>
   </div>
 
-  <!-- Alert Box -->
+  <!-- Alert -->
   <div id="alertBox" class="hidden mb-4 p-3 rounded text-white text-center"></div>
 
   <% if (projects && projects.length > 0) { %>
@@ -19,28 +20,27 @@
 
       <% projects.forEach((project) => { %>
       <div id="project-<%= project._id %>"
-        class="border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition bg-gray-50">
+           class="border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition bg-gray-50">
 
-        <!-- Header + Status -->
+        <!-- Title + Status -->
         <div class="flex justify-between items-center">
           <h3 class="text-xl font-bold text-green-700"><%= project.title %></h3>
 
-          <span
-            class="px-3 py-1 rounded-full text-xs font-semibold 
+          <span class="px-3 py-1 rounded-full text-xs font-semibold
             <%= project.status === 'completed' ? 'bg-green-200 text-green-800' :
-                 project.status === 'in-progress' ? 'bg-blue-200 text-blue-800' :
-                 project.status === 'submitted' ? 'bg-purple-200 text-purple-800' :
-                 project.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
-                 project.status === 'disputed' ? 'bg-red-200 text-red-800' :
-                 'bg-gray-200 text-gray-700' %>">
+                project.status === 'in-progress' ? 'bg-blue-200 text-blue-800' :
+                project.status === 'submitted' ? 'bg-purple-200 text-purple-800' :
+                project.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
+                project.status === 'disputed' ? 'bg-red-200 text-red-800' :
+                'bg-gray-200 text-gray-700' %>">
             <%= project.status.charAt(0).toUpperCase() + project.status.slice(1) %>
           </span>
         </div>
 
-        <% if (project.status === 'completed') { %>
-          <p class="text-green-700 text-sm mt-1">
-            🎉 All milestones completed — Project is now <b>Completed</b>.
-          </p>
+        <% if (project.status === "completed") { %>
+        <p class="text-green-700 text-sm mt-1">
+          🎉 All milestones completed — Project is now <b>Completed</b>.
+        </p>
         <% } %>
 
         <!-- Description -->
@@ -62,7 +62,7 @@
             <div class="flex flex-wrap gap-2">
               <% project.attachments.forEach((file) => { %>
                 <a href="<%= file %>" target="_blank"
-                  class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-3 py-1 rounded">
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-3 py-1 rounded">
                   View File
                 </a>
               <% }) %>
@@ -73,14 +73,14 @@
         <!-- ACTIONS -->
         <div class="flex flex-wrap justify-end gap-3 mt-5">
 
-          <!-- View Milestones -->
+          <!-- Milestones -->
           <a href="/milestone/project/<%= project._id %>/milestones"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm">
+             class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm">
             ⏱ View Milestones
           </a>
 
-          <!-- Review / Approve / Request changes (ONLY when submitted) -->
-          <% if (project.status === 'submitted') { %>
+          <!-- Submitted → Review, Approve, Request -->
+          <% if (project.status === "submitted") { %>
             <button onclick="reviewDeliverables('<%= project._id %>')"
               class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm">
               👀 Review Work
@@ -97,34 +97,34 @@
             </button>
           <% } %>
 
-          <!-- Payment Management -->
+          <!-- Payments -->
           <a href="/client/payments/<%= project._id %>"
-            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+             class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
             💸 Manage Payments
           </a>
 
           <!-- Edit -->
           <a href="/client/projects/<%= project._id %>/edit"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded text-sm">
+             class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded text-sm">
             ✏️ Edit
           </a>
 
           <!-- Delete -->
           <button data-id="<%= project._id %>"
-            class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm">
+                  class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm">
             🗑️ Delete
           </button>
 
-          <!-- Review Button (ONLY when project is completed) -->
-          <% if (project.status === 'completed' && project.hiredFreelancer) { %>
+          <!-- Reviews -->
+          <% if (project.status === "completed" && project.hiredFreelancer) { %>
             <% if (project.reviewed) { %>
               <a href="/review/view/<%= project._id %>"
-                class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1.5 rounded text-sm">
+                 class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1.5 rounded text-sm">
                 ✅ View Review
               </a>
             <% } else { %>
               <a href="/review/write/<%= project._id %>"
-                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+                 class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
                 ⭐ Leave Review
               </a>
             <% } %>
@@ -139,7 +139,7 @@
     <div class="text-center py-12">
       <p class="text-gray-500 text-lg">No projects found.</p>
       <a href="/client/post-project"
-        class="text-green-600 hover:underline font-semibold mt-2 inline-block">
+         class="text-green-600 hover:underline font-semibold mt-2 inline-block">
         ➕ Post your first project
       </a>
     </div>
@@ -147,7 +147,7 @@
 
 </div>
 
-<!-- SweetAlert2 -->
+<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -158,26 +158,25 @@ async function reviewDeliverables(projectId) {
   const res = await fetch(`/project/client/${projectId}/deliverables`);
   const data = await res.json();
 
-  if (data.success) {
-    const files = data.deliverables.length
-      ? data.deliverables.map(f =>
-          `<a href="${f.fileUrl}" target="_blank" class="block text-blue-600 hover:underline">${f.fileUrl.split('/').pop()}</a>`
-        ).join("")
-      : "<p>No files uploaded yet.</p>";
+  if (!data.success) return Swal.fire("Error", data.message, "error");
 
-    Swal.fire({ title: "📦 Deliverables", html: files, confirmButtonText: "Close" });
-  } else {
-    Swal.fire("Error", data.message, "error");
-  }
+  const files = data.deliverables.length
+    ? data.deliverables.map(f =>
+        `<a href="${f.fileUrl}" target="_blank" class="block text-blue-600">${f.fileUrl.split('/').pop()}</a>`
+      ).join("")
+    : "<p>No files uploaded yet.</p>";
+
+  Swal.fire({ title: "📦 Deliverables", html: files });
 }
 
+
 /* ===============================
-   APPROVE PROJECT → Completed
+   APPROVE PROJECT
 ================================ */
 async function approveProject(projectId) {
   const confirm = await Swal.fire({
-    title: "Approve this project?",
-    text: "This will mark the project as completed and notify the freelancer.",
+    title: "Approve project?",
+    text: "This will complete the project.",
     icon: "question",
     showCancelButton: true,
     confirmButtonText: "✅ Approve"
@@ -185,12 +184,16 @@ async function approveProject(projectId) {
 
   if (!confirm.isConfirmed) return;
 
-  const res = await fetch(`/project/client/${projectId}/approve`, { method: "PUT" });
+  const res = await fetch(`/project/client/${projectId}/approve`, {
+    method: "PUT"
+  });
+
   const data = await res.json();
 
-  Swal.fire(data.success ? "✅ Approved!" : "❌ Error", data.message);
-  if (data.success) setTimeout(() => location.reload(), 1000);
+  Swal.fire(data.success ? "Completed!" : "Error", data.message);
+  if (data.success) setTimeout(() => location.reload(), 900);
 }
+
 
 /* ===============================
    REQUEST CHANGES
@@ -199,10 +202,10 @@ async function requestChanges(projectId) {
   const { value: feedback } = await Swal.fire({
     title: "Request Changes",
     input: "textarea",
-    inputPlaceholder: "Describe what needs to be revised...",
-    showCancelButton: true,
-    confirmButtonText: "🔁 Send Request"
+    inputPlaceholder: "Describe needed revisions...",
+    showCancelButton: true
   });
+
   if (feedback === undefined) return;
 
   const res = await fetch(`/project/client/${projectId}/revision`, {
@@ -212,9 +215,11 @@ async function requestChanges(projectId) {
   });
 
   const data = await res.json();
-  Swal.fire(data.success ? "🔁 Revision Requested!" : "❌ Error", data.message);
-  if (data.success) setTimeout(() => location.reload(), 1000);
+
+  Swal.fire(data.success ? "Requested!" : "Error", data.message);
+  if (data.success) setTimeout(() => location.reload(), 900);
 }
+
 
 /* ===============================
    DELETE PROJECT
@@ -229,9 +234,9 @@ document.querySelectorAll(".delete-btn").forEach(btn => {
 
     if (data.success) {
       document.getElementById(`project-${id}`).remove();
-      showAlert("✅ Project deleted successfully!", "bg-green-500");
+      showAlert("Deleted!", "bg-green-500");
     } else {
-      showAlert("❌ Failed to delete project.", "bg-red-500");
+      showAlert("Delete failed", "bg-red-500");
     }
   });
 });

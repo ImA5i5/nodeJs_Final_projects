@@ -13,6 +13,14 @@ router.use(AuthMiddleware.verifyAccessToken);
    📦 CLIENT SIDE ROUTES
 ------------------------------------------------------------------- */
 
+// ⭐ GET Manage Project Page
+router.get(
+  "/client/manage/:id",
+  AuthMiddleware.verifyAccessToken,
+  RoleMiddleware.authorizeRoles("client"),
+  ProjectController.getManageProjectPage
+);
+
 // 👀 View Deliverables
 router.get(
   "/client/:id/deliverables",
@@ -23,10 +31,11 @@ router.get(
 // ✅ Approve Project
 router.put(
   "/client/:id/approve",
-  AuthMiddleware.verifyAccessToken,           // 🔐 must be logged in
-  RoleMiddleware.authorizeRoles("client"),    // 👤 only client can approve
-  ProjectController.approveProject            // ✅ updated final function
+  AuthMiddleware.verifyAccessToken,
+  RoleMiddleware.authorizeRoles("client"),
+  ProjectController.clientApproveProject
 );
+
 
 // 🔁 Request Changes
 router.put(
@@ -178,8 +187,9 @@ router.get(
 // ✅ Approve project
 router.put(
   "/admin/projects/:id/approve",
+  AuthMiddleware.verifyAccessToken,
   RoleMiddleware.authorizeRoles("admin"),
-  ProjectController.approveProject
+  ProjectController.adminApproveProject
 );
 
 // ❌ Reject (soft delete) project

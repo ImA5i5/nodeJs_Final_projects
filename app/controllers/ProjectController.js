@@ -15,6 +15,44 @@ class ProjectController {
 
   /*===============Client section================*/
 
+  static async getManageProjectPage(req, res) {
+  try {
+    const projectId = req.params.id;
+
+    // Load project
+    const project = await Project.findById(projectId)
+      .populate("hiredFreelancer client");
+
+    if (!project) {
+      return res.redirect("/client/manage/list");
+    }
+
+    // Load ALL milestones
+    const milestones = await Milestone.find({ project: projectId }).sort({
+      order: 1,
+    });
+
+    // Calculate progress
+    let progress = 0;
+    if (milestones.length > 0) {
+      const completed = milestones.filter(
+        (m) => m.status === "released" || m.status === "completed"
+      ).length;
+      progress = Math.round((completed / milestones.length) * 100);
+    }
+
+    return res.render("pages/client/manage-project", {
+      project,
+      milestones,
+      progress,
+    });
+
+  } catch (error) {
+    console.log("Manage Project Error:", error.message);
+    return res.status(500).send("Server Error");
+  }
+}
+
   // 👀 View Deliverables
   static async viewDeliverables(req, res) {
     try {
@@ -44,26 +82,22 @@ class ProjectController {
  /* =====================================================
      FINAL: CLIENT — APPROVE PROJECT (NO APPROVED STATUS)
   ======================================================*/
-static async approveProject(req, res) {
+// CLIENT APPROVAL — freelancer completed work
+static async clientApproveProject(req, res) {
   try {
-    const projectId = req.params.id;
-
-    const project = await Project.findById(projectId)
+    const project = await Project.findById(req.params.id)
       .populate("hiredFreelancer client");
 
-    if (!project) {
+    if (!project)
       return res.json({ success: false, message: "Project not found" });
-    }
 
-    // Only submitted projects can be approved
     if (project.status !== "submitted") {
       return res.json({
         success: false,
-        message: "Project must be submitted before approval"
+        message: "Project must be submitted before approval."
       });
     }
 
-    // FINAL STATUS (NO APPROVED)
     project.status = "completed";
     project.completedAt = new Date();
     await project.save();
@@ -75,19 +109,20 @@ static async approveProject(req, res) {
       `
         <p>Hello ${project.hiredFreelancer.fullName},</p>
         <p>The client <b>${project.client.fullName}</b> has approved your work.</p>
-        <p>Your project <b>${project.title}</b> is now marked as <b>Completed</b>.</p>
+        <p>The project is now marked as <b>Completed</b>.</p>
       `
     );
 
     return res.json({
       success: true,
-      message: "Project approved and COMPLETED!"
+      message: "Project approved by client and marked as COMPLETED."
     });
 
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
 }
+
 
 
 
@@ -1041,38 +1076,43 @@ static async getAllProjects(req, res, next) {
    * ✅ 2. Approve project
    * Marks project as approved and emails the client.
    */
-  static async approveProject(req, res) {
-    try {
-      const project = await Project.findById(req.params.id).populate("client");
-      if (!project)
-        return res.status(404).json({ success: false, message: "Project not found" });
+  // ADMIN APPROVAL — project becomes visible for freelancers
 
-      project.status = "approved";
-      project.approvedAt = new Date();
-      project.approvedBy = req.user._id;
-      await project.save();
+static async adminApproveProject(req, res) {
+  try {
+    const project = await Project.findById(req.params.id).populate("client");
 
-      // Notify client
-      try {
-        await transporter.sendMail({
-          from: `"Freelancer Marketplace" <${process.env.EMAIL_USER}>`,
-          to: project.client.email,
-          subject: "✅ Project Approved",
-          html: `
-            <h2>Hi ${project.client.fullName},</h2>
-            <p>Your project <b>${project.title}</b> has been approved and is now visible to freelancers.</p>
-          `,
-        });
-      } catch (emailErr) {
-        winston.warn("Approval Email Error: " + emailErr.message);
-      }
+    if (!project)
+      return res.status(404).json({ success: false, message: "Project not found" });
 
-      res.json({ success: true, message: "Project approved successfully" });
-    } catch (err) {
-      winston.error("Approve Project Error: " + err.message);
-      res.status(500).json({ success: false, message: "Server error approving project" });
+    if (project.status !== "pending") {
+      return res.json({ success: false, message: "Only pending projects can be approved." });
     }
+
+    project.status = "approved";
+    project.approvedAt = new Date();
+    project.approvedBy = req.user._id;
+    await project.save();
+
+    // Notify client
+    await EmailService.sendNotification(
+      project.client.email,
+      "✅ Your Project Has Been Approved!",
+      `
+        <p>Hello ${project.client.fullName},</p>
+        <p>Your project <b>${project.title}</b> has been approved by admin.</p>
+        <p>Freelancers can now see and bid on it.</p>
+      `
+    );
+
+    return res.json({ success: true, message: "Project approved by admin." });
+
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
   }
+}
+
+
 
   /**
    * ❌ 3. Reject (soft delete) project

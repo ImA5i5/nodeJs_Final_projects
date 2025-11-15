@@ -126,13 +126,16 @@
     timerProgressBar: true,
   });
 
-  // ✅ Approve project
+  // ============================================================
+  //   ADMIN — APPROVE PROJECT
+  // ============================================================
   document.querySelectorAll(".approveBtn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const id = btn.dataset.id;
+
       const confirm = await Swal.fire({
-        title: "Approve Project?",
-        text: "This project will be approved and visible to freelancers.",
+        title: "Approve this project?",
+        text: "Once approved, freelancers can see and bid on it.",
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "✅ Approve",
@@ -143,8 +146,12 @@
       if (!confirm.isConfirmed) return;
 
       try {
-        const res = await fetch(`/project/admin/projects/${id}/approve`, { method: "PUT" });
+        const res = await fetch(`/project/admin/projects/${id}/approve`, {
+          method: "PUT",
+        });
+
         const data = await res.json();
+
         if (data.success) {
           Toast.fire({ icon: "success", title: "Project approved!" });
           setTimeout(() => window.location.reload(), 1200);
@@ -156,7 +163,6 @@
       }
     });
   });
-
   // ❌ Reject project
   document.querySelectorAll(".rejectBtn").forEach((btn) => {
     btn.addEventListener("click", async () => {

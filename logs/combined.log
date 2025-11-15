@@ -5334,3 +5334,34 @@
 [2025-11-16 02:09:13] ERROR: ❌ MongoDB Connection Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
 [2025-11-16 02:09:54] INFO: 🚀 Server running on http://localhost:5000
 [2025-11-16 02:09:59] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-16 02:12:02] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 02:12:06] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-16 02:22:10] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 02:22:11] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-16 02:22:54] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 02:22:55] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-16 02:25:02] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 02:25:04] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-16 02:37:22] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 02:37:23] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-16 02:37:30] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 02:37:30] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-16 02:44:51] INFO: 📧 Notification sent to test2001@yopmail.com | ✅ Your Project Has Been Approved!
+[2025-11-16 02:48:47] INFO: 📧 Notification sent to test08@yopmail.com | 🎉 You've been hired for "ashis"
+[2025-11-16 02:48:47] WARN: Hire: failed to create in-app message: Message validation failed: room: Path `room` is required.
+[2025-11-16 02:55:58] INFO: ✅ Razorpay Order created: order_RgACl9Hb2bIFKp
+[2025-11-16 02:56:34] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-16 02:59:29] INFO: 📧 Notification sent to test08@yopmail.com | 🎉 Project "ashis" Completed!
+[2025-11-16 02:59:39] INFO: ✅ Credited ₹15000 to wallet of 68f7f83baf080e1345d36794
+[2025-11-16 02:59:44] INFO: 📧 Notification sent to test08@yopmail.com | ✅ Payment Released
+[2025-11-16 03:00:06] WARN: ⚠️ Attempted to send email without 'email' specified.
+[2025-11-16 03:11:46] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 03:11:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-16 03:14:12] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 03:14:13] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-16 03:14:24] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 03:14:25] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-16 03:24:20] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 03:24:21] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-16 03:26:07] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-16 03:26:08] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
