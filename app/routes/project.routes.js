@@ -23,8 +23,9 @@ router.get(
 // ✅ Approve Project
 router.put(
   "/client/:id/approve",
-  RoleMiddleware.authorizeRoles("client"),
-  ProjectController.approveProject
+  AuthMiddleware.verifyAccessToken,           // 🔐 must be logged in
+  RoleMiddleware.authorizeRoles("client"),    // 👤 only client can approve
+  ProjectController.approveProject            // ✅ updated final function
 );
 
 // 🔁 Request Changes

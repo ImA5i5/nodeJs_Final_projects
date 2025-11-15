@@ -41,47 +41,55 @@ class ProjectController {
   }
 
   // ✅ Approve Project (submitted → completed)
- static async approveProject(req, res) {
-    try {
-      const project = await Project.findById(req.params.id).populate("hiredFreelancer client");
+ /* =====================================================
+     FINAL: CLIENT — APPROVE PROJECT (NO APPROVED STATUS)
+  ======================================================*/
+static async approveProject(req, res) {
+  try {
+    const projectId = req.params.id;
 
-      if (!project) {
-        return res.status(404).json({ success: false, message: "Project not found" });
-      }
+    const project = await Project.findById(projectId)
+      .populate("hiredFreelancer client");
 
-      if (project.status !== "submitted") {
-        return res.status(400).json({ success: false, message: "Project not in submitted state." });
-      }
-
-      console.log("Before save - status:", project.status);
-
-      // ✅ FIX — change to 'completed'
-      project.status = "completed";
-      project.completedAt = new Date();
-      await project.save();
-
-      console.log("After save - status:", project.status);
-
-      // ✅ Notify freelancer
-      await EmailService.sendNotification(
-        project.hiredFreelancer.email,
-        `✅ Project "${project.title}" Completed!`,
-        `
-        <p>Hi ${project.hiredFreelancer.fullName},</p>
-        <p>The client <b>${project.client.fullName}</b> has approved and marked your project <b>${project.title}</b> as completed.</p>
-        <p>Congratulations on finishing successfully 🎉</p>
-        `
-      );
-
-      return res.json({
-        success: true,
-        message: "Project approved and marked as completed! Freelancer has been notified.",
-      });
-    } catch (err) {
-      winston.error("Approve Project Error:", err.message);
-      return res.status(500).json({ success: false, message: "Error approving project" });
+    if (!project) {
+      return res.json({ success: false, message: "Project not found" });
     }
+
+    // Only submitted projects can be approved
+    if (project.status !== "submitted") {
+      return res.json({
+        success: false,
+        message: "Project must be submitted before approval"
+      });
+    }
+
+    // FINAL STATUS (NO APPROVED)
+    project.status = "completed";
+    project.completedAt = new Date();
+    await project.save();
+
+    // Notify freelancer
+    await EmailService.sendNotification(
+      project.hiredFreelancer.email,
+      `🎉 Project "${project.title}" Completed!`,
+      `
+        <p>Hello ${project.hiredFreelancer.fullName},</p>
+        <p>The client <b>${project.client.fullName}</b> has approved your work.</p>
+        <p>Your project <b>${project.title}</b> is now marked as <b>Completed</b>.</p>
+      `
+    );
+
+    return res.json({
+      success: true,
+      message: "Project approved and COMPLETED!"
+    });
+
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
+}
+
+
 
   // 🔁 Request Revisions (submitted → in-progress)
   static async requestRevision(req, res) {

@@ -5302,3 +5302,31 @@
 [2025-11-13 17:38:55] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
 [2025-11-13 17:41:57] INFO: ✅ Credited ₹2000 to wallet of 68f7f83baf080e1345d36794
 [2025-11-13 17:42:03] INFO: 📧 Notification sent to test08@yopmail.com | ✅ Payment Released
+[2025-11-13 22:00:50] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 22:00:52] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 22:01:18] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 22:01:20] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
+[2025-11-13 22:18:27] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 22:18:28] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 22:29:35] INFO: 📧 Notification sent to test08@yopmail.com | 🎉 You've been hired for "abcd"
+[2025-11-13 22:29:35] WARN: Hire: failed to create in-app message: Message validation failed: room: Path `room` is required.
+[2025-11-13 22:35:07] INFO: ✅ Razorpay Order created: order_RfIgyKnF7nuome
+[2025-11-13 22:35:43] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-13 22:37:40] INFO: ✅ Credited ₹100 to wallet of 68f7f83baf080e1345d36794
+[2025-11-13 22:37:47] INFO: 📧 Notification sent to test08@yopmail.com | ✅ Payment Released
+[2025-11-13 22:58:03] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 22:58:06] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 23:14:46] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-13 23:14:47] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-13 23:27:55] INFO: 📧 Notification sent to test08@yopmail.com | 🎉 You've been hired for "xyz"
+[2025-11-13 23:27:55] WARN: Hire: failed to create in-app message: Message validation failed: room: Path `room` is required.
+[2025-11-13 23:36:03] INFO: ✅ Razorpay Order created: order_RfJjLDEgPJFTdk
+[2025-11-13 23:37:01] INFO: 📧 Notification sent to test2001@yopmail.com | 💰 Escrow Funded
+[2025-11-13 23:47:55] INFO: ✅ Credited ₹4500 to wallet of 68f7f83baf080e1345d36794
+[2025-11-13 23:48:00] INFO: 📧 Notification sent to test08@yopmail.com | ✅ Payment Released
+[2025-11-14 00:06:05] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-14 00:06:07] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-02.qnunwtq.mongodb.net
+[2025-11-14 00:09:29] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-14 00:09:30] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-00.qnunwtq.mongodb.net
+[2025-11-14 11:45:47] INFO: 🚀 Server running on http://localhost:5000
+[2025-11-14 11:45:58] INFO: ✅ MongoDB Connected: ac-ku6mtzf-shard-00-01.qnunwtq.mongodb.net
